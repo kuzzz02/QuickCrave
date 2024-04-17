@@ -40,7 +40,7 @@ git remote -v
 ```
 cd client
 npm install -g yarn
-npm install -s
+yarn
 ```
 
 - 项目启动 (在client 文件夹下，并请先提前打开simulator)
