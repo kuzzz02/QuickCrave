@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image ,TouchableOpacity, TextInput } from 'react-native';
 
 
-const App = () => {
+const LogIn = () => {
   const handleSignInPress = () => {
   };
   const handleSignUpPress = () => {
@@ -11,7 +11,7 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('./common/70.jpg')}
+        source={require('../common/70.jpg')}
         style={styles.image}
       />
       <View style={styles.textBox}>
@@ -156,5 +156,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default LogIn;
 

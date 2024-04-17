@@ -2,19 +2,19 @@ import React from 'react';
 import { View, Text, StyleSheet, Image ,TouchableOpacity, TextInput } from 'react-native';
 
 
-const App = () => {
+const SignUp = () => {
   const handleSignUpPress = () => {
   };
 
   return (
     <View style={styles.container}>
       <Image
-        source={require('./common/SU.jpg')}
+        source={require('../common/SU.jpg')}
         style={styles.image}
       />
       <View style={styles.textBox}>
         <Text style={styles.text1}>Welcome to QuickCrave</Text>
-        <Text style={styles.text2}>Get best experence in QuickCrave by signing up!</Text>
+        <Text style={styles.text2}>Get best experience in QuickCrave by signing up!</Text>
       </View>
       <Text style={styles.text3}>Phone</Text>
       <TextInput
@@ -29,7 +29,7 @@ const App = () => {
               placeholderTextColor="#8897AD"
 
       />
-      <Text style={styles.text5}>Comfirm your password</Text>
+      <Text style={styles.text5}>Confirm your password</Text>
       <TextInput
               style={styles.input3}
               placeholder="Please input your password again"
@@ -172,5 +172,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default App;
+export default SignUp;
 
