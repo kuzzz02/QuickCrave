@@ -43,14 +43,20 @@ npm install -g yarn
 npm install -s
 ```
 
-- 项目启动 (在client 文件夹下)
+- 项目启动 (在client 文件夹下，并请先提前打开simulator)
 ```
 yarn android
 ```
 
-- 上传代码
+- 更新代码 (比如别人上传了新的代码而你本地并没有更新，这样提交的时候可能会报错要求先更新)
+```
+git pull origin dev
+```
+
+- 上传代码 (不要 **"-f"** 上传)
 ```
 git add ./
 git commit -m "注释"
 git push origin dev
 ```
+
