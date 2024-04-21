@@ -1,8 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, StyleSheet, Image ,TouchableOpacity, TextInput } from 'react-native';
 
 
 const LogIn = () => {
+  const navigation = useNavigation();
   const handleSignInPress = () => {
   };
   const handleSignUpPress = () => {
@@ -31,10 +33,10 @@ const LogIn = () => {
               placeholderTextColor="#8897AD"
               secureTextEntry={true}
       />
-      <TouchableOpacity style={styles.button} onPress={handleSignInPress}>
+      <TouchableOpacity style={styles.button}/*signin跳转*/onPress={handleSignInPress}>
         <Text style={styles.buttonText}>Sign in</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleSignUpPress}>
+      <TouchableOpacity onPress={()=> navigation.navigate('SignUp')}>
         <Text style={styles.text5}>Don't you have an account? <Text style={styles.signUpText}>Sign up</Text></Text>
       </TouchableOpacity>
      </View>

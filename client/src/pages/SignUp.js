@@ -1,8 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, StyleSheet, Image ,TouchableOpacity, TextInput } from 'react-native';
 
 
 const SignUp = () => {
+  const navigation = useNavigation();
   const handleSignUpPress = () => {
   };
 
@@ -36,7 +38,7 @@ const SignUp = () => {
               placeholderTextColor="#8897AD"
 
       />
-      <TouchableOpacity style={styles.button} onPress={handleSignUpPress}>
+      <TouchableOpacity style={styles.button} /*跳转到了购物车 记得修改*/onPress={()=> navigation.navigate('ShoppingCart')}>
         <Text style={styles.buttonText}>Sign up</Text>
       </TouchableOpacity>
 
