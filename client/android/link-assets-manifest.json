@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/AlimamaShuHeiTi-Bold.ttf",
+      "sha1": "65b941457420a6e809c8356f1002859e9a8db282"
+    },
+    {
+      "path": "assets/fonts/HedvigLettersSans-Regular.ttf",
+      "sha1": "7eb8683ee95a19156a909cef8c90602a559717cd"
+    },
+    {
+      "path": "assets/fonts/Nunito-Italic-VariableFont_wght.ttf",
+      "sha1": "0b4c3a612cf31e069014ede3a502381c034fc736"
+    },
+    {
+      "path": "assets/fonts/SmileySans-Oblique.ttf",
+      "sha1": "1a6f0098377564a0baaf95d1a859c212f4fe6231"
+    },
+    {
+      "path": "assets/fonts/SourceHanSansHC-VF.ttf",
+      "sha1": "3fca1d71fc5fed85147d0bfcf89e1af68187b926"
+    }
+  ]
+}
