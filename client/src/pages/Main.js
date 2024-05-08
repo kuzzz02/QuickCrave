@@ -1,15 +1,25 @@
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, TextInput, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, Searchbar, BottomNavigation, Icon, Button } from 'react-native-paper';
-import LogIn from './LogIn';
-import SignUp from './SignUp';
+
 
 
 const { width, height } = Dimensions.get('window');
 
+const MusicRoute = () => {
+
+};
+
+const NotificationsRoute = () => {
+
+};
+
 const Main = () => {
+
+const navigation = useNavigation();
 
 const categories = [
     { key: 'burger', text: '🍔 Burger'},
@@ -34,12 +44,27 @@ const renderRating = (rating) => {
       </>
     );
   };
+
+  const handleDetailPress = () => {
+    navigation.navigate('Detail');
+  };
     
 const Tab = createBottomTabNavigator();
 
 const [searchQuery, setSearchQuery] = React.useState('');
 
 const [selectedCategory, setSelectedCategory] = React.useState('');
+
+const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'music', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
+    { key: 'notifications', title: 'Shopping-Cart', focusedIcon: 'shopping', unfocusedIcon: 'shopping-outline' },
+  ]);
+
+  const renderScene = BottomNavigation.SceneMap({
+    music: MusicRoute,
+    notifications: NotificationsRoute,
+  });
 
 const handlePress = (categoryName) => {
     setSelectedCategory(categoryName);
@@ -66,93 +91,25 @@ const handlePress = (categoryName) => {
         ))}
       </ScrollView>
       </View>
-      <View style={styles.itemContainer}>
+      <View style={styles.itemContainer} >
         {items.map(item => (
-          <View key={item.id} style={styles.item}>
+          <TouchableOpacity key={item.id} style={styles.item} onPress={(handleDetailPress)}>
             <Image source={item.logo} style={styles.logo} />
             <View style={styles.details}>
               <Text style={styles.itemName}>{item.name}</Text>
               <Text style={styles.itemDescription}>{item.description}</Text>
               <Text style={styles.itemRate}>{renderRating(item.rating)} </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
-        {/* //TODO: HaoRan Win! */}
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      tabBar={({ navigation, state, descriptors, insets }) => (
-        <BottomNavigation.Bar
-          navigationState={state}
-         safeAreaInsets={insets}
-          onTabPress={({ route, preventDefault }) => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (event.defaultPrevented) {
-              preventDefault();
-            } else {
-             navigation.dispatch({
-                ...CommonActions.navigate(route.name, route.params),
-                target: state.key,
-              });
-            }
-          }}
-          renderIcon={({ route, focused, color }) => {
-            const { options } = descriptors[route.key];
-            if (options.tabBarIcon) {
-              return options.tabBarIcon({ focused, color, size: 24 });
-            }
-            return null;
-          }}
-          getLabelText={({ route }) => {
-            const { options } = descriptors[route.key];
-            const label =
-              options.tabBarLabel !== undefined
-                ? options.tabBarLabel
-                : options.title !== undefined
-                ? options.title
-                : route.title;
-
-            return label.toString();
-          }}
-        />
-      )}
-    >
-      <Tab.Screen
-        name="Home"
-        component={LogIn}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="home" size={size} color={color} />;
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SignUp}
-        options={{
-          tabBarLabel: 'Settings',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="cog" size={size} color={color} />;
-          },
-        }}
-      />
-    </Tab.Navigator>;
-
-      {/* <View style={styles.navBar}>
-        <TouchableOpacity style={styles.navButton}>
-          <Text>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <Text>Cart</Text>
-        </TouchableOpacity>
-      </View> */}
+    </View>
+    <View style={styles.navBar}>
+    <BottomNavigation
+      barStyle={{ backgroundColor: 'white' }}
+      navigationState={{ index, routes }}
+      onIndexChange={setIndex}
+      renderScene={renderScene}
+    />
     </View>
     </View>
   );
@@ -285,12 +242,19 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     navBar: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingVertical: 10,
-        borderTopWidth: 1,
-        borderTopColor: '#eee',
-        marginBottom: 10,
+        // flexDirection: 'row',
+        // flex: 1,
+        position: 'absolute',
+        bottom: 0,
+        height: 70,
+        left: 0,
+        right: 0,
+        // justifyContent: 'space-around',
+        // paddingVertical: 10,
+        // borderTopWidth: 1,
+        // borderTopColor: '#eee',
+        // marginBottom: 10,
+        marginTop: 5,
         backgroundColor: 'red',
     },
     navButton: {
