@@ -153,14 +153,14 @@ buttonBox:{
     fontSize: 18,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     marginTop: 15,
-    marginLeft: 135,
+    marginLeft: 95,
     color: 'white',
   },
   money1: {
     fontSize: 24,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     marginTop: 15,
-    marginLeft: 130,
+    marginLeft: 90,
     color: 'white',
   },
   locationContainer:{
