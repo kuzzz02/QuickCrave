@@ -1,15 +1,42 @@
 import React from 'react';
+import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Text, TextInput, ImageBackground, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-paper';
+import UserService from '../services/UserService';
 
 const { width, height } = Dimensions.get('window');
 
 const SignUp = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const navigation = useNavigation();
-  const handleSignUpPress = () => {
-    navigation.navigate('LogIn');
+  const handleSignUpPress = () =>{
+    UserService.signup(username,password)
+    // fetch('http://localhost:8000/user/signup', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({name: username, password: password}),
+    // })
+    .then(res =>{
+      console.log(res);
+      navigation.navigate('LogIn');
+    })
+    .catch(error =>{
+      console.log(error);
+      // if(!error.response) {
+      //   console.log('!Network Error!');
+      // } 
+      // else{
+      //   console.log(error.response.data);
+      //   console.log(error.response.status);
+      //   console.log(error.response.headers);
+      // }
+    })
   };
+  
     return (
         <View style={styles.container}
         behavior={Platform.select({ ios: 'padding', android: 'height' })}
@@ -31,7 +58,9 @@ const SignUp = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Please input your phone number"
-                keyboardType="phone-pad"/>
+                onChangeText={text => setUsername(text)}
+                // keyboardType="phone-pad"
+                />
                 <Text style={styles.text}>Password</Text>
                 <TextInput
                 style={styles.input}
@@ -41,6 +70,7 @@ const SignUp = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Please confirm your password"
+                        onChangeText={text => setPassword(text)}
                         secureTextEntry={true}/>
                     </View>
                     <Button style={styles.button} labelStyle={{ fontSize: 16 }} buttonColor='#162D3A' mode="contained" onPress={handleSignUpPress}>Sign Up</Button>

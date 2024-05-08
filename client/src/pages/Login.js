@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Text, TextInput, ImageBackground, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-paper';
+import UserService from '../services/UserService';
 
 const { width, height } = Dimensions.get('window');
 
@@ -34,7 +35,8 @@ const LogIn = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Please input your phone number"
-                keyboardType="phone-pad"/>
+                // keyboardType="phone-pad"
+                />
                 <Text style={styles.text2}>Password</Text>
                     <TextInput
                         style={styles.input}
