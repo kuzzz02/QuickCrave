@@ -3,8 +3,7 @@ import { StyleSheet, View, TextInput, ScrollView, Image, TouchableOpacity, Dimen
 import { CommonActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, Searchbar, BottomNavigation, Icon, Button, IconButton, Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
-
+import { Text, BottomNavigation, Icon, Button, IconButton, Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 
 
 const { width, height } = Dimensions.get('window');
@@ -28,21 +27,35 @@ const Detail = () => {
       backgroundColor: 'white',
     },
   };  
+const foodCategories =[{
+  id: 1,
+  name: 'Chicken Burger',
+  image: require('../common/goods5.png'),
+  description: '200 gr chicken + cheese Lettuce + tomato',
+  restaurant: 'McDonald\'s',
+  price: 10.99,
+},
+{
+  id: 2,
+  name: 'Cheese Burger',
+  image: require('../common/goods8.png'),
+  description: '200 gr chicken + cheese Lettuce + tomato',
+  restaurant: 'McDonald\'s',
+  price: 11.99,
+},
+{
+  id: 3,
+  name: 'Beef Burger',
+  image: require('../common/goods7.png'),
+  description: '200 gr chicken + cheese Lettuce + tomato',
+  restaurant: 'McDonald\'s',
+  price: 12.99,
+}]; 
 
 const navigation = useNavigation();
 
 const [counts, setCounts] = useState(new Array(foodCategories.length).fill(0));
 
-const categories = [
-    { key: 'burger', text: '🍔 Burger'},
-    { key: 'pizza', text: '🍕 Pizza'},
-    { key: 'sandwich', text: '🥪 Sandwich'},
-  ];
-
-const items = [
-  { id: 1, logo: require('../common/KKFC.png'), name: 'KFC', description: '200 gr chicken + cheese Lettuce + tomato', rating: 4.0,length:0},
-  { id: 2, logo: require('../common/MC.png'), name: 'McDonald\'s', description: '200 gr meat + Lettuce cheese + onion + tomato', rating: 4.8,length:0 },
-];
 
 const handleIncrease = (index) => {
   const newCounts = [...counts];
@@ -58,6 +71,14 @@ const handleDecrease = (index) => {
   setCounts(newCounts);
 };
 
+const calculateTotal = () => {
+  let total = 0;
+  counts.forEach((count, index) => {
+    total += count * foodCategories[index].price;
+  });
+  return total;
+};
+
 const renderRating = (rating) => {
     const filledStars = Math.floor(rating);
     const halfStar = rating % 1 !== 0;
@@ -69,31 +90,6 @@ const renderRating = (rating) => {
         {'☆'.repeat(emptyStars)}
       </>
     );
-  };
-const foodCategories =[{
-    id: 1,
-    name: 'Chicken Burger',
-    image: require('../common/goods5.png'),
-    description: '200 gr chicken + cheese Lettuce + tomato',
-    price: 10.99,
-  },
-  {
-    id: 2,
-    name: 'Cheese Burger',
-    image: require('../common/goods8.png'),
-    description: '200 gr chicken + cheese Lettuce + tomato',
-    price: 11.99,
-  },
-  {
-    id: 3,
-    name: 'Beef Burger',
-    image: require('../common/goods7.png'),
-    description: '200 gr chicken + cheese Lettuce + tomato',
-    price: 12.99,
-}]; 
-
-  const handleDetailPress = () => {
-    navigation.navigate('Detail');
   };
     
 const Tab = createBottomTabNavigator();
@@ -117,10 +113,18 @@ const handlePress = (categoryName) => {
     setSelectedCategory(categoryName);
     // Additional logic can be added here for navigation or other purposes
   };
+
+
+const handleShoppingPress = () => {
+  const total = calculateTotal();
+  navigation.navigate('ShoppingCart', { foodCategories, counts, total });
+}
+
   return (
+    <View style={{flex:1}}>
     <ScrollView style={styles.container}>
-        <Image style={styles.backgroundImage} source={require('../common/detail.png')}></Image>
-        <View style={styles.header}>
+      <Image style={styles.backgroundImage} source={require('../common/detail.png')} />
+      <View style={styles.header}>
         <Text style={styles.title}>McDonald's</Text>
         <View style={styles.detailContainer}>
             <View style ={styles.box}><Text>{'Delivery \nFor Free'}</Text></View>
@@ -128,22 +132,31 @@ const handlePress = (categoryName) => {
             {/* <Text style={styles.itemRate}>{renderRating(item.rating)} </Text> */}
         </View>    
         </View>
-        <View style={styles.categoryContainer} >
-    {foodCategories.map(category =>(
-        <View key={category.id} style={styles.foodCategory}>
-        <Image source={category.image} style={{top:-10, width: 120, height: 120}}/>
-        <View style={styles.details}>
-              <Text style={styles.foodName}>{category.name}</Text>
-              <Text style={styles.foodDescription}>{category.description}</Text>
-              <View style={{flexDirection:'row', height:35, width:160, justifyContent: 'space-between'}}>
-              <Text style={styles.foodPrice}>€{category.price} </Text>
-              <IconButton icon="plus-circle" size={30} onPress={handleDetailPress} iconColor={'#06c168'} style={styles.add}/>
-              </View>
+      <View style={styles.categoryContainer}>
+        {foodCategories.map((category, index) => (
+          <View key={category.id} style={styles.foodCategory}>
+            <Image source={category.image} style={{ width: 120, height: 120, marginBottom: 10 }} />
+            <Text style={styles.foodName}>{category.name}</Text>
+            <Text style={styles.foodDescription}>{category.description}</Text>
+            <View style={styles.actionContainer}>
+              {counts[index] > 0 && (
+                <IconButton icon="minus-circle" size={20} onPress={() => handleDecrease(index)} iconColor={'#06c168'} style={styles.minus} />
+              )}
+              {counts[index] > 0 ? (
+                <Text>{counts[index]}</Text>
+              ) : (
+                <Text style={styles.foodPrice}>€{category.price}</Text>
+              )}
+              <IconButton icon="plus-circle" size={20} onPress={() => handleIncrease(index)} iconColor={'#06c168'} style={styles.add} />
             </View>
-        </View>
-    ))}
+          </View>
+        ))}
       </View>
     </ScrollView>
+    <TouchableOpacity icon="alpha-q-circle-outline" onPress={handleShoppingPress}  style={styles.countCart} >
+    <Text style={styles.cartText}>Total Cost: €{calculateTotal()}</Text>
+    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -169,11 +182,11 @@ const styles = StyleSheet.create({
     left: '50%', // 左侧边缘位于父容器的50%
     width: 300,
     borderRadius: 15,
-    shadowOpacity: 0.2, // 阴影透明度
-    shadowRadius: 3, // 阴影半径
-    shadowColor: '#000', // 阴影颜色
-    shadowOffset: { height: 2, width: 0 }, // 阴影偏移
-    elevation: 3, // 安卓阴影
+    shadowOpacity: 0.2,
+    shadowRadius: 3, 
+    shadowColor: '#000', 
+    shadowOffset: { height: 2, width: 0 }, 
+    elevation: 3, 
   },
   title:{
     fontSize: 26,
@@ -227,14 +240,13 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   foodName:{
-    marginTop: -13,
+    marginTop: -15,
     alignItems: 'center',
     textAlign: 'center',
     fontFamily:'AlimamaShuHeiTi-Bold',
     fontSize: 18,
   },
   foodDescription:{
-    marginTop: 5,
     textAlign: 'center',
     fontSize: 14,
   },
@@ -244,11 +256,35 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     marginLeft: 10,
+    flex: 1,
   },
-  add:{
-    marginTop: -5,
-    // justifyContent: 'flex-end',
-  }
+  actionContainer: {
+    flexDirection: 'row',
+    // marginTop: 10,
+    alignItems: 'center',
+    marginTop: -8,
+    height: 35,
+    width: 160,
+    // backgroundColor: 'red',
+    justifyContent: 'center',
+  },
+  countCart: {
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 15,
+    width: width * 0.9,
+    marginHorizontal: width * 0.05,
+    
+    height: 60,
+    backgroundColor: '#162D3A',
+    borderRadius: 15,
+  },
+  cartText: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 18,
+    textAlign: 'center',
+  },
 });
 
 export default Detail;
