@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 
-import LogIn from './pages/LogIn';
+import LogIn from './pages/Login';
 import SignUp from './pages/SignUp';
 import Start from './pages/Start';
 import Main from './pages/Main';
@@ -35,4 +35,3 @@ export default function App() {
     </CartProvider>
   );
 }
-
