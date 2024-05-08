@@ -18,7 +18,7 @@ export const CartProvider = ({ children }) => {
     setCounts(newCounts);
   };
 
-  const handleDecrease = (index) => {
+const handleDecrease = (index) => {
     const newCounts = [...counts];
     if (newCounts[index] > 0) {
       newCounts[index] -= 1;
@@ -26,8 +26,16 @@ export const CartProvider = ({ children }) => {
     setCounts(newCounts);
   };
 
+const calculateTotal = () => {
+    let total = 0;
+    counts.forEach((count, index) => {
+        total += count * foodCategories[index].price;
+    });
+    return total;
+    };
+
   return (
-    <CartContext.Provider value={{ foodCategories, counts, handleIncrease, handleDecrease, setCounts }}>
+    <CartContext.Provider value={{ foodCategories, counts, handleIncrease, handleDecrease, setCounts, calculateTotal }}>
       {children}
     </CartContext.Provider>
   );

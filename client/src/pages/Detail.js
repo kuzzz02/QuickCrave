@@ -4,6 +4,7 @@ import { CommonActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, BottomNavigation, Icon, Button, IconButton, Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
+import { useCart } from './CartContext';
 
 
 const { width, height } = Dimensions.get('window');
@@ -18,12 +19,14 @@ const NotificationsRoute = () => {
 
 const Detail = () => {
 
+  const { counts, handleIncrease, handleDecrease, calculateTotal } = useCart();
+
   const newTheme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      primary: 'green',  // 更改主要颜色为绿色
-      accent: 'red',  // 更改次要颜色为红色
+      primary: 'green',  
+      accent: 'red',  
       backgroundColor: 'white',
     },
   };  
@@ -53,31 +56,6 @@ const foodCategories =[{
 }]; 
 
 const navigation = useNavigation();
-
-const [counts, setCounts] = useState(new Array(foodCategories.length).fill(0));
-
-
-const handleIncrease = (index) => {
-  const newCounts = [...counts];
-  newCounts[index] += 1;
-  setCounts(newCounts);
-};
-
-const handleDecrease = (index) => {
-  const newCounts = [...counts];
-  if (newCounts[index] > 0) {
-    newCounts[index] -= 1;
-  }
-  setCounts(newCounts);
-};
-
-const calculateTotal = () => {
-  let total = 0;
-  counts.forEach((count, index) => {
-    total += count * foodCategories[index].price;
-  });
-  return total;
-};
 
 const renderRating = (rating) => {
     const filledStars = Math.floor(rating);
@@ -228,7 +206,7 @@ const styles = StyleSheet.create({
   foodCategory: {
     width: 160,
     height: 200,
-    margin: 12, // 确保左对齐且有垂直间隔
+    margin: 12, 
     backgroundColor: 'white',
     textAlign: 'center',
     borderRadius: 8,
@@ -274,7 +252,6 @@ const styles = StyleSheet.create({
     bottom: 15,
     width: width * 0.9,
     marginHorizontal: width * 0.05,
-    
     height: 60,
     backgroundColor: '#162D3A',
     borderRadius: 15,
