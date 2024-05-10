@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, Text, TextInput, ImageBackground, Dimensions, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ImageBackground, Dimensions, KeyboardAvoidingView ,Alert} from 'react-native';
 import { Button } from 'react-native-paper';
 import UserService from '../services/UserService';
 
@@ -12,20 +12,24 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const handleSignUpPress = () =>{
-    UserService.signup(username,password)
-    // fetch('http://localhost:8000/user/signup', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({name: username, password: password}),
-    // })
-    .then(res =>{
+     UserService.signup({name:username,password:password})
+//    fetch('http://localhost:8000/user/signup', {
+//      method: 'POST',
+//      headers: {
+//        'Content-Type': 'application/json',
+//      },
+//      body: JSON.stringify({
+//        name: username,
+//        password: password
+//      }),
+//    })
+    .then(res => {
       console.log(res);
       navigation.navigate('LogIn');
     })
     .catch(error =>{
-      console.log(error);
+      Alert.alert("Invalid username or password")
+      console.log(error + " " + "111");
       // if(!error.response) {
       //   console.log('!Network Error!');
       // } 

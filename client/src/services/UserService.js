@@ -21,15 +21,17 @@ class UserService {
     return http.delete(`/user/delete/${id}`);
   }
 
-  deleteAll() {
-    return http.delete(`/users`);
-  }
-  login(name, password) {
-    return http.post(`/user/login`, {name, password});
+  // deleteAll() {
+  //   return http.delete(`/user/deleteAll`);
+  // }
+
+  login(data) {
+    return http.post(`/user/login`, data);
   }
 
-  signup(name, password) {
-    return http.post(`/user/signup`, {name, password});
+
+  signup(data) {
+    return http.post(`/user/signup`, data);
   }
 }
 
