@@ -12,20 +12,32 @@ const Pay = ({route}) => {
         <Text style={styles.text}>You have to pay</Text>
         <Text style={styles.text2}>€{total}</Text>
         <Button
-        style={styles.button1}
-        labelStyle={{fontSize: 16}}
-        mode="contained"
-        >
-        <Text style={{fontFamily:'AlimamaShuHeiTi-Bold', fontSize:22, lineHeight: 40}}>Alipay</Text>
-      </Button>
-      <Button
-    //   icon={source={require('../common/alipay.png')}}
-        style={styles.button2}
-        labelStyle={{fontSize: 16}}
-        mode="contained"
-        >
-        <Text style={{fontFamily:'AlimamaShuHeiTi-Bold', fontSize:22, lineHeight: 40}}>Wechat</Text>
-      </Button>
+          style={styles.button1}
+          labelStyle={{fontSize: 16}}
+          mode="contained">
+          <Text
+            style={{
+              fontFamily: 'AlimamaShuHeiTi-Bold',
+              fontSize: 22,
+              lineHeight: 40,
+            }}>
+            Alipay
+          </Text>
+        </Button>
+        <Button
+          //   icon={source={require('../common/alipay.png')}}
+          style={styles.button2}
+          labelStyle={{fontSize: 16}}
+          mode="contained">
+          <Text
+            style={{
+              fontFamily: 'AlimamaShuHeiTi-Bold',
+              fontSize: 22,
+              lineHeight: 40,
+            }}>
+            Wechat
+          </Text>
+        </Button>
       </View>
     </View>
   );
@@ -56,20 +68,20 @@ const styles = StyleSheet.create({
     fontSize: 38,
     color: 'black',
   },
-  button1:{
+  button1: {
     marginTop: 50,
     backgroundColor: '#5296E1',
     borderRadius: 35,
     height: 88,
     justifyContent: 'center',
   },
-  button2:{
+  button2: {
     marginTop: 20,
     backgroundColor: '#31C72C',
     borderRadius: 35,
     height: 88,
     justifyContent: 'center',
-  }
+  },
 });
 
 export default Pay;
