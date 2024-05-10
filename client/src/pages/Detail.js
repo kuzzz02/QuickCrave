@@ -1,63 +1,71 @@
-import React,{ useState } from 'react';
-import { StyleSheet, View, TextInput, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, BottomNavigation, Icon, Button, IconButton, Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
-import { useCart } from './CartContext';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  Text,
+  BottomNavigation,
+  IconButton,
+  Provider as PaperProvider,
+  DefaultTheme,
+} from 'react-native-paper';
+import {useCart} from './CartContext';
 
+const {width, height} = Dimensions.get('window');
 
-const { width, height } = Dimensions.get('window');
+const MusicRoute = () => {};
 
-const MusicRoute = () => {
-
-};
-
-const NotificationsRoute = () => {
-
-};
+const NotificationsRoute = () => {};
 
 const Detail = () => {
-
-  const { counts, handleIncrease, handleDecrease, calculateTotal } = useCart();
+  const {counts, handleIncrease, handleDecrease, calculateTotal} = useCart();
 
   const newTheme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      primary: 'green',  
-      accent: 'red',  
+      primary: 'green',
+      accent: 'red',
       backgroundColor: 'white',
     },
-  };  
-const foodCategories =[{
-  id: 1,
-  name: 'Chicken Burger',
-  image: require('../common/goods5.png'),
-  description: '200 gr chicken + cheese Lettuce + tomato',
-  restaurant: 'McDonald\'s',
-  price: 10.99,
-},
-{
-  id: 2,
-  name: 'Cheese Burger',
-  image: require('../common/goods8.png'),
-  description: '200 gr chicken + cheese Lettuce + tomato',
-  restaurant: 'McDonald\'s',
-  price: 11.99,
-},
-{
-  id: 3,
-  name: 'Beef Burger',
-  image: require('../common/goods7.png'),
-  description: '200 gr chicken + cheese Lettuce + tomato',
-  restaurant: 'McDonald\'s',
-  price: 12.99,
-}]; 
+  };
+  const foodCategories = [
+    {
+      id: 1,
+      name: 'Chicken Burger',
+      image: require('../common/goods5.png'),
+      description: '200 gr chicken + cheese Lettuce + tomato',
+      restaurant: "McDonald's",
+      price: 10.99,
+    },
+    {
+      id: 2,
+      name: 'Cheese Burger',
+      image: require('../common/goods8.png'),
+      description: '200 gr chicken + cheese Lettuce + tomato',
+      restaurant: "McDonald's",
+      price: 11.99,
+    },
+    {
+      id: 3,
+      name: 'Beef Burger',
+      image: require('../common/goods7.png'),
+      description: '200 gr chicken + cheese Lettuce + tomato',
+      restaurant: "McDonald's",
+      price: 12.99,
+    },
+  ];
 
-const navigation = useNavigation();
+  const navigation = useNavigation();
 
-const renderRating = (rating) => {
+  const renderRating = rating => {
     const filledStars = Math.floor(rating);
     const halfStar = rating % 1 !== 0;
     const emptyStars = 5 - filledStars - (halfStar ? 1 : 0);
@@ -69,17 +77,27 @@ const renderRating = (rating) => {
       </>
     );
   };
-    
-const Tab = createBottomTabNavigator();
 
-const [searchQuery, setSearchQuery] = React.useState('');
+  const Tab = createBottomTabNavigator();
 
-const [selectedCategory, setSelectedCategory] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState('');
 
-const [index, setIndex] = React.useState(0);
+  const [selectedCategory, setSelectedCategory] = React.useState('');
+
+  const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'music', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
-    { key: 'notifications', title: 'Shopping-Cart', focusedIcon: 'shopping', unfocusedIcon: 'shopping-outline' },
+    {
+      key: 'music',
+      title: 'Home',
+      focusedIcon: 'home',
+      unfocusedIcon: 'home-outline',
+    },
+    {
+      key: 'notifications',
+      title: 'Shopping-Cart',
+      focusedIcon: 'shopping',
+      unfocusedIcon: 'shopping-outline',
+    },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
@@ -87,53 +105,77 @@ const [index, setIndex] = React.useState(0);
     notifications: NotificationsRoute,
   });
 
-const handlePress = (categoryName) => {
+  const handlePress = categoryName => {
     setSelectedCategory(categoryName);
     // Additional logic can be added here for navigation or other purposes
   };
 
-
-const handleShoppingPress = () => {
-  const total = calculateTotal();
-  navigation.navigate('ShoppingCart', { foodCategories, counts, total });
-}
+  const handleShoppingPress = () => {
+    const total = calculateTotal();
+    navigation.navigate('ShoppingCart', {foodCategories, counts, total});
+  };
 
   return (
-    <View style={{flex:1}}>
-    <ScrollView style={styles.container}>
-      <Image style={styles.backgroundImage} source={require('../common/detail.png')} />
-      <View style={styles.header}>
-        <Text style={styles.title}>McDonald's</Text>
-        <View style={styles.detailContainer}>
-            <View style ={styles.box}><Text>{'Delivery \nFor Free'}</Text></View>
-            <View style ={styles.box}><Text>20~30min</Text></View>
-            {/* <Text style={styles.itemRate}>{renderRating(item.rating)} </Text> */}
-        </View>    
-        </View>
-      <View style={styles.categoryContainer}>
-        {foodCategories.map((category, index) => (
-          <View key={category.id} style={styles.foodCategory}>
-            <Image source={category.image} style={{ width: 120, height: 120, marginBottom: 10 }} />
-            <Text style={styles.foodName}>{category.name}</Text>
-            <Text style={styles.foodDescription}>{category.description}</Text>
-            <View style={styles.actionContainer}>
-              {counts[index] > 0 && (
-                <IconButton icon="minus-circle" size={20} onPress={() => handleDecrease(index)} iconColor={'#06c168'} style={styles.minus} />
-              )}
-              {counts[index] > 0 ? (
-                <Text>{counts[index]}</Text>
-              ) : (
-                <Text style={styles.foodPrice}>€{category.price}</Text>
-              )}
-              <IconButton icon="plus-circle" size={20} onPress={() => handleIncrease(index)} iconColor={'#06c168'} style={styles.add} />
+    <View style={{flex: 1}}>
+      <ScrollView style={styles.container}>
+        <Image
+          style={styles.backgroundImage}
+          source={require('../common/detail.png')}
+        />
+        <View style={styles.header}>
+          <Text style={styles.title}>McDonald's</Text>
+          <View style={styles.detailContainer}>
+            <View style={styles.box}>
+              <Text>{'Delivery \nFor Free'}</Text>
             </View>
+            <View style={styles.box}>
+              <Text>20~30min</Text>
+            </View>
+            {/* <Text style={styles.itemRate}>{renderRating(item.rating)} </Text> */}
           </View>
-        ))}
-      </View>
-    </ScrollView>
-    <TouchableOpacity icon="alpha-q-circle-outline" onPress={handleShoppingPress}  style={styles.countCart} >
-    <Text style={styles.cartText}>Total Cost: €{calculateTotal()}</Text>
-    </TouchableOpacity>
+        </View>
+        <View style={styles.categoryContainer}>
+          {foodCategories.map((category, index) => (
+            <View key={category.id} style={styles.foodCategory}>
+              <Image
+                source={category.image}
+                style={{width: 120, height: 120, marginBottom: 10}}
+              />
+              <Text style={styles.foodName}>{category.name}</Text>
+              <Text style={styles.foodDescription}>{category.description}</Text>
+              <View style={styles.actionContainer}>
+                {counts[index] > 0 && (
+                  <IconButton
+                    icon="minus-circle"
+                    size={20}
+                    onPress={() => handleDecrease(index)}
+                    iconColor={'#06c168'}
+                    style={styles.minus}
+                  />
+                )}
+                {counts[index] > 0 ? (
+                  <Text>{counts[index]}</Text>
+                ) : (
+                  <Text style={styles.foodPrice}>€{category.price}</Text>
+                )}
+                <IconButton
+                  icon="plus-circle"
+                  size={20}
+                  onPress={() => handleIncrease(index)}
+                  iconColor={'#06c168'}
+                  style={styles.add}
+                />
+              </View>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+      <TouchableOpacity
+        icon="alpha-q-circle-outline"
+        onPress={handleShoppingPress}
+        style={styles.countCart}>
+        <Text style={styles.cartText}>Total Cost: €{calculateTotal()}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -150,7 +192,7 @@ const styles = StyleSheet.create({
     // resizeMode: 'contain',
     zIndex: -1,
   },
-  header:{
+  header: {
     backgroundColor: 'white',
     position: 'absolute',
     top: 80,
@@ -161,24 +203,24 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 15,
     shadowOpacity: 0.2,
-    shadowRadius: 3, 
-    shadowColor: '#000', 
-    shadowOffset: { height: 2, width: 0 }, 
-    elevation: 3, 
+    shadowRadius: 3,
+    shadowColor: '#000',
+    shadowOffset: {height: 2, width: 0},
+    elevation: 3,
   },
-  title:{
+  title: {
     fontSize: 26,
     // fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 10,
-    fontFamily:'AlimamaShuHeiTi-Bold',
+    fontFamily: 'AlimamaShuHeiTi-Bold',
   },
-  detailContainer:{
+  detailContainer: {
     flexDirection: 'row',
     // justifyContent: 'space-around',
     marginTop: 10,
   },
-  box:{
+  box: {
     width: 100,
     height: 50,
     justifyContent: 'center',
@@ -187,7 +229,7 @@ const styles = StyleSheet.create({
     borderColor: '#DCDFE6',
     borderRightWidth: 1,
   },
-  box1:{
+  box1: {
     width: 100,
     height: 50,
     justifyContent: 'center',
@@ -206,29 +248,29 @@ const styles = StyleSheet.create({
   foodCategory: {
     width: 160,
     height: 200,
-    margin: 12, 
+    margin: 12,
     backgroundColor: 'white',
     textAlign: 'center',
     borderRadius: 8,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 4
+    elevation: 4,
   },
-  foodName:{
+  foodName: {
     marginTop: -15,
     alignItems: 'center',
     textAlign: 'center',
-    fontFamily:'AlimamaShuHeiTi-Bold',
+    fontFamily: 'AlimamaShuHeiTi-Bold',
     fontSize: 18,
   },
-  foodDescription:{
+  foodDescription: {
     textAlign: 'center',
     fontSize: 14,
   },
-  foodPrice:{
+  foodPrice: {
     marginTop: 5,
     color: '#06C168',
     fontWeight: 'bold',

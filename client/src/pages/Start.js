@@ -1,27 +1,29 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
-import { useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native';
-
+import {StyleSheet, View, Image, Text} from 'react-native';
+import {useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 const Start = () => {
-    const navigation = useNavigation()
-    useEffect(()=>{
-        setTimeout(()=>{
-          //move to delivery screen
-          navigation.navigate('Start2');
-        }, 3000)
-      },[])
+  const navigation = useNavigation();
+  useEffect(() => {
+    setTimeout(() => {
+      //move to delivery screen
+      navigation.navigate('Start2');
+    }, 3000);
+  }, []);
   return (
     <View style={styles.container}>
       {/* 背景图片 */}
-      <Image source={require('../common/startback.jpg')} style={styles.backgroundImage} />
-      
+      <Image
+        source={require('../common/startback.jpg')}
+        style={styles.backgroundImage}
+      />
+
       {/* 中间的logo */}
       <View style={styles.logoContainer}>
         <Image source={require('../common/start.jpg')} style={styles.logo} />
       </View>
-      
+
       {/* 文字 */}
       <Text style={styles.text}>QuickCrave</Text>
     </View>
