@@ -63,7 +63,7 @@ const Detail = () => {
     },
   ];
 
-  const navigation = useNavigation();
+ 
 
   const renderRating = rating => {
     const filledStars = Math.floor(rating);
@@ -109,6 +109,8 @@ const Detail = () => {
     setSelectedCategory(categoryName);
     // Additional logic can be added here for navigation or other purposes
   };
+
+  const navigation = useNavigation();
 
   const handleShoppingPress = () => {
     const total = calculateTotal();

@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 import {useCart} from './CartContext';
 
@@ -16,6 +17,13 @@ const ShoppingCart = ({route}) => {
   const {foodCategories, counts, handleIncrease, handleDecrease} = useCart();
 
   const man = [{phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'}];
+
+  const navigation = useNavigation();
+
+  const handleOrderPress = () => {
+    const total = calculateTotal();
+    navigation.navigate('Pay', {total});
+  };
 
   const calculateTotal = () => {
     let total = foodCategories.reduce((total, item, index) => {
@@ -36,9 +44,6 @@ const ShoppingCart = ({route}) => {
                   <Text style={styles.foodName}>{item.name}</Text>
                   <Text style={styles.foodRestaurant}>{item.restaurant}</Text>
                   <Text style={styles.foodPrice}>€{item.price}</Text>
-
-                  {/* <Text style={styles.foodName}>{item.name} - {counts[index]} x ${item.price}</Text> */}
-                  {/* <Text>Subtotal: ${(counts[index] * item.price)}</Text> */}
                   <Text style></Text>
                 </View>
                 <View style={styles.buttonBox}>
@@ -101,6 +106,7 @@ const ShoppingCart = ({route}) => {
           style={styles.button}
           labelStyle={{fontSize: 16}}
           buttonColor="white"
+          onPress={handleOrderPress}
           mode="contained">
           <Text
             style={{
