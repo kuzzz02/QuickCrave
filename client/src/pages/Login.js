@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
+  Alert
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -14,13 +16,24 @@ import UserService from '../services/UserService';
 const {width, height} = Dimensions.get('window');
 
 const LogIn = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const handleSignUpPress = () => {
     navigation.navigate('SignUp');
   };
   const handleLogInPress = () => {
-    navigation.navigate('Main');
+    UserService.login({name:username,password:password})
+    .then(res => {
+      console.log(res);
+      navigation.navigate('Main');
+    })
+    .catch(error =>{
+      Alert.alert("Invalid username or password")
+      console.log(error + " " + "222");
+    })
   };
+
   return (
     <View
       style={styles.container}
@@ -40,12 +53,14 @@ const LogIn = () => {
         <TextInput
           style={styles.input}
           placeholder="Please input your phone number"
+          onChangeText={text => setUsername(text)}
           // keyboardType="phone-pad"
         />
         <Text style={styles.text2}>Password</Text>
         <TextInput
           style={styles.input}
           placeholder="Please input your password"
+          onChangeText={text => setPassword(text)}
           secureTextEntry={true}
         />
       </View>
