@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'
-
-
+import {StyleSheet, View, Image, Text, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const Init = () => {
   const navigation = useNavigation();
@@ -10,23 +8,26 @@ const Init = () => {
     <View style={styles.container}>
       {/* 食物插图 */}
       <Image source={require('../common/back.png')} style={styles.image} />
-      
+
       {/* 描述性文本 */}
-      <Text style={styles.title}>QuickCrave will give you best 
-                                        eating experience</Text>
-      <Text style={styles.subtitle}>Enjoy a fast and smooth food            delivery at your doorstep</Text>
-      
+      <Text style={styles.title}>
+        QuickCrave will give you best eating experience
+      </Text>
+      <Text style={styles.subtitle}>
+        Enjoy a fast and smooth food delivery at your doorstep
+      </Text>
+
       {/* 登录按钮 */}
-      <TouchableOpacity onPress={()=> navigation.navigate('LogIn')}
-      style={styles.loginButton}>
-        
+      <TouchableOpacity
+        onPress={() => navigation.navigate('LogIn')}
+        style={styles.loginButton}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
-      
+
       {/* 注册链接 */}
       <View style={styles.signupContainer}>
         <Text style={styles.signupText}>Don't you have an account? </Text>
-        <TouchableOpacity onPress={()=> navigation.navigate('SignUp')}>
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
           <Text style={styles.signupLink}>Sign up</Text>
         </TouchableOpacity>
       </View>
@@ -52,14 +53,14 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     textAlign: 'center',
     marginBottom: 10,
-    color: '#000000'
+    color: '#000000',
   },
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
-    color: '#000'
+    color: '#000',
   },
   loginButton: {
     backgroundColor: '#4CAF50', // 按钮的背景颜色
