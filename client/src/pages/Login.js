@@ -24,13 +24,23 @@ const LogIn = () => {
   };
   const handleLogInPress = () => {
     UserService.login({name:username,password:password})
+    // fetch('https://localhost:12581/user/login', {
+    //   method: 'POST',
+    //   headers: {
+    //    'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     "name": username,
+    //     "password": password
+    //   }),
+    // })
     .then(res => {
       console.log(res);
       navigation.navigate('Main');
     })
     .catch(error =>{
-      Alert.alert("Invalid username or password")
-      console.log(error + " " + "222");
+      console.log(error + " " + "2222");
+      Alert.alert("Invalid username or password");
     })
   };
 

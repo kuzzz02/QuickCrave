@@ -9,6 +9,10 @@ class UserService {
     return http.get(`/user/selectByName/${name}`);
   }
 
+  getById(id) {
+    return http.get(`/user/selectById/${id}`);
+  }
+
   create(data) {
     return http.post("/user/insert", data);
   }
@@ -21,9 +25,9 @@ class UserService {
     return http.delete(`/user/delete/${id}`);
   }
 
-  // deleteAll() {
-  //   return http.delete(`/user/deleteAll`);
-  // }
+  deleteAll() {
+    return http.delete(`/user/deleteAll`);
+  }
 
   login(data) {
     return http.post(`/user/login`, data);

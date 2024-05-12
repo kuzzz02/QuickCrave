@@ -20,24 +20,24 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
   const handleSignUpPress = () =>{
-     UserService.signup({name:username,password:password})
-//    fetch('http://localhost:8000/user/signup', {
-//      method: 'POST',
-//      headers: {
-//        'Content-Type': 'application/json',
-//      },
-//      body: JSON.stringify({
-//        name: username,
-//        password: password
-//      }),
-//    })
+    UserService.signup({name:username,password:password})
+    // fetch('https://localhost:12581/user/signup', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //  },
+    //   body: JSON.stringify({
+    //     name: username,
+    //     password: password
+    //   }),
+    // })
     .then(res => {
-      console.log(res);
+      console.log(res.data);
       navigation.navigate('LogIn');
     })
-    .catch(error =>{
-      Alert.alert("Invalid username or password")
+    .catch(error => {
       console.log(error + " " + "111");
+      Alert.alert("Invalid username or password");
       // if(!error.response) {
       //   console.log('!Network Error!');
       // } 
