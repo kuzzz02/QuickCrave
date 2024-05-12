@@ -14,6 +14,11 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-client-clientTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-client-clientTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		76CD7959022E4294B9DE4080 /* HedvigLettersSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 635B6C5F5C1140ADB9AC4138 /* HedvigLettersSans-Regular.ttf */; };
+		B30C3EF2312B4CD5B0AB7F81 /* Nunito-Italic-VariableFont_wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F02597B464924E11A6C3B9D5 /* Nunito-Italic-VariableFont_wght.ttf */; };
+		7BFBAD7B4B1142E9A2D6084E /* SmileySans-Oblique.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A5CB0C1C9524AD9A32B09AC /* SmileySans-Oblique.ttf */; };
+		E5E69B4D94B047F38D1922D3 /* SourceHanSansHC-VF.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ACD2242CBE9C4CDF8303B4AB /* SourceHanSansHC-VF.ttf */; };
+		18FC3AEB38FA49448B88965B /* AlimamaShuHeiTi-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FD2B1C0C2364FD18F69AF6A /* AlimamaShuHeiTi-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +49,11 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = client/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-client-clientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-client-clientTests.release.xcconfig"; path = "Target Support Files/Pods-client-clientTests/Pods-client-clientTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		635B6C5F5C1140ADB9AC4138 /* HedvigLettersSans-Regular.ttf */ = {isa = PBXFileReference; name = "HedvigLettersSans-Regular.ttf"; path = "../assets/fonts/HedvigLettersSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F02597B464924E11A6C3B9D5 /* Nunito-Italic-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "Nunito-Italic-VariableFont_wght.ttf"; path = "../assets/fonts/Nunito-Italic-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9A5CB0C1C9524AD9A32B09AC /* SmileySans-Oblique.ttf */ = {isa = PBXFileReference; name = "SmileySans-Oblique.ttf"; path = "../assets/fonts/SmileySans-Oblique.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		ACD2242CBE9C4CDF8303B4AB /* SourceHanSansHC-VF.ttf */ = {isa = PBXFileReference; name = "SourceHanSansHC-VF.ttf"; path = "../assets/fonts/SourceHanSansHC-VF.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8FD2B1C0C2364FD18F69AF6A /* AlimamaShuHeiTi-Bold.ttf */ = {isa = PBXFileReference; name = "AlimamaShuHeiTi-Bold.ttf"; path = "../assets/fonts/AlimamaShuHeiTi-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +132,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				A35AC4C1EA0D48B48FD9F311 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +158,19 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		A35AC4C1EA0D48B48FD9F311 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				635B6C5F5C1140ADB9AC4138 /* HedvigLettersSans-Regular.ttf */,
+				F02597B464924E11A6C3B9D5 /* Nunito-Italic-VariableFont_wght.ttf */,
+				9A5CB0C1C9524AD9A32B09AC /* SmileySans-Oblique.ttf */,
+				ACD2242CBE9C4CDF8303B4AB /* SourceHanSansHC-VF.ttf */,
+				8FD2B1C0C2364FD18F69AF6A /* AlimamaShuHeiTi-Bold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -243,6 +267,11 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				76CD7959022E4294B9DE4080 /* HedvigLettersSans-Regular.ttf in Resources */,
+				B30C3EF2312B4CD5B0AB7F81 /* Nunito-Italic-VariableFont_wght.ttf in Resources */,
+				7BFBAD7B4B1142E9A2D6084E /* SmileySans-Oblique.ttf in Resources */,
+				E5E69B4D94B047F38D1922D3 /* SourceHanSansHC-VF.ttf in Resources */,
+				18FC3AEB38FA49448B88965B /* AlimamaShuHeiTi-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
