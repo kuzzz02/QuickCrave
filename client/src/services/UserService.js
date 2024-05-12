@@ -33,7 +33,6 @@ class UserService {
     return http.post(`/user/login`, data);
   }
 
-
   signup(data) {
     return http.post(`/user/signup`, data);
   }

@@ -53,10 +53,6 @@ class GoodsService {
     return http.put(`/goods/updatePrice/${id}`, data);
   }
 
-  updateCategory(id, data) {
-    return http.put(`/goods/updateCategory/${id}`, data);
-  }
-
   updateDiscount(id, data) {
     return http.put(`/goods/updateDiscount/${id}`, data);
   }

@@ -12,6 +12,10 @@ class VendorService {
   getById(id) {
     return http.get(`/vendor/selectById/${id}`);
   }
+  
+  getByCategory(category) {
+    return http.get(`/vendor/selectByCategory/${category}`);
+  }
 
   getWithProducts(id) {
     return http.get(`/vendor/selectVendorWithGoods/${id}`);
