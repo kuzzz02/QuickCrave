@@ -8,7 +8,7 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
-  Alert
+  Alert,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -17,36 +17,33 @@ const {width, height} = Dimensions.get('window');
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
   const navigation = useNavigation();
-  const handleSignUpPress = () =>{
-     UserService.signup({name:username,password:password})
-//    fetch('http://localhost:8000/user/signup', {
-//      method: 'POST',
-//      headers: {
-//        'Content-Type': 'application/json',
-//      },
-//      body: JSON.stringify({
-//        name: username,
-//        password: password
-//      }),
-//    })
-    .then(res => {
-      console.log(res);
-      navigation.navigate('LogIn');
+  const handleSignUpPress = () => {
+    if (password1 !== password2) {
+      Alert.alert('Password does not match');
+      return;
+    }
+    //  UserService.signup({name:username,password:password})
+    fetch('http://10.0.2.2:12581/user/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: username,
+        password: password2,
+      }),
     })
-    .catch(error =>{
-      Alert.alert("Invalid username or password")
-      console.log(error + " " + "111");
-      // if(!error.response) {
-      //   console.log('!Network Error!');
-      // } 
-      // else{
-      //   console.log(error.response.data);
-      //   console.log(error.response.status);
-      //   console.log(error.response.headers);
-      // }
-    })
+      .then(res => {
+        // console.log(res);
+        navigation.navigate('LogIn');
+      })
+      .catch(error => {
+        Alert.alert('Invalid username or password');
+        console.log(error + ' ' + '111');
+      });
   };
 
   return (
@@ -75,13 +72,14 @@ const SignUp = () => {
         <TextInput
           style={styles.input}
           placeholder="Please set your password"
+          onChangeText={text => setPassword1(text)}
           secureTextEntry={true}
         />
         <Text style={styles.text}>Confirm your password</Text>
         <TextInput
           style={styles.input}
           placeholder="Please confirm your password"
-          onChangeText={text => setPassword(text)}
+          onChangeText={text => setPassword2(text)}
           secureTextEntry={true}
         />
       </View>

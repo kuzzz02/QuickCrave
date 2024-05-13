@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {CommonActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   Text,
@@ -74,25 +73,25 @@ const Main = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('');
 
   const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: 'music',
-      title: 'Home',
-      focusedIcon: 'home',
-      unfocusedIcon: 'home-outline',
-    },
-    {
-      key: 'notifications',
-      title: 'Shopping-Cart',
-      focusedIcon: 'shopping',
-      unfocusedIcon: 'shopping-outline',
-    },
-  ]);
+  // const [routes] = React.useState([
+  //   {
+  //     key: 'music',
+  //     title: 'Home',
+  //     focusedIcon: 'home',
+  //     unfocusedIcon: 'home-outline',
+  //   },
+  //   {
+  //     key: 'notifications',
+  //     title: 'Shopping-Cart',
+  //     focusedIcon: 'shopping',
+  //     unfocusedIcon: 'shopping-outline',
+  //   },
+  // ]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    music: MusicRoute,
-    notifications: NotificationsRoute,
-  });
+  // const renderScene = BottomNavigation.SceneMap({
+  //   music: MusicRoute,
+  //   notifications: NotificationsRoute,
+  // });
 
   const handlePress = categoryName => {
     setSelectedCategory(categoryName);
@@ -166,7 +165,7 @@ const Main = () => {
           barStyle={{backgroundColor: 'white'}}
           navigationState={{index, routes}}
           onIndexChange={setIndex}
-          renderScene={renderScene}
+          // renderScene={renderScene}
         />
       </View>
     </View>
