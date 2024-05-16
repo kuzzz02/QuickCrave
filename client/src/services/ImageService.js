@@ -1,4 +1,4 @@
-import http from "../http";
+import http from '../http';
 
 class ImageService {
   getVendorImage(imageName) {
