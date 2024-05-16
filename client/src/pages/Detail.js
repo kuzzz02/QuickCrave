@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,22 +7,17 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {
   Text,
-  BottomNavigation,
   IconButton,
   Provider as PaperProvider,
   DefaultTheme,
 } from 'react-native-paper';
 import {useCart} from './CartContext';
+import GoodsService from '../services/GoodsService';
 
 const {width, height} = Dimensions.get('window');
-
-const MusicRoute = () => {};
-
-const NotificationsRoute = () => {};
 
 const Detail = () => {
   const {counts, handleIncrease, handleDecrease, calculateTotal} = useCart();
@@ -36,34 +31,6 @@ const Detail = () => {
       backgroundColor: 'white',
     },
   };
-  const foodCategories = [
-    {
-      id: 1,
-      name: 'Chicken Burger',
-      image: require('../common/goods5.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 10.99,
-    },
-    {
-      id: 2,
-      name: 'Cheese Burger',
-      image: require('../common/goods8.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 11.99,
-    },
-    {
-      id: 3,
-      name: 'Beef Burger',
-      image: require('../common/goods7.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 12.99,
-    },
-  ];
-
- 
 
   const renderRating = rating => {
     const filledStars = Math.floor(rating);
@@ -78,43 +45,34 @@ const Detail = () => {
     );
   };
 
-  const Tab = createBottomTabNavigator();
+  const route = useRoute();
 
-  const [searchQuery, setSearchQuery] = React.useState('');
-
-  const [selectedCategory, setSelectedCategory] = React.useState('');
+  const vendor = route.params.vendor;
 
   const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: 'music',
-      title: 'Home',
-      focusedIcon: 'home',
-      unfocusedIcon: 'home-outline',
-    },
-    {
-      key: 'notifications',
-      title: 'Shopping-Cart',
-      focusedIcon: 'shopping',
-      unfocusedIcon: 'shopping-outline',
-    },
-  ]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    music: MusicRoute,
-    notifications: NotificationsRoute,
-  });
+  const [goods, setGoods] = useState([]);
 
-  const handlePress = categoryName => {
-    setSelectedCategory(categoryName);
-    // Additional logic can be added here for navigation or other purposes
-  };
+  useEffect(() => {
+    const fetchVendorDetails = async () => {
+      try {
+        const goodsResponse = await GoodsService.getAll();
+        const goodsData = goodsResponse.data;
+        const goodsArray = Array.isArray(goodsData) ? goodsData : [goodsData];
+        setGoods(goodsArray);
+      } catch (error) {
+        console.error('Error fetching user details: ', error);
+      }
+    };
+    fetchVendorDetails();
+  }, []);
+
 
   const navigation = useNavigation();
 
-  const handleShoppingPress = () => {
+  const handleShoppingPress = vendor => {
     const total = calculateTotal();
-    navigation.navigate('ShoppingCart', {foodCategories, counts, total});
+    navigation.navigate('ShoppingCart', {goods, counts, total, vendor});
   };
 
   return (
@@ -125,26 +83,40 @@ const Detail = () => {
           source={require('../common/detail.png')}
         />
         <View style={styles.header}>
-          <Text style={styles.title}>McDonald's</Text>
+          <Text style={styles.title}>{vendor.name}</Text>
           <View style={styles.detailContainer}>
             <View style={styles.box}>
-              <Text>{'Delivery \nFor Free'}</Text>
+              <Text>Delivery for</Text>
+              <Text>€{vendor.fee}</Text>
             </View>
             <View style={styles.box}>
-              <Text>20~30min</Text>
+              <Text>{vendor.time}min</Text>
             </View>
-            {/* <Text style={styles.itemRate}>{renderRating(item.rating)} </Text> */}
+            <View style={styles.box}>
+              <Text style={styles.itemRate}>
+                {renderRating(vendor.quantity)}{' '}
+              </Text>
+            </View>
           </View>
         </View>
         <View style={styles.categoryContainer}>
-          {foodCategories.map((category, index) => (
-            <View key={category.id} style={styles.foodCategory}>
-              <Image
-                source={category.image}
-                style={{width: 120, height: 120, marginBottom: 10}}
-              />
-              <Text style={styles.foodName}>{category.name}</Text>
-              <Text style={styles.foodDescription}>{category.description}</Text>
+          {goods.map((good, index) => (
+            <View key={good.id} style={styles.foodCategory}>
+              <Image style={{width: 120, height: 120, marginBottom: 5}} />
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={styles.foodName}>
+                {good.name}
+              </Text>
+              <View style={styles.textBox}>
+                <Text
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                  style={styles.foodDescription}>
+                  {good.description}
+                </Text>
+              </View>
               <View style={styles.actionContainer}>
                 {counts[index] > 0 && (
                   <IconButton
@@ -156,9 +128,9 @@ const Detail = () => {
                   />
                 )}
                 {counts[index] > 0 ? (
-                  <Text>{counts[index]}</Text>
+                  <Text styles={styles.text}>{counts[index]}</Text>
                 ) : (
-                  <Text style={styles.foodPrice}>€{category.price}</Text>
+                  <Text style={styles.foodPrice}>€{good.price}</Text>
                 )}
                 <IconButton
                   icon="plus-circle"
@@ -174,7 +146,7 @@ const Detail = () => {
       </ScrollView>
       <TouchableOpacity
         icon="alpha-q-circle-outline"
-        onPress={handleShoppingPress}
+        onPress={() => handleShoppingPress(vendor)}
         style={styles.countCart}>
         <Text style={styles.cartText}>Total Cost: €{calculateTotal()}</Text>
       </TouchableOpacity>
@@ -247,10 +219,19 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
     alignItems: 'center',
   },
+  // textBox: {
+  //   height: 30,
+  //   width: 160,
+  //   // backgroundColor: 'red',
+  //   // alignItems: 'center',
+  //   justifyContent: 'center',
+  //   textAlign: 'center',
+  // },
   foodCategory: {
     width: 160,
     height: 200,
-    margin: 12,
+    margin: 10,
+    marginHorizontal: width * 0.015,
     backgroundColor: 'white',
     textAlign: 'center',
     borderRadius: 8,
@@ -284,11 +265,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // marginTop: 10,
     alignItems: 'center',
+    alignSelf: 'center', // 水平居中
+    justifyContent: 'space-between',
     marginTop: -8,
     height: 35,
     width: 160,
     // backgroundColor: 'red',
-    justifyContent: 'center',
   },
   countCart: {
     justifyContent: 'center',
@@ -300,6 +282,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#162D3A',
     borderRadius: 15,
   },
+  add: {
+    marginTop: 12,
+  },
+  minus: {
+    marginTop: 12,
+  },
+  // text:{
+  //   marginTop:15,
+  // },
   cartText: {
     fontWeight: 'bold',
     color: 'white',

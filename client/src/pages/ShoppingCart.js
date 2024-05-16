@@ -7,14 +7,14 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 import {useCart} from './CartContext';
 
 const {width, height} = Dimensions.get('window');
 
-const ShoppingCart = ({route}) => {
-  const {foodCategories, counts, handleIncrease, handleDecrease} = useCart();
+const ShoppingCart = () => {
+  const {goods, counts, handleIncrease, handleDecrease} = useCart();
 
   const man = [{phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'}];
 
@@ -26,23 +26,28 @@ const ShoppingCart = ({route}) => {
   };
 
   const calculateTotal = () => {
-    let total = foodCategories.reduce((total, item, index) => {
-      return total + item.price * counts[index];
-    }, 0);
+    let total = vendor.fee;
+    counts.forEach((count, index) => {
+      total += count * goods[index].price;
+    });
     return total;
   };
+
+  const route = useRoute();
+
+  const vendor = route.params.vendor;
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        {foodCategories.map((item, index) => {
+        {goods.map((item, index) => {
           if (counts[index] > 0) {
             return (
               <View style={styles.productContainer}>
                 <Image source={item.image} style={styles.foodImage}></Image>
                 <View key={item.id} style={styles.item}>
-                  <Text style={styles.foodName}>{item.name}</Text>
-                  <Text style={styles.foodRestaurant}>{item.restaurant}</Text>
+                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.foodName}>{item.name}</Text>
+                  <Text style={styles.foodRestaurant}>{vendor.name}</Text>
                   <Text style={styles.foodPrice}>€{item.price}</Text>
                   <Text style></Text>
                 </View>
@@ -86,7 +91,7 @@ const ShoppingCart = ({route}) => {
               </Text>
             </View>
           ))}
-          <View style={{marginLeft: 30}}>
+          <View style={{marginLeft: 10}}>
             <Text style={styles.editLink}>Edit</Text>
           </View>
         </View>
@@ -99,7 +104,7 @@ const ShoppingCart = ({route}) => {
         </View>
         <View style={styles.right}>
           <Text style={styles.money}>€{calculateTotal()}</Text>
-          <Text style={styles.money}>€{calculateTotal()}</Text>
+          <Text style={styles.money}>€{vendor.fee}</Text>
           <Text style={styles.money1}>€{calculateTotal()}</Text>
         </View>
         <Button
@@ -129,8 +134,8 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green',
   },
   item: {
-    // padding: 10,
-    // backgroundColor: 'red',
+    width: 145,
+
   },
   productContainer: {
     flexDirection: 'row',
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   foodName: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     color: 'black',
     marginTop: 10,
@@ -167,8 +172,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   foodImage: {
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     borderRadius: 8,
   },
   buttonBox: {
@@ -233,6 +238,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     marginTop: 10,
+    marginRight: 20,
   },
   totalContainer: {
     flexDirection: 'row',
@@ -253,7 +259,7 @@ const styles = StyleSheet.create({
   },
   left: {
     height: 180,
-    width: width * 0.45,
+    width: width * 0.5,
   },
   right: {
     height: 180,

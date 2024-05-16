@@ -1,37 +1,30 @@
 import React, {createContext, useContext, useState} from 'react';
+import {useEffect} from 'react';
+import GoodsService from '../services/GoodsService';
 
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({children}) => {
-  const [foodCategories, setFoodCategories] = useState([
-    {
-      id: 1,
-      name: 'Chicken Burger',
-      image: require('../common/goods5.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 10.99,
-    },
-    {
-      id: 2,
-      name: 'Cheese Burger',
-      image: require('../common/goods8.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 11.99,
-    },
-    {
-      id: 3,
-      name: 'Beef Burger',
-      image: require('../common/goods7.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 12.99,
-    },
-  ]);
-  const [counts, setCounts] = useState(new Array(3).fill(0));
+  const [goods, setGoods] = useState([]);
+  const [counts, setCounts] = useState([]);
+
+  useEffect(() => {
+    const fetchVendorDetails = async () => {
+      try {
+        const goodsResponse = await GoodsService.getAll();
+        const goodsData = goodsResponse.data;
+        const goodsArray = Array.isArray(goodsData) ? goodsData : [goodsData];
+        setGoods(goodsArray);
+        setCounts(new Array(goodsData.length).fill(0));
+      } catch (error) {
+        console.error('Error fetching user details: ', error);
+      }
+    };
+    fetchVendorDetails();
+  }, []);
+ 
 
   const handleIncrease = index => {
     const newCounts = [...counts];
@@ -50,15 +43,18 @@ export const CartProvider = ({children}) => {
   const calculateTotal = () => {
     let total = 0;
     counts.forEach((count, index) => {
-      total += count * foodCategories[index].price;
+      total += count * Number(goods[index].price);
     });
     return total;
   };
 
+
+
+
   return (
     <CartContext.Provider
       value={{
-        foodCategories,
+        goods,
         counts,
         handleIncrease,
         handleDecrease,

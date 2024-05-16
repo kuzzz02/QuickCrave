@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
-  Alert
+  Alert,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -23,15 +23,26 @@ const LogIn = () => {
     navigation.navigate('SignUp');
   };
   const handleLogInPress = () => {
-    UserService.login({name:username,password:password})
-    .then(res => {
-      console.log(res);
-      navigation.navigate('Main');
-    })
-    .catch(error =>{
-      Alert.alert("Invalid username or password")
-      console.log(error + " " + "222");
-    })
+    UserService.login({name: username, password: password})
+      // fetch('https://8.130.37.157:12581/user/login', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({name: username, password: password}),
+      // })
+      // .then(response => {
+      //   // JSON.parse(response);
+      //   // response.json();
+      // })
+      .then(res => {
+        console.log(res);
+        navigation.navigate('Main');
+      })
+      .catch(error => {
+        console.log(error + ' ' + '2222');
+        Alert.alert('Invalid username or password');
+      });
   };
 
   return (

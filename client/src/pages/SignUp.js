@@ -25,19 +25,19 @@ const SignUp = () => {
       Alert.alert('Password does not match');
       return;
     }
-    //  UserService.signup({name:username,password:password})
-    fetch('http://10.0.2.2:12581/user/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: username,
-        password: password2,
-      }),
-    })
+    UserService.signup({name: username, password: password2})
+      // fetch('http://10.0.2.2:12581/user/signup', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     name: username,
+      //     password: password2,
+      //   }),
+      // })
       .then(res => {
-        // console.log(res);
+        console.log(res);
         navigation.navigate('LogIn');
       })
       .catch(error => {

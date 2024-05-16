@@ -10,6 +10,7 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   Text,
   Searchbar,
@@ -39,6 +40,7 @@ const Main = () => {
 
   const [filteredVendors, setFilteredVendors] = useState([]);
 
+  const [image, setImage] = useState('');
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -46,14 +48,9 @@ const Main = () => {
         const response = await VendorService.getAll();
         const data = response.data;
         const vendorsArray = Array.isArray(data) ? data : [data];
+        // console.log('vendorsArray:', 1);
         setVendors(vendorsArray);
         setFilteredVendors(vendorsArray);
-        await Promise.all(
-          vendorsArray.map(async vendor => {
-            const imageResponse = await ImageService.getVendorImage(vendor.imageName);
-            vendor.image = imageResponse.data.url; // Assuming the response includes the URL directly
-          }),
-        );
       } catch (error) {
         console.error('Error fetching user details: ', error);
       }
@@ -74,14 +71,16 @@ const Main = () => {
     );
   };
 
-
-  const handleDetailPress = vendor => {
+  const handleDetailPress = (vendor) => {
     navigation.navigate('Detail', {vendor});
   };
+
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const [selectedCategory, setSelectedCategory] = React.useState('');
+
+
 
   const handlePress = categoryKey => {
     setSelectedCategory(categoryKey);
@@ -95,7 +94,7 @@ const Main = () => {
     }
   };
 
-  const handleSearch = query => {
+  const handleSearch = (query) => {
     setSearchQuery(query);
     if (query.trim() === '') {
       setFilteredVendors(vendors); // 如果搜索框为空，则显示所有商家
@@ -103,7 +102,7 @@ const Main = () => {
       const filtered = vendors.filter(
         vendor =>
           vendor.name.toLowerCase().includes(query.toLowerCase()) ||
-          vendor.description.toLowerCase().includes(query.toLowerCase()),
+          vendor.description.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredVendors(filtered);
     }
@@ -164,22 +163,11 @@ const Main = () => {
             key={vendor.id}
             style={styles.item}
             onPress={() => handleDetailPress(vendor)}>
-              {console.log(vendor.image)}
-              <View style={styles.imageBox}>
-            <Image style={styles.logo} source={{ uri: `https://8.130.37.157:12581/vendor/${vendor.image}` }} />
-            {/* "https://8.130.37.157:12581/vendor/MC.png" */}
-            </View>
+            <Image style={styles.logo} />
             <View style={styles.details}>
               <Text style={styles.itemName}>{vendor.name}</Text>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={styles.itemDescription}>
-                {vendor.description}
-              </Text>
-              <Text style={styles.itemRate}>
-                {renderRating(vendor.quantity)}{' '}
-              </Text>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.itemDescription}>{vendor.description}</Text>
+              <Text style={styles.itemRate}>{renderRating(vendor.quantity)} </Text>
             </View>
           </TouchableOpacity>
         ))}
@@ -280,7 +268,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     backgroundColor: 'white',
     borderRadius: 8,
-    margin: 10,
+    margin:10,
     // padding: 10,
     // justifyContent: 'center',
     // textAlign: 'center',
@@ -291,19 +279,15 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 4,
   },
-  imageBox:{
-    justifyContent: 'center',
-    alignSelf: 'center',
-  },
   logo: {
-    resizeMode: 'center',
+    // resizeMode: 'center',
     width: 90,
     height: 80,
     marginTop: 30,
     marginRight: 10,
   },
   details: {
-    marginTop: 10,
+    marginTop: 20,
     // flex: 1,
   },
   itemName: {
