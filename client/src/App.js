@@ -24,13 +24,10 @@ export default function App() {
           screenOptions={{
             headerShown: false,
           }}>
-          {/* <Stack.Screen name="LogIn" component={LogIn} /> */}
-          {/* <Stack.Screen name="Test" component={Test} /> */}
-          {/* <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="Start" component={Start} />
           <Stack.Screen name="Init" component={Init} />
           <Stack.Screen name="LogIn" component={LogIn} />
-          <Stack.Screen name="SignUp" component={SignUp} /> */}
+          <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="Detail" component={Detail} />
           <Stack.Screen name="ShoppingCart" component={ShoppingCart} />

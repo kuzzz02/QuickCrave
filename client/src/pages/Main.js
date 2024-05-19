@@ -50,8 +50,10 @@ const Main = () => {
         setFilteredVendors(vendorsArray);
         await Promise.all(
           vendorsArray.map(async vendor => {
-            const imageResponse = await ImageService.getVendorImage(vendor.imageName);
-            vendor.image = imageResponse.data.url; // Assuming the response includes the URL directly
+            const imageResponse = await ImageService.getVendorImage("MC.png");
+            vendor.s = imageResponse; // Assuming the response includes the URL directly
+            console.log(imageResponse._url);
+            console.log("1");
           }),
         );
       } catch (error) {
@@ -164,9 +166,9 @@ const Main = () => {
             key={vendor.id}
             style={styles.item}
             onPress={() => handleDetailPress(vendor)}>
-              {console.log(vendor.image)}
+              {/* {console.log(vendor.portrait)} */}
               <View style={styles.imageBox}>
-            <Image style={styles.logo} source={{ uri: `https://8.130.37.157:12581/vendor/${vendor.image}` }} />
+            <Image style={styles.logo} source={{ uri: `https://8.130.37.157:12581/vendor/${vendor.portrait}` }} />
             {/* "https://8.130.37.157:12581/vendor/MC.png" */}
             </View>
             <View style={styles.details}>

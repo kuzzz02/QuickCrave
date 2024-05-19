@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   signupLink: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#162D3A', // 注册链接颜色
+    color: '#4f6d7a',
   },
 });
 

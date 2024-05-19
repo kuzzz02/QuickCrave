@@ -16,7 +16,7 @@ const {width, height} = Dimensions.get('window');
 const ShoppingCart = () => {
   const {goods, counts, handleIncrease, handleDecrease} = useCart();
 
-  const man = [{phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'}];
+  const man = [{id:"1", phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'}];
 
   const navigation = useNavigation();
 
@@ -27,6 +27,7 @@ const ShoppingCart = () => {
 
   const calculateTotal = () => {
     let total = vendor.fee;
+    console.log(vendor.fee);
     counts.forEach((count, index) => {
       total += count * goods[index].price;
     });
@@ -44,7 +45,7 @@ const ShoppingCart = () => {
           if (counts[index] > 0) {
             return (
               <View style={styles.productContainer}>
-                <Image source={item.image} style={styles.foodImage}></Image>
+                <Image source={{ uri: `https://8.130.37.157:12581/goods/${item.image}` }} style={styles.foodImage}></Image>
                 <View key={item.id} style={styles.item}>
                   <Text numberOfLines={1} ellipsizeMode="tail" style={styles.foodName}>{item.name}</Text>
                   <Text style={styles.foodRestaurant}>{vendor.name}</Text>
@@ -76,7 +77,7 @@ const ShoppingCart = () => {
         })}
         <View style={styles.locationContainer}>
           {man.map(item => (
-            <View style={{height: 100, width: 280}}>
+            <View key={man.id} style={{height: 100, width: 280}}>
               <Text style={styles.locationTitle}>Deliver To</Text>
               {/* <Icon source="map-marker" style={{marginLeft:100}} color="yellow"size={40}/> */}
               <Text
@@ -103,7 +104,7 @@ const ShoppingCart = () => {
           <Text style={styles.total1}>Total: </Text>
         </View>
         <View style={styles.right}>
-          <Text style={styles.money}>€{calculateTotal()}</Text>
+          <Text style={styles.money}>€{calculateTotal()-vendor.fee}</Text>
           <Text style={styles.money}>€{vendor.fee}</Text>
           <Text style={styles.money1}>€{calculateTotal()}</Text>
         </View>

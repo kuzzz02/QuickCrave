@@ -2,7 +2,7 @@ import http from '../http';
 
 class ImageService {
   getVendorImage(imageName) {
-    return http.get(`/image/vendor/${imageName}`);
+    return http.get(`/image/vendor/getVendorImage?imageName=${imageName}`);
   }
 
   getGoodsImage(imageName) {

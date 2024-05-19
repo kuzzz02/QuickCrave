@@ -102,7 +102,7 @@ const Detail = () => {
         <View style={styles.categoryContainer}>
           {goods.map((good, index) => (
             <View key={good.id} style={styles.foodCategory}>
-              <Image style={{width: 120, height: 120, marginBottom: 5}} />
+              <Image style={{width: 120, height: 120, marginBottom: 5}} source={{ uri: `https://8.130.37.157:12581/goods/${good.image}` }} />
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"

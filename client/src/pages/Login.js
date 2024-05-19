@@ -9,6 +9,8 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -23,33 +25,32 @@ const LogIn = () => {
     navigation.navigate('SignUp');
   };
   const handleLogInPress = () => {
+    if (!username || !password) {
+      Alert.alert('Error', 'Username and password cannot be empty');
+      return;
+    }
     UserService.login({name: username, password: password})
-      // fetch('https://8.130.37.157:12581/user/login', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({name: username, password: password}),
-      // })
-      // .then(response => {
-      //   // JSON.parse(response);
-      //   // response.json();
-      // })
       .then(res => {
-        console.log(res);
-        navigation.navigate('Main');
+        if (res.status === 200) {  // 检查状态码是否为200
+          console.log(res);
+          navigation.navigate('Main');
+        } else {
+          console.log("Login failed: ", res.status);
+          Alert.alert('Invalid username or password');
+        }
       })
       .catch(error => {
-        console.log(error + ' ' + '2222');
-        Alert.alert('Invalid username or password');
+        console.log(error, ' 2222');
+        Alert.alert('Login error, please try again');
       });
   };
 
   return (
-    <View
+    <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.select({ios: 'padding', android: 'height'})}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}>
+      behavior="height"
+      keyboardVerticalOffset={-25}
+      enabled>
       <ImageBackground
         source={require('../common/70.jpg')}
         style={styles.backgroundImage}
@@ -89,7 +90,7 @@ const LogIn = () => {
           Sign up
         </Text>
       </Text>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
