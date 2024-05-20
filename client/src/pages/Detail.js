@@ -55,7 +55,7 @@ const Detail = () => {
   const [goods, setGoods] = useState([]);
 
 
-  const placeholderImage = require('../common/qu.png');
+  // const placeholderImage = require('../common/qu.png');
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -106,11 +106,12 @@ const Detail = () => {
         <View style={styles.categoryContainer}>
           {goods.map((good, index) => (
             <View key={good.id} style={styles.foodCategory}>
-              {images[good.id] ? (
+              <Image style={{width: 120, height: 120, marginBottom: 5}} source={{uri: images[good.id]}} />
+              {/* {images[good.id] ? (
                 <Image style={{width: 120, height: 120, marginBottom: 5}} source={{uri: images[good.id]}} />
               ) : (
                 <Image style={{width: 120, height: 120, marginBottom: 5}} source={placeholderImage} />
-              )}
+              )} */}
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
