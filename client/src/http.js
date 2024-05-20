@@ -4,7 +4,7 @@ const http = axios.create({
   baseURL: 'https://8.130.37.157:12581',
   // timeout:5000,
   headers: {
-    'Content-type': 'application/json',
+    'Content-type': 'application/json'
   },
   validateStatus: false,
   // withCredentials: true

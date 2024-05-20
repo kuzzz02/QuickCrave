@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
+// import { Buffer } from 'buffer';
 import axios from 'axios';
+
 import {
   StyleSheet,
   View,
@@ -22,10 +24,6 @@ import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
 
-const MusicRoute = () => {};
-
-const NotificationsRoute = () => {};
-
 const Main = () => {
   const navigation = useNavigation();
 
@@ -39,6 +37,9 @@ const Main = () => {
 
   const [filteredVendors, setFilteredVendors] = useState([]);
 
+  const [images, setImages] = useState({});
+
+  const placeholderImage = require('../common/qu.png');
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -48,12 +49,13 @@ const Main = () => {
         const vendorsArray = Array.isArray(data) ? data : [data];
         setVendors(vendorsArray);
         setFilteredVendors(vendorsArray);
-        await Promise.all(
-          vendorsArray.map(async vendor => {
-            const imageResponse = await ImageService.getVendorImage(vendor.imageName);
-            vendor.image = imageResponse.data.url; // Assuming the response includes the URL directly
-          }),
-        );
+        vendorsArray.forEach(async vendor => {
+          const imageSrc = await ImageService.getVendorImage(vendor.portrait);
+          setImages(prevImages => ({
+            ...prevImages,
+            [vendor.id]: imageSrc,
+          }));
+        });
       } catch (error) {
         console.error('Error fetching user details: ', error);
       }
@@ -73,7 +75,6 @@ const Main = () => {
       </>
     );
   };
-
 
   const handleDetailPress = vendor => {
     navigation.navigate('Detail', {vendor});
@@ -100,10 +101,8 @@ const Main = () => {
     if (query.trim() === '') {
       setFilteredVendors(vendors); // 如果搜索框为空，则显示所有商家
     } else {
-      const filtered = vendors.filter(
-        vendor =>
-          vendor.name.toLowerCase().includes(query.toLowerCase()) ||
-          vendor.description.toLowerCase().includes(query.toLowerCase()),
+      const filtered = vendors.filter(vendor =>
+        vendor.name.toLowerCase().includes(query.toLowerCase()),
       );
       setFilteredVendors(filtered);
     }
@@ -164,10 +163,12 @@ const Main = () => {
             key={vendor.id}
             style={styles.item}
             onPress={() => handleDetailPress(vendor)}>
-              {console.log(vendor.image)}
-              <View style={styles.imageBox}>
-            <Image style={styles.logo} source={{ uri: `https://8.130.37.157:12581/vendor/${vendor.image}` }} />
-            {/* "https://8.130.37.157:12581/vendor/MC.png" */}
+            <View style={styles.imageBox}>
+              {images[vendor.id] ? (
+                <Image style={styles.logo} source={{uri: images[vendor.id]}} />
+              ) : (
+                <Image style={styles.logo} source={placeholderImage} />
+              )}
             </View>
             <View style={styles.details}>
               <Text style={styles.itemName}>{vendor.name}</Text>
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 4,
   },
-  imageBox:{
+  imageBox: {
     justifyContent: 'center',
     alignSelf: 'center',
   },

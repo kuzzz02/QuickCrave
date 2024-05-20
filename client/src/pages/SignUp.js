@@ -9,6 +9,8 @@ import {
   ImageBackground,
   Dimensions,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -20,24 +22,20 @@ const SignUp = () => {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const navigation = useNavigation();
+  const handleLoginPress = () => {
+    navigation.navigate('LogIn');
+  };
   const handleSignUpPress = () => {
+    if (!username || !password2) {
+      Alert.alert('Error', 'Username and password cannot be empty');
+      return;
+    }
     if (password1 !== password2) {
       Alert.alert('Password does not match');
       return;
     }
     UserService.signup({name: username, password: password2})
-      // fetch('http://10.0.2.2:12581/user/signup', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     name: username,
-      //     password: password2,
-      //   }),
-      // })
       .then(res => {
-        console.log(res);
         navigation.navigate('LogIn');
       })
       .catch(error => {
@@ -47,10 +45,12 @@ const SignUp = () => {
   };
 
   return (
-    <View
+    <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.select({ios: 'padding', android: 'height'})}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}>
+      behavior="height"
+      keyboardVerticalOffset={-25}
+      enabled>
+      {console.log('height', 1)}
       <ImageBackground
         source={require('../common/SU.jpg')}
         style={styles.backgroundImage}
@@ -91,7 +91,13 @@ const SignUp = () => {
         onPress={handleSignUpPress}>
         Sign Up
       </Button>
-    </View>
+      <Text style={styles.signupText}>
+        Already have an account?{' '}
+        <Text style={styles.loginLink} onPress={handleLoginPress}>
+          Login
+        </Text>
+      </Text>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -125,6 +131,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 15,
     flexGrow: 1,
+    // justifyContent: 'space-around',
   },
   text: {
     marginTop: 5,
@@ -147,7 +154,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-  signupLink: {
+  loginLink: {
     fontWeight: 'bold',
     color: '#4f6d7a',
   },
