@@ -36,7 +36,6 @@ const SignUp = () => {
     }
     UserService.signup({name: username, password: password2})
       .then(res => {
-        console.log(res);
         navigation.navigate('LogIn');
       })
       .catch(error => {

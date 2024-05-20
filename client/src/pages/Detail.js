@@ -16,11 +16,12 @@ import {
 } from 'react-native-paper';
 import {useCart} from './CartContext';
 import GoodsService from '../services/GoodsService';
+import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
 
 const Detail = () => {
-  const {counts, handleIncrease, handleDecrease, calculateTotal} = useCart();
+  const {counts, handleIncrease, handleDecrease, calculateTotal, images} = useCart();
 
   const newTheme = {
     ...DefaultTheme,
@@ -52,6 +53,9 @@ const Detail = () => {
   const [index, setIndex] = React.useState(0);
 
   const [goods, setGoods] = useState([]);
+
+
+  const placeholderImage = require('../common/qu.png');
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -102,7 +106,11 @@ const Detail = () => {
         <View style={styles.categoryContainer}>
           {goods.map((good, index) => (
             <View key={good.id} style={styles.foodCategory}>
-              <Image style={{width: 120, height: 120, marginBottom: 5}} source={{ uri: `https://8.130.37.157:12581/goods/${good.image}` }} />
+              {images[good.id] ? (
+                <Image style={{width: 120, height: 120, marginBottom: 5}} source={{uri: images[good.id]}} />
+              ) : (
+                <Image style={{width: 120, height: 120, marginBottom: 5}} source={placeholderImage} />
+              )}
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
@@ -147,7 +155,9 @@ const Detail = () => {
       <TouchableOpacity
         icon="alpha-q-circle-outline"
         onPress={() => handleShoppingPress(vendor)}
-        style={styles.countCart}>
+        disabled={calculateTotal() === 0 }
+        style={styles.countCart}
+        >
         <Text style={styles.cartText}>Total Cost: €{calculateTotal()}</Text>
       </TouchableOpacity>
     </View>

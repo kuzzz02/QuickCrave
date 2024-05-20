@@ -32,7 +32,6 @@ const LogIn = () => {
     UserService.login({name: username, password: password})
       .then(res => {
         if (res.status === 200) {  // 检查状态码是否为200
-          console.log(res);
           navigation.navigate('Main');
         } else {
           console.log("Login failed: ", res.status);
