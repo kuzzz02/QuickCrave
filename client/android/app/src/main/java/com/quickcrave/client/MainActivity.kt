@@ -1,4 +1,4 @@
-package com.client
+package com.quickcrave.client
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
