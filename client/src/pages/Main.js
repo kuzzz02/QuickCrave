@@ -39,7 +39,7 @@ const Main = () => {
 
   const [images, setImages] = useState({});
 
-  const placeholderImage = require('../common/qu.png');
+  // const placeholderImage = require('../common/qu.png');
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -164,11 +164,12 @@ const Main = () => {
             style={styles.item}
             onPress={() => handleDetailPress(vendor)}>
             <View style={styles.imageBox}>
-              {images[vendor.id] ? (
+            <Image style={styles.logo} source={{uri: images[vendor.id]}} />
+              {/* {images[vendor.id] ? (
                 <Image style={styles.logo} source={{uri: images[vendor.id]}} />
               ) : (
                 <Image style={styles.logo} source={placeholderImage} />
-              )}
+              )} */}
             </View>
             <View style={styles.details}>
               <Text style={styles.itemName}>{vendor.name}</Text>
