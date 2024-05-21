@@ -27,7 +27,6 @@ const ShoppingCart = () => {
 
   const calculateTotal = () => {
     let total = vendor.fee;
-    console.log(vendor.fee);
     counts.forEach((count, index) => {
       total += count * goods[index].price;
     });

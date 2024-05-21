@@ -22,7 +22,6 @@ import VendorService from '../services/VendorService';
 import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
-console.log(width, height);
 
 const Main = () => {
   const navigation = useNavigation();
