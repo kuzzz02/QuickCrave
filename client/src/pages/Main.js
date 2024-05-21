@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
-// import { Buffer } from 'buffer';
 import axios from 'axios';
 
 import {
@@ -23,6 +22,7 @@ import VendorService from '../services/VendorService';
 import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
+console.log(width, height);
 
 const Main = () => {
   const navigation = useNavigation();
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   imageD: {
-    marginLeft: 20,
+    marginLeft: 0.04 * width,
   },
   subtitle: {
     // paddingHorizontal: 10,
@@ -241,11 +241,11 @@ const styles = StyleSheet.create({
   categoryContainer: {
     marginVertical: 10,
     marginLeft: width * 0.05,
-    height: 50,
+    height: 0.07 * height,
   },
   category: {
-    height: 50,
-    width: 150,
+    height: 0.066 * height,
+    width: 0.39 * width,
     borderRadius: 10,
     textAlign: 'center',
     justifyContent: 'center',
@@ -275,13 +275,13 @@ const styles = StyleSheet.create({
     // padding: 10,
   },
   item: {
-    width: 165,
-    height: 220,
+    width: 0.43*width,
+    height: 0.3*height,
     marginTop: 10,
     marginHorizontal: 2,
     backgroundColor: 'white',
     borderRadius: 8,
-    margin: 10,
+    margin: 0.025 * width,
     // padding: 10,
     // justifyContent: 'center',
     // textAlign: 'center',
@@ -298,10 +298,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     resizeMode: 'center',
-    width: 90,
-    height: 80,
-    marginTop: 30,
-    marginRight: 10,
+    width: 0.23 * width,
+    height: 0.11 * height,
+    marginTop: 0.04 * height,
   },
   details: {
     marginTop: 10,
@@ -330,7 +329,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     position: 'absolute',
     bottom: 0,
-    height: 70,
+    height: 0.1 * height,
     left: 0,
     right: 0,
     // justifyContent: 'space-around',
