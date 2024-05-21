@@ -106,12 +106,7 @@ const Detail = () => {
         <View style={styles.categoryContainer}>
           {goods.map((good, index) => (
             <View key={good.id} style={styles.foodCategory}>
-              <Image style={{width: 120, height: 120, marginBottom: 5}} source={{uri: images[good.id]}} />
-              {/* {images[good.id] ? (
-                <Image style={{width: 120, height: 120, marginBottom: 5}} source={{uri: images[good.id]}} />
-              ) : (
-                <Image style={{width: 120, height: 120, marginBottom: 5}} source={placeholderImage} />
-              )} */}
+              <Image style={{width: 0.312 * width, height: 0.159 * height, marginBottom: 5}} source={{uri: images[good.id]}} />
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
@@ -173,19 +168,19 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: width,
-    height: 150,
+    height: 0.2 * height,
     // resizeMode: 'contain',
     zIndex: -1,
   },
   header: {
     backgroundColor: 'white',
     position: 'absolute',
-    top: 80,
-    height: 130,
-    marginLeft: -150,
+    top: 0.11 * height,
+    height: 0.17 * height,
+    marginLeft: -0.39 * width,
     zIndex: 0,
     left: '50%', // 左侧边缘位于父容器的50%
-    width: 300,
+    width: 0.78 * width,
     borderRadius: 15,
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -197,17 +192,17 @@ const styles = StyleSheet.create({
     fontSize: 26,
     // fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   detailContainer: {
     flexDirection: 'row',
     // justifyContent: 'space-around',
-    marginTop: 10,
+    marginTop: 0.013 * height,
   },
   box: {
-    width: 100,
-    height: 50,
+    width: 0.26 * width,
+    height: 0.066 * height,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -215,8 +210,8 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
   },
   box1: {
-    width: 100,
-    height: 50,
+    width: 0.26 * width,
+    height: 0.066 * height,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -224,7 +219,7 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 75, // 确保足够空间在header之下开始
+    marginTop: 0.1 * height, // 确保足够空间在header之下开始
     justifyContent: 'flex-start',
     marginHorizontal: width * 0.05,
     // backgroundColor: 'red',
@@ -239,9 +234,9 @@ const styles = StyleSheet.create({
   //   textAlign: 'center',
   // },
   foodCategory: {
-    width: 160,
-    height: 200,
-    margin: 10,
+    width: 0.41 * width,
+    height: 0.266 * height,
+    margin: 0.013 * height,
     marginHorizontal: width * 0.015,
     backgroundColor: 'white',
     textAlign: 'center',
@@ -254,7 +249,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   foodName: {
-    marginTop: -15,
+    marginTop: -0.02 * height,
     alignItems: 'center',
     textAlign: 'center',
     fontFamily: 'AlimamaShuHeiTi-Bold',
@@ -269,7 +264,7 @@ const styles = StyleSheet.create({
     color: '#06C168',
     fontWeight: 'bold',
     fontSize: 18,
-    marginLeft: 10,
+    marginLeft: 0.026 * width,
     flex: 1,
   },
   actionContainer: {
@@ -279,25 +274,25 @@ const styles = StyleSheet.create({
     alignSelf: 'center', // 水平居中
     justifyContent: 'space-between',
     marginTop: -8,
-    height: 35,
-    width: 160,
+    height: 0.0465 * height,
+    width: 0.417 * width,
     // backgroundColor: 'red',
   },
   countCart: {
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 15,
+    bottom: 0.02 * height,
     width: width * 0.9,
     marginHorizontal: width * 0.05,
-    height: 60,
+    height: 0.08 * height,
     backgroundColor: '#162D3A',
     borderRadius: 15,
   },
   add: {
-    marginTop: 12,
+    marginTop: 0.016 * height,
   },
   minus: {
-    marginTop: 12,
+    marginTop: 0.016 * height,
   },
   // text:{
   //   marginTop:15,

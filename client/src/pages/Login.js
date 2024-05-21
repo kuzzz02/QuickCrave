@@ -96,8 +96,8 @@ const LogIn = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 40,
-    paddingTop: 25,
+    padding: 0.104 * width,
+    paddingTop: 0.033 * height,
   },
   backgroundImage: {
     // flex: 1,
@@ -110,17 +110,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'black',
     // fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   subtitle: {
     fontSize: 16,
     color: 'black',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   inputContainer: {
-    marginTop: 15,
+    marginTop: 0.02 * height,
     flexGrow: 1,
   },
   text: {
@@ -142,14 +142,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   button: {
-    marginTop: 30,
+    marginTop: 0.039 * height,
     borderRadius: 12,
   },
   signupText: {
     fontSize: 16,
     color: 'black',
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 0.026 * height,
   },
   signupLink: {
     fontWeight: 'bold',

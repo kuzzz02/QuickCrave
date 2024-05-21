@@ -56,7 +56,7 @@ const ShoppingCart = () => {
                 <View style={styles.buttonBox}>
                   <IconButton
                     icon="minus-circle"
-                    size={30}
+                    size={0.078 * width}
                     onPress={() => handleDecrease(index)}
                     iconColor={'#06c168'}
                     style={styles.minus}
@@ -66,7 +66,7 @@ const ShoppingCart = () => {
                   </Text>
                   <IconButton
                     icon="plus-circle"
-                    size={30}
+                    size={0.078 * width}
                     onPress={() => handleIncrease(index)}
                     iconColor={'#06c168'}
                     style={styles.add}
@@ -78,22 +78,22 @@ const ShoppingCart = () => {
         })}
         <View style={styles.locationContainer}>
           {man.map(item => (
-            <View key={item.id} style={{height: 100, width: 280}}>
+            <View key={item.id} style={{height: 0.133 * height, width: 0.729 * width}}>
               <Text style={styles.locationTitle}>Deliver To</Text>
               {/* <Icon source="map-marker" style={{marginLeft:100}} color="yellow"size={40}/> */}
               <Text
                 style={{
-                  marginTop: 10,
+                  marginTop: 0.013 * height,
                   color: 'black',
                   fontFamily: 'AlimamaShuHeiTi-Bold',
                   fontSize: 24,
-                  marginLeft: 20,
+                  marginLeft: 0.052 * width,
                 }}>
                 {item.location}
               </Text>
             </View>
           ))}
-          <View style={{marginLeft: 10}}>
+          <View style={{marginLeft: 0.026 * width}}>
             <Text style={styles.editLink}>Edit</Text>
           </View>
         </View>
@@ -136,16 +136,16 @@ const styles = StyleSheet.create({
     // backgroundColor: 'green',
   },
   item: {
-    width: 145,
+    width: 0.377 * width,
 
   },
   productContainer: {
     flexDirection: 'row',
-    marginTop: 18,
+    marginTop: 0.024 * height,
     flex: 1,
     zIndex: -1,
     width: width * 0.9,
-    height: 100,
+    height: 0.135 * height,
     backgroundColor: 'white',
     textAlign: 'center',
     borderRadius: 12,
@@ -159,23 +159,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     color: 'black',
-    marginTop: 10,
+    marginTop: 0.013 * height,
   },
   foodRestaurant: {
     fontSize: 18,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     color: '#C5C5C5',
-    marginTop: 10,
+    marginTop: 0.013 * height,
   },
   foodPrice: {
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     color: '#06c168',
-    marginTop: 10,
+    marginTop: 0.013 * height,
   },
   foodImage: {
-    width: 90,
-    height: 90,
+    width: 0.234 * width,
+    height: 0.12 * height,
     borderRadius: 8,
   },
   buttonBox: {
@@ -187,39 +187,39 @@ const styles = StyleSheet.create({
   },
   total: {
     fontSize: 18,
-    marginTop: 15,
-    marginLeft: 30,
+    marginTop: 0.02 * height,
+    marginLeft: 0.078 * width,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     color: 'white',
   },
   total1: {
     fontSize: 24,
-    marginTop: 15,
-    marginLeft: 30,
+    marginTop: 0.02 * height,
+    marginLeft: 0.078 * width,
     color: 'white',
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   money: {
     fontSize: 18,
     fontFamily: 'AlimamaShuHeiTi-Bold',
-    marginTop: 15,
-    marginLeft: 95,
+    marginTop: 0.02 * height,
+    marginLeft: 0.247 * width,
     color: 'white',
   },
   money1: {
     fontSize: 24,
     fontFamily: 'AlimamaShuHeiTi-Bold',
-    marginTop: 15,
-    marginLeft: 90,
+    marginTop: 0.02 * height,
+    marginLeft: 0.234 * width,
     color: 'white',
   },
   locationContainer: {
     flexDirection: 'row',
-    marginTop: 18,
+    marginTop: 0.0239 * height,
     flex: 1,
     // zIndex: -1,
     width: width * 0.9,
-    height: 100,
+    height: 0.133 * height,
     backgroundColor: 'white',
     textAlign: 'center',
     borderRadius: 12,
@@ -232,22 +232,22 @@ const styles = StyleSheet.create({
   locationTitle: {
     fontFamily: 'AlimamaShuHeiTi-Bold',
     fontSize: 20,
-    marginTop: 10,
-    marginLeft: 20,
+    marginTop: 0.013 * height,
+    marginLeft: 0.052 * width,
   },
   editLink: {
     color: '#06c168',
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
-    marginTop: 10,
-    marginRight: 20,
+    marginTop: 0.013 * height,
+    marginRight: 0.052 * width,
   },
   totalContainer: {
     flexDirection: 'row',
     width: width * 0.9,
-    height: 180,
+    height: 0.239 * height,
     position: 'absolute',
-    bottom: 10,
+    bottom: 0.013 * height,
     zIndex: 2,
     backgroundColor: '#06c168',
     // textAlign: 'center',
@@ -260,16 +260,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   left: {
-    height: 180,
+    height: 0.239 * height,
     width: width * 0.5,
   },
   right: {
-    height: 180,
+    height: 0.239 * height,
     width: width * 0.45,
   },
   button: {
     position: 'absolute',
-    bottom: 8,
+    bottom: 0.012 * height,
     width: width * 0.85,
     borderRadius: 12,
   },

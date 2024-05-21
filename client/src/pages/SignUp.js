@@ -50,7 +50,6 @@ const SignUp = () => {
       behavior="height"
       keyboardVerticalOffset={-25}
       enabled>
-      {console.log('height', 1)}
       <ImageBackground
         source={require('../common/SU.jpg')}
         style={styles.backgroundImage}
@@ -105,31 +104,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: 'blue',
-    padding: 40,
-    paddingTop: 15,
+    padding: 0.104 * width,
+    paddingTop: 0.02 * height,
   },
   backgroundImage: {
     justifyContent: 'center',
     borderRadius: 20,
     height: height * 0.3,
-    backgroundColor: 'red',
   },
   title: {
     fontSize: 28,
     color: 'black',
     // fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     // alignSelf: 'center',
   },
   subtitle: {
     fontSize: 18,
     color: 'black',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   inputContainer: {
-    marginTop: 15,
+    marginTop: 0.02 * height,
     flexGrow: 1,
     // justifyContent: 'space-around',
   },
@@ -145,14 +143,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   button: {
-    marginTop: 30,
+    marginTop: 0.039 * height,
     borderRadius: 12,
   },
   signupText: {
     fontSize: 16,
     color: 'black',
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 0.026 * height,
   },
   loginLink: {
     fontWeight: 'bold',

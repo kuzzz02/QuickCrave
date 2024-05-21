@@ -85,10 +85,13 @@ const Main = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('');
 
   const handlePress = categoryKey => {
-    setSelectedCategory(categoryKey);
-    if (categoryKey === '') {
-      setFilteredVendors(vendors); // 显示所有商家
+    // 如果已经选中的类别被再次点击，取消选中并显示所有商家
+    if (selectedCategory === categoryKey) {
+      setSelectedCategory('');
+      setFilteredVendors(vendors);
     } else {
+      // 否则更新选中的类别并过滤商家
+      setSelectedCategory(categoryKey);
       const filtered = vendors.filter(
         vendor => vendor.category === categoryKey,
       );
@@ -111,7 +114,7 @@ const Main = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        <Icon source="map-marker" color="#06C168" size={22} />
+        <Icon source="map-marker" color="#06C168" size={0.057 * width} />
         SCNU, CN
       </Text>
       <View style={styles.header}>
@@ -165,11 +168,6 @@ const Main = () => {
             onPress={() => handleDetailPress(vendor)}>
             <View style={styles.imageBox}>
             <Image style={styles.logo} source={{uri: images[vendor.id]}} />
-              {/* {images[vendor.id] ? (
-                <Image style={styles.logo} source={{uri: images[vendor.id]}} />
-              ) : (
-                <Image style={styles.logo} source={placeholderImage} />
-              )} */}
             </View>
             <View style={styles.details}>
               <Text style={styles.itemName}>{vendor.name}</Text>
@@ -195,7 +193,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    marginTop: 20,
+    marginTop: 0.026 * height,
     marginHorizontal: width * 0.04,
     // backgroundColor: 'red',
     fontSize: 20,
@@ -205,7 +203,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // 水平排列
     alignItems: 'center', // 垂直居中
     marginHorizontal: width * 0.05,
-    marginTop: 15,
+    marginTop: 0.02 * height,
   },
   imageD: {
     marginLeft: 0.04 * width,
@@ -222,7 +220,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     marginHorizontal: width * 0.05,
-    marginVertical: 10,
+    marginVertical: 0.013 * height,
     borderRadius: 10,
     // height: 40,
   },
@@ -240,7 +238,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   categoryContainer: {
-    marginVertical: 10,
+    marginVertical: 0.013 * height,
     marginLeft: width * 0.05,
     height: 0.07 * height,
   },
@@ -278,7 +276,7 @@ const styles = StyleSheet.create({
   item: {
     width: 0.43*width,
     height: 0.3*height,
-    marginTop: 10,
+    marginTop: 0.013 * height,
     marginHorizontal: 2,
     backgroundColor: 'white',
     borderRadius: 8,
@@ -304,25 +302,25 @@ const styles = StyleSheet.create({
     marginTop: 0.04 * height,
   },
   details: {
-    marginTop: 10,
+    marginTop: 0.013 * height,
     // flex: 1,
   },
   itemName: {
     fontWeight: 'bold',
     fontSize: 18,
-    marginTop: 10,
-    marginLeft: 10,
+    marginTop: 0.013 * height,
+    marginLeft: 0.026 * width,
   },
   itemDescription: {
     color: '#666',
-    marginLeft: 10,
-    marginRight: 8,
+    marginLeft: 0.026 * width,
+    marginRight: 0.024 * width,
   },
   itemRate: {
     color: 'green',
     fontWeight: 'bold',
     marginTop: 5,
-    marginLeft: 10,
+    marginLeft: 0.026 * width,
     fontSize: 18,
   },
   navBar: {

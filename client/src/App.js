@@ -13,7 +13,6 @@ import {CartProvider} from './pages/CartContext';
 import Init from './pages/Init';
 import Pay from './pages/Pay';
 import Track from './pages/Track';
-import Test from './pages/Test';
 
 const Stack = createStackNavigator();
 export default function App() {

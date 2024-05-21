@@ -1,13 +1,14 @@
 import React from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
+import {StyleSheet, View, Image, Text, Dimensions} from 'react-native';
 import {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
+
+const {width, height} = Dimensions.get('window');
 
 const Start = () => {
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
-      //move to delivery screen
       navigation.navigate('Init');
     }, 1500);
   }, []);
@@ -37,29 +38,30 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     position: 'absolute',
-    left: -500,
+    left: -380,
     top: -700,
   },
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -30,
+    marginTop: -0.039 * height,
   },
   logo: {
-    width: 170,
-    height: 170, 
+    width: 0.44 * width,
+    height: 0.23 * height, 
     resizeMode: 'contain',
   },
   text: {
     fontSize: 40,
     fontFamily: 'AlimamaShuHeiTi-Bold',
-    marginTop: 10, 
+    marginTop: 0.013 * height, 
     color: '#3cb371', 
   },
   text2: {
     fontSize: 18,
     fontFamily: 'AlimamaShuHeiTi-Bold',
-    marginTop: 10, 
+    marginTop: 0.013 * height, 
+    lineHeight: 0.052 * height,
     color: 'black',
   },
 });
