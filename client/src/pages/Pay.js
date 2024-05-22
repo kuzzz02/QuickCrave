@@ -19,7 +19,7 @@ const Pay = ({route}) => {
             style={{
               fontFamily: 'AlimamaShuHeiTi-Bold',
               fontSize: 22,
-              lineHeight: 40,
+              lineHeight: 0.053 * height,
             }}>
             Alipay
           </Text>
@@ -33,7 +33,7 @@ const Pay = ({route}) => {
             style={{
               fontFamily: 'AlimamaShuHeiTi-Bold',
               fontSize: 22,
-              lineHeight: 40,
+              lineHeight: 0.053 * height,
             }}>
             Wechat
           </Text>
@@ -58,28 +58,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'AlimamaShuHeiTi-Bold',
     fontSize: 30,
-    lineHeight: 40,
+    lineHeight: 0.053 * height,
     color: 'black',
   },
   text2: {
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 0.026 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     fontSize: 38,
     color: 'black',
   },
   button1: {
-    marginTop: 50,
+    marginTop: 0.065 * height,
     backgroundColor: '#5296E1',
     borderRadius: 35,
-    height: 88,
+    height: 0.117 * height,
     justifyContent: 'center',
   },
   button2: {
-    marginTop: 20,
+    marginTop: 0.026 * height,
     backgroundColor: '#31C72C',
     borderRadius: 35,
-    height: 88,
+    height: 0.117 * height,
     justifyContent: 'center',
   },
 });

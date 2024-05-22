@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,25 +7,21 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {
   Text,
-  BottomNavigation,
   IconButton,
   Provider as PaperProvider,
   DefaultTheme,
 } from 'react-native-paper';
 import {useCart} from './CartContext';
+import GoodsService from '../services/GoodsService';
+import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
 
-const MusicRoute = () => {};
-
-const NotificationsRoute = () => {};
-
 const Detail = () => {
-  const {counts, handleIncrease, handleDecrease, calculateTotal} = useCart();
+  const {counts, handleIncrease, handleDecrease, calculateTotal, images} = useCart();
 
   const newTheme = {
     ...DefaultTheme,
@@ -36,34 +32,6 @@ const Detail = () => {
       backgroundColor: 'white',
     },
   };
-  const foodCategories = [
-    {
-      id: 1,
-      name: 'Chicken Burger',
-      image: require('../common/goods5.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 10.99,
-    },
-    {
-      id: 2,
-      name: 'Cheese Burger',
-      image: require('../common/goods8.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 11.99,
-    },
-    {
-      id: 3,
-      name: 'Beef Burger',
-      image: require('../common/goods7.png'),
-      description: '200 gr chicken + cheese Lettuce + tomato',
-      restaurant: "McDonald's",
-      price: 12.99,
-    },
-  ];
-
- 
 
   const renderRating = rating => {
     const filledStars = Math.floor(rating);
@@ -78,43 +46,37 @@ const Detail = () => {
     );
   };
 
-  const Tab = createBottomTabNavigator();
+  const route = useRoute();
 
-  const [searchQuery, setSearchQuery] = React.useState('');
-
-  const [selectedCategory, setSelectedCategory] = React.useState('');
+  const vendor = route.params.vendor;
 
   const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: 'music',
-      title: 'Home',
-      focusedIcon: 'home',
-      unfocusedIcon: 'home-outline',
-    },
-    {
-      key: 'notifications',
-      title: 'Shopping-Cart',
-      focusedIcon: 'shopping',
-      unfocusedIcon: 'shopping-outline',
-    },
-  ]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    music: MusicRoute,
-    notifications: NotificationsRoute,
-  });
+  const [goods, setGoods] = useState([]);
 
-  const handlePress = categoryName => {
-    setSelectedCategory(categoryName);
-    // Additional logic can be added here for navigation or other purposes
-  };
+
+  // const placeholderImage = require('../common/qu.png');
+
+  useEffect(() => {
+    const fetchVendorDetails = async () => {
+      try {
+        const goodsResponse = await GoodsService.getAll();
+        const goodsData = goodsResponse.data;
+        const goodsArray = Array.isArray(goodsData) ? goodsData : [goodsData];
+        setGoods(goodsArray);
+      } catch (error) {
+        console.error('Error fetching user details: ', error);
+      }
+    };
+    fetchVendorDetails();
+  }, []);
+
 
   const navigation = useNavigation();
 
-  const handleShoppingPress = () => {
+  const handleShoppingPress = vendor => {
     const total = calculateTotal();
-    navigation.navigate('ShoppingCart', {foodCategories, counts, total});
+    navigation.navigate('ShoppingCart', {goods, counts, total, vendor});
   };
 
   return (
@@ -125,26 +87,40 @@ const Detail = () => {
           source={require('../common/detail.png')}
         />
         <View style={styles.header}>
-          <Text style={styles.title}>McDonald's</Text>
+          <Text style={styles.title}>{vendor.name}</Text>
           <View style={styles.detailContainer}>
             <View style={styles.box}>
-              <Text>{'Delivery \nFor Free'}</Text>
+              <Text>Delivery for</Text>
+              <Text>€{vendor.fee}</Text>
             </View>
             <View style={styles.box}>
-              <Text>20~30min</Text>
+              <Text>{vendor.time}min</Text>
             </View>
-            {/* <Text style={styles.itemRate}>{renderRating(item.rating)} </Text> */}
+            <View style={styles.box}>
+              <Text style={styles.itemRate}>
+                {renderRating(vendor.quantity)}{' '}
+              </Text>
+            </View>
           </View>
         </View>
         <View style={styles.categoryContainer}>
-          {foodCategories.map((category, index) => (
-            <View key={category.id} style={styles.foodCategory}>
-              <Image
-                source={category.image}
-                style={{width: 120, height: 120, marginBottom: 10}}
-              />
-              <Text style={styles.foodName}>{category.name}</Text>
-              <Text style={styles.foodDescription}>{category.description}</Text>
+          {goods.map((good, index) => (
+            <View key={good.id} style={styles.foodCategory}>
+              <Image style={{width: 0.312 * width, height: 0.159 * height, marginBottom: 5}} source={{uri: images[good.id]}} />
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={styles.foodName}>
+                {good.name}
+              </Text>
+              <View style={styles.textBox}>
+                <Text
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                  style={styles.foodDescription}>
+                  {good.description}
+                </Text>
+              </View>
               <View style={styles.actionContainer}>
                 {counts[index] > 0 && (
                   <IconButton
@@ -156,9 +132,9 @@ const Detail = () => {
                   />
                 )}
                 {counts[index] > 0 ? (
-                  <Text>{counts[index]}</Text>
+                  <Text styles={styles.text}>{counts[index]}</Text>
                 ) : (
-                  <Text style={styles.foodPrice}>€{category.price}</Text>
+                  <Text style={styles.foodPrice}>€{good.price}</Text>
                 )}
                 <IconButton
                   icon="plus-circle"
@@ -174,8 +150,10 @@ const Detail = () => {
       </ScrollView>
       <TouchableOpacity
         icon="alpha-q-circle-outline"
-        onPress={handleShoppingPress}
-        style={styles.countCart}>
+        onPress={() => handleShoppingPress(vendor)}
+        disabled={calculateTotal() === 0 }
+        style={styles.countCart}
+        >
         <Text style={styles.cartText}>Total Cost: €{calculateTotal()}</Text>
       </TouchableOpacity>
     </View>
@@ -190,19 +168,19 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     width: width,
-    height: 150,
+    height: 0.2 * height,
     // resizeMode: 'contain',
     zIndex: -1,
   },
   header: {
     backgroundColor: 'white',
     position: 'absolute',
-    top: 80,
-    height: 130,
-    marginLeft: -150,
+    top: 0.11 * height,
+    height: 0.17 * height,
+    marginLeft: -0.39 * width,
     zIndex: 0,
     left: '50%', // 左侧边缘位于父容器的50%
-    width: 300,
+    width: 0.78 * width,
     borderRadius: 15,
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -214,17 +192,17 @@ const styles = StyleSheet.create({
     fontSize: 26,
     // fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   detailContainer: {
     flexDirection: 'row',
     // justifyContent: 'space-around',
-    marginTop: 10,
+    marginTop: 0.013 * height,
   },
   box: {
-    width: 100,
-    height: 50,
+    width: 0.26 * width,
+    height: 0.066 * height,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -232,8 +210,8 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
   },
   box1: {
-    width: 100,
-    height: 50,
+    width: 0.26 * width,
+    height: 0.066 * height,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -241,16 +219,25 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 75, // 确保足够空间在header之下开始
+    marginTop: 0.1 * height, // 确保足够空间在header之下开始
     justifyContent: 'flex-start',
     marginHorizontal: width * 0.05,
     // backgroundColor: 'red',
     alignItems: 'center',
   },
+  // textBox: {
+  //   height: 30,
+  //   width: 160,
+  //   // backgroundColor: 'red',
+  //   // alignItems: 'center',
+  //   justifyContent: 'center',
+  //   textAlign: 'center',
+  // },
   foodCategory: {
-    width: 160,
-    height: 200,
-    margin: 12,
+    width: 0.41 * width,
+    height: 0.266 * height,
+    margin: 0.013 * height,
+    marginHorizontal: width * 0.015,
     backgroundColor: 'white',
     textAlign: 'center',
     borderRadius: 8,
@@ -262,7 +249,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   foodName: {
-    marginTop: -15,
+    marginTop: -0.02 * height,
     alignItems: 'center',
     textAlign: 'center',
     fontFamily: 'AlimamaShuHeiTi-Bold',
@@ -277,29 +264,39 @@ const styles = StyleSheet.create({
     color: '#06C168',
     fontWeight: 'bold',
     fontSize: 18,
-    marginLeft: 10,
+    marginLeft: 0.026 * width,
     flex: 1,
   },
   actionContainer: {
     flexDirection: 'row',
     // marginTop: 10,
     alignItems: 'center',
+    alignSelf: 'center', // 水平居中
+    justifyContent: 'space-between',
     marginTop: -8,
-    height: 35,
-    width: 160,
+    height: 0.0465 * height,
+    width: 0.417 * width,
     // backgroundColor: 'red',
-    justifyContent: 'center',
   },
   countCart: {
     justifyContent: 'center',
     position: 'absolute',
-    bottom: 15,
+    bottom: 0.02 * height,
     width: width * 0.9,
     marginHorizontal: width * 0.05,
-    height: 60,
+    height: 0.08 * height,
     backgroundColor: '#162D3A',
     borderRadius: 15,
   },
+  add: {
+    marginTop: 0.016 * height,
+  },
+  minus: {
+    marginTop: 0.016 * height,
+  },
+  // text:{
+  //   marginTop:15,
+  // },
   cartText: {
     fontWeight: 'bold',
     color: 'white',

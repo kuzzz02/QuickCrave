@@ -1,28 +1,28 @@
-import http from "../http";
+import http from '../http';
 
 class VendorService {
   getAll() {
-    return http.get("/vendor/selectAll");
+    return http.get('/vendor/selectAll');
   }
 
   getByName(name) {
-    return http.get(`/vendor/selectByName/${name}`);
+    return http.get(`/vendor/selectByName?name=${name}`);
   }
 
   getById(id) {
-    return http.get(`/vendor/selectById/${id}`);
+    return http.get(`/vendor/selectById?id=${id}`);
   }
-  
+
   getByCategory(category) {
-    return http.get(`/vendor/selectByCategory/${category}`);
+    return http.get(`/vendor/selectByCategory?category=${category}`);
   }
 
   getWithProducts(id) {
-    return http.get(`/vendor/selectVendorWithGoods/${id}`);
+    return http.get(`/vendor/selectVendorWithGoods/getWithProducts=${id}`);
   }
 
   create(data) {
-    return http.post("/vendor/insert", data);
+    return http.post('/vendor/insert', data);
   }
 
   update(id, data) {

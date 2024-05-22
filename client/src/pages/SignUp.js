@@ -8,7 +8,9 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
-  Alert
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -17,43 +19,37 @@ const {width, height} = Dimensions.get('window');
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
   const navigation = useNavigation();
-  const handleSignUpPress = () =>{
-    UserService.signup({name:username,password:password})
-    // fetch('https://localhost:12581/user/signup', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //  },
-    //   body: JSON.stringify({
-    //     name: username,
-    //     password: password
-    //   }),
-    // })
-    .then(res => {
-      console.log(res.data);
-      navigation.navigate('LogIn');
-    })
-    .catch(error => {
-      console.log(error + " " + "111");
-      Alert.alert("Invalid username or password");
-      // if(!error.response) {
-      //   console.log('!Network Error!');
-      // } 
-      // else{
-      //   console.log(error.response.data);
-      //   console.log(error.response.status);
-      //   console.log(error.response.headers);
-      // }
-    })
+  const handleLoginPress = () => {
+    navigation.navigate('LogIn');
+  };
+  const handleSignUpPress = () => {
+    if (!username || !password2) {
+      Alert.alert('Error', 'Username and password cannot be empty');
+      return;
+    }
+    if (password1 !== password2) {
+      Alert.alert('Password does not match');
+      return;
+    }
+    UserService.signup({name: username, password: password2})
+      .then(res => {
+        navigation.navigate('LogIn');
+      })
+      .catch(error => {
+        Alert.alert('Invalid username or password');
+        console.log(error + ' ' + '111');
+      });
   };
 
   return (
-    <View
+    <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.select({ios: 'padding', android: 'height'})}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}>
+      behavior="height"
+      keyboardVerticalOffset={-25}
+      enabled>
       <ImageBackground
         source={require('../common/SU.jpg')}
         style={styles.backgroundImage}
@@ -75,13 +71,14 @@ const SignUp = () => {
         <TextInput
           style={styles.input}
           placeholder="Please set your password"
+          onChangeText={text => setPassword1(text)}
           secureTextEntry={true}
         />
         <Text style={styles.text}>Confirm your password</Text>
         <TextInput
           style={styles.input}
           placeholder="Please confirm your password"
-          onChangeText={text => setPassword(text)}
+          onChangeText={text => setPassword2(text)}
           secureTextEntry={true}
         />
       </View>
@@ -93,7 +90,13 @@ const SignUp = () => {
         onPress={handleSignUpPress}>
         Sign Up
       </Button>
-    </View>
+      <Text style={styles.signupText}>
+        Already have an account?{' '}
+        <Text style={styles.loginLink} onPress={handleLoginPress}>
+          Login
+        </Text>
+      </Text>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -101,32 +104,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: 'blue',
-    padding: 40,
-    paddingTop: 15,
+    padding: 0.104 * width,
+    paddingTop: 0.02 * height,
   },
   backgroundImage: {
     justifyContent: 'center',
     borderRadius: 20,
     height: height * 0.3,
-    backgroundColor: 'red',
   },
   title: {
     fontSize: 28,
     color: 'black',
     // fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     // alignSelf: 'center',
   },
   subtitle: {
     fontSize: 18,
     color: 'black',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   inputContainer: {
-    marginTop: 15,
+    marginTop: 0.02 * height,
     flexGrow: 1,
+    // justifyContent: 'space-around',
   },
   text: {
     marginTop: 5,
@@ -140,16 +143,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   button: {
-    marginTop: 30,
+    marginTop: 0.039 * height,
     borderRadius: 12,
   },
   signupText: {
     fontSize: 16,
     color: 'black',
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 0.026 * height,
   },
-  signupLink: {
+  loginLink: {
     fontWeight: 'bold',
     color: '#4f6d7a',
   },

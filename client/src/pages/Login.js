@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   StyleSheet,
@@ -8,7 +8,9 @@ import {
   TextInput,
   ImageBackground,
   Dimensions,
-  Alert
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -23,32 +25,31 @@ const LogIn = () => {
     navigation.navigate('SignUp');
   };
   const handleLogInPress = () => {
-    UserService.login({name:username,password:password})
-    // fetch('https://localhost:12581/user/login', {
-    //   method: 'POST',
-    //   headers: {
-    //    'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     "name": username,
-    //     "password": password
-    //   }),
-    // })
-    .then(res => {
-      console.log(res);
-      navigation.navigate('Main');
-    })
-    .catch(error =>{
-      console.log(error + " " + "2222");
-      Alert.alert("Invalid username or password");
-    })
+    if (!username || !password) {
+      Alert.alert('Error', 'Username and password cannot be empty');
+      return;
+    }
+    UserService.login({name: username, password: password})
+      .then(res => {
+        if (res.status === 200) {  // 检查状态码是否为200
+          navigation.navigate('Main');
+        } else {
+          console.log("Login failed: ", res.status);
+          Alert.alert('Invalid username or password');
+        }
+      })
+      .catch(error => {
+        console.log(error, ' 2222');
+        Alert.alert('Login error, please try again');
+      });
   };
 
   return (
-    <View
+    <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.select({ios: 'padding', android: 'height'})}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 100}>
+      behavior="height"
+      keyboardVerticalOffset={-25}
+      enabled>
       <ImageBackground
         source={require('../common/70.jpg')}
         style={styles.backgroundImage}
@@ -88,15 +89,15 @@ const LogIn = () => {
           Sign up
         </Text>
       </Text>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 40,
-    paddingTop: 25,
+    padding: 0.104 * width,
+    paddingTop: 0.033 * height,
   },
   backgroundImage: {
     // flex: 1,
@@ -109,17 +110,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'black',
     // fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   subtitle: {
     fontSize: 16,
     color: 'black',
-    marginTop: 10,
+    marginTop: 0.013 * height,
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   inputContainer: {
-    marginTop: 15,
+    marginTop: 0.02 * height,
     flexGrow: 1,
   },
   text: {
@@ -141,14 +142,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   button: {
-    marginTop: 30,
+    marginTop: 0.039 * height,
     borderRadius: 12,
   },
   signupText: {
     fontSize: 16,
     color: 'black',
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 0.026 * height,
   },
   signupLink: {
     fontWeight: 'bold',

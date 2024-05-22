@@ -6,11 +6,11 @@ class GoodsService {
   }
 
   getByName(name) {
-    return http.get(`/goods/selectByName/${name}`);
+    return http.get(`/goods/selectByName?name=${name}`);
   }
 
   getById(id) {
-    return http.get(`/goods/selectById/${id}`);
+    return http.get(`/goods/selectById?id=${id}`);
   }
 
   create(data) {
@@ -18,7 +18,7 @@ class GoodsService {
   }
 
   delete(id) {
-    return http.delete(`/goods/delete/${id}`);
+    return http.delete(`/goods/delete?id=${id}`);
   }
 
   deleteAll() {
@@ -26,43 +26,43 @@ class GoodsService {
   }
 
   update(id, data) {
-    return http.put(`/goods/update/${id}`, data);
+    return http.put(`/goods/update?id=${id}`, data);
   }
 
   updateName(id, data) {
-    return http.put(`/goods/updateName/${id}`, data);
+    return http.put(`/goods/updateName?id=${id}`, data);
   }
 
   updateDescription(id, data) {
-    return http.put(`/goods/updateDescription/${id}`, data);
+    return http.put(`/goods/updateDescription?id=${id}`, data);
   }
 
   updateImage(id, data) {
-    return http.put(`/goods/updateImage/${id}`, data);
+    return http.put(`/goods/updateImage?id=${id}`, data);
   }
 
   updateState(id, data) {
-    return http.put(`/goods/updateState/${id}`, data);
+    return http.put(`/goods/updateState?id=${id}`, data);
   }
 
   updateDate(id, data) {
-    return http.put(`/goods/updateDate/${id}`, data);
+    return http.put(`/goods/updateDate?id=${id}`, data);
   }
 
   updatePrice(id, data) {
-    return http.put(`/goods/updatePrice/${id}`, data);
+    return http.put(`/goods/updatePrice?id=${id}`, data);
   }
 
   updateDiscount(id, data) {
-    return http.put(`/goods/updateDiscount/${id}`, data);
+    return http.put(`/goods/updateDiscount?id=${id}`, data);
   }
 
   updateQuantity(id, data) {
-    return http.put(`/goods/updateQuantity/${id}`, data);
+    return http.put(`/goods/updateQuantity?id=${id}`, data);
   }
 
   updateVendor(id, data) {
-    return http.put(`/goods/updateVendor/${id}`, data);
+    return http.put(`/goods/updateVendor?id=${id}`, data);
   }
 }
 

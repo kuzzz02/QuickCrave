@@ -74,9 +74,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.client"
+    namespace "com.quickcrave.client"
     defaultConfig {
-        applicationId "com.client"
+        applicationId "com.quickcrave.client"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -89,6 +89,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+              storeFile file(MYAPP_RELEASE_STORE_FILE)
+              storePassword MYAPP_RELEASE_STORE_PASSWORD
+              keyAlias MYAPP_RELEASE_KEY_ALIAS
+              keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
@@ -97,12 +105,15 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 }
+
+// ./gradlew clean
+// ./gradlew assembleRelease
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin

@@ -1,8 +1,8 @@
-import http from "../http";
+import http from '../http';
 
 class UserService {
   getAll() {
-    return http.get("/user/selectAll");
+    return http.get('/user/selectAll');
   }
 
   getByName(name) {
@@ -14,7 +14,7 @@ class UserService {
   }
 
   create(data) {
-    return http.post("/user/insert", data);
+    return http.post('/user/insert', data);
   }
 
   update(id, data) {

@@ -1,12 +1,41 @@
-import http from "../http";
+import http from '../http';
 
 class ImageService {
-  getVendorImage(imageName) {
-    return http.get(`/image/vendor/${imageName}`);
+  async getVendorImage(imageName) {
+    try {
+      const response = await http.get(`/image/vendor?imageName=${imageName}`, { responseType: 'blob' });
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          resolve(base64data);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(response.data);
+      });
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      return null;
+    }
   }
 
-  getGoodsImage(imageName) {
-    return http.get(`/image/goods/${imageName}`);
+  async getGoodsImage(imageName) {
+    // return http.get(`/image/goods/${imageName}`);
+    try {
+      const response = await http.get(`/image/goods?imageName=${imageName}`, { responseType: 'blob' });
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          resolve(base64data);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(response.data);
+      });
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      return null;
+    }
   }
 
   getUserImage(imageName) {
@@ -17,3 +46,5 @@ class ImageService {
     return http.get(`/image/delivery/${imageName}`);
   }
 }
+
+export default new ImageService();

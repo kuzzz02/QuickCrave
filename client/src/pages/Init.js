@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 0.013 * height,
     color: 'black',
   },
   linearGradient: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     width: '55%',
-    height: 70, 
+    height: 0.1 * height, 
     borderRadius: 15,
     overflow: 'hidden', 
   },
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   signupLink: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#162D3A', // 注册链接颜色
+    color: '#4f6d7a',
   },
 });
 
