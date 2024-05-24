@@ -23,7 +23,7 @@ const Start = () => {
         <Image source={require('../common/start.jpg')} style={styles.logo} />
       </View>
       <Text style={styles.text}>QuickCrave Management-Side</Text>
-      <Text style={styles.text2}>Deliver Favourite Food</Text>
+      <Text style={styles.text2}>Manage your Restaurant with our App</Text>
     </View>
 
   );
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     marginTop: 0.013 * height, 
+    textAlign: 'center',
     color: '#3cb371', 
   },
   text2: {
