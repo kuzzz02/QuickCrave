@@ -1,7 +1,7 @@
 module.exports = {
   project: {
     ios: {},
-    android: {},
+    android: {}, // grouped into "project"
   },
-  assets: ['node_modules/@ant-design/icons-react-native/fonts'],
-}
+  assets: ["./assets/fonts/"], 
+};

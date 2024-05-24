@@ -1,61 +1,69 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
-import { useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import {StyleSheet, View, Image, Text, Dimensions} from 'react-native';
+import {useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
+const {width, height} = Dimensions.get('window');
 
 const Start = () => {
-    const navigation = useNavigation()
-    useEffect(()=>{
-        setTimeout(()=>{
-          //move to delivery screen
-          navigation.navigate('Start2');
-        }, 3000)
-      },[])
+  const navigation = useNavigation();
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('Init');
+    }, 1500);
+  }, []);
   return (
     <View style={styles.container}>
-      {/* 背景图片 */}
-      <Image source={require('../common/startback.jpg')} style={styles.backgroundImage} />
-      
-      {/* 中间的logo */}
+      <Image
+        source={require('../common/Pattern.png')}
+        style={styles.backgroundImage}
+      />
+
       <View style={styles.logoContainer}>
         <Image source={require('../common/start.jpg')} style={styles.logo} />
       </View>
-      
-      {/* 文字 */}
-      <Text style={styles.text}>QuickCrave</Text>
+      <Text style={styles.text}>QuickCrave Management-Side</Text>
+      <Text style={styles.text2}>Deliver Favourite Food</Text>
     </View>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   backgroundImage: {
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    left: -380,
+    top: -700,
   },
   logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: -0.039 * height,
   },
   logo: {
-    width: 200, // 根据您的实际图片尺寸调整
-    height: 200, // 根据您的实际图片尺寸调整
+    width: 0.44 * width,
+    height: 0.23 * height, 
     resizeMode: 'contain',
   },
   text: {
     fontSize: 40,
-    fontWeight: 'bold',
-    marginTop: 20, // 根据您的设计调整
-    color: '#3cb371', // Or any other color
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+    marginTop: 0.013 * height, 
+    color: '#3cb371', 
+  },
+  text2: {
+    fontSize: 18,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+    marginTop: 0.013 * height, 
+    lineHeight: 0.052 * height,
+    color: 'black',
   },
 });
 
 export default Start;
-
-  

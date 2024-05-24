@@ -1,185 +1,160 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image ,TouchableOpacity, TextInput,Alert } from 'react-native';
-import { Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import React from 'react';
+import {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ImageBackground,
+  Dimensions,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import {Button} from 'react-native-paper';
+// import UserService from '../services/UserService';
 
+const {width, height} = Dimensions.get('window');
 
 const LogIn = () => {
-  const navigation = useNavigation();
-  //State for input fields
-  const [phone, setPhone] = useState(''); 
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigation = useNavigation();
   const handleSignUpPress = () => {
     navigation.navigate('SignUp');
   };
-  const validateInput = () => {
-    //Simple validate
-    //Assume that phone numbers should be 10 or 11 digits
-    const phoneRegex = /^[0-9]{10,11}$/; 
-    if (!phoneRegex.test(phoneNumber)) {
-      Alert.alert("Invalid Phone Number", "Phone number should be 10 to 11 digits.");
-      return false;
-    }
-    if (password.length < 6) {
-      Alert.alert("Invalid Password", "Password should be at least 6 characters.");
-      return false;
-    }
-    return true;
-  };
-  const handleSignInPress = () => {
-    if (validateInput()) {
-      console.log('Logging in with:', phoneNumber, password);
-      //TODO: Implement login
-    }
+  const handleLogInPress = () => {
+    // if (!username || !password) {
+    //   Alert.alert('Error', 'Username and password cannot be empty');
+    //   return;
+    // }
+    // UserService.login({name: username, password: password})
+    //   .then(res => {
+    //     if (res.status === 200) {  // 检查状态码是否为200
+    //       navigation.navigate('Main');
+    //     } else {
+    //       console.log("Login failed: ", res.status);
+    //       Alert.alert('Invalid username or password');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log(error, ' 2222');
+    //     Alert.alert('Login error, please try again');
+    //   });
   };
 
   return (
-    <View style={styles.container}>
-      <Image
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior="height"
+      keyboardVerticalOffset={-25}
+      enabled>
+      <ImageBackground
         source={require('../common/70.jpg')}
-        style={styles.image}
-      />
-      <View style={styles.textBox}>
-        <Text style={styles.text1}>Welcome Back 👋</Text>
-        <Text style={styles.text2}>It's time for you to enjoy your delicious. Login in to start your trip!</Text>
+        style={styles.backgroundImage}
+        resizeMode="cover"
+        imageStyle={{borderRadius: 20}}></ImageBackground>
+      <Text style={styles.title}>Welcome Back 👋</Text>
+      <Text style={styles.subtitle}>
+        Login in to help you better managing your restaurant!
+      </Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.text}>Username</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Please input your Username"
+          onChangeText={text => setUsername(text)}
+          // keyboardType="phone-pad"
+        />
+        <Text style={styles.text2}>Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Please input your password"
+          onChangeText={text => setPassword(text)}
+          secureTextEntry={true}
+        />
       </View>
-      <Text style={styles.text3}>Phone</Text>
-      <TextInput
-              style={styles.input1}
-              placeholder="Please input your Phone number"
-              placeholderTextColor="#8897AD"
-      />
-      <Text style={styles.text4}>Password</Text>
-      <TextInput
-              style={styles.input2}
-              placeholder="Please input your password"
-              placeholderTextColor="#8897AD"
-              secureTextEntry={true}
-      />
-      <TouchableOpacity style={styles.button}/*signin跳转*/onPress={handleSignInPress}>
-        <Button type="primary">primary</Button>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={()=> navigation.navigate('SignUp')}>
-        <Text style={styles.text5}>Don't you have an account? <Text style={styles.signUpText}>Sign up</Text></Text>
-      </TouchableOpacity>
-     </View>
+      <Button
+        style={styles.button}
+        labelStyle={{fontSize: 16}}
+        buttonColor="#162D3A"
+        mode="contained"
+        onPress={handleLogInPress}>
+        Log In
+      </Button>
+      <Text style={styles.signupText}>
+        Don't you have an account?{' '}
+        <Text style={styles.signupLink} onPress={handleSignUpPress}>
+          Sign up
+        </Text>
+      </Text>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    position: 'relative',
+    padding: 0.104 * width,
+    paddingTop: 0.033 * height,
   },
-  image: {
-    width: '78%',
-    height: '28%',
+  backgroundImage: {
+    // flex: 1,
+    justifyContent: 'center',
+    // marginHorizontal: width * 0.05,
     borderRadius: 20,
-    position: 'absolute',
-    top: 42,
+    height: height * 0.3,
   },
-
-  textBox: {
-    position: 'absolute',
-    width: '78%',
-    height: '13%',
-    top: 250,
-    padding: 0,
-    paddingLeft: 1,
-  },
-  text1: {
-    fontFamily: 'SmileySans-Oblique',
-    fontWeight: '700',
+  title: {
     fontSize: 24,
-    letterSpacing: 0.24,
     color: 'black',
-    textAlign: 'left',
+    // fontWeight: 'bold',
+    marginTop: 0.013 * height,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'black',
+    marginTop: 0.013 * height,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+  },
+  inputContainer: {
+    marginTop: 0.02 * height,
+    flexGrow: 1,
+  },
+  text: {
+    marginTop: 5,
+    fontSize: 16,
+    color: 'black',
+    // fontFamily: 'SmileySans-Oblique',
   },
   text2: {
-    fontFamily: 'SmileySans-Oblique',
-    fontWeight: '700',
+    marginTop: 5,
     fontSize: 16,
-    letterSpacing: 0.14,
     color: 'black',
-    textAlign: 'left',
-    marginTop: 1,
+    marginTop: 15,
+    // fontFamily: 'SmileySans-Oblique',
   },
-  text3: {
-     fontFamily: 'SmileySans-Oblique',
-     position: 'absolute',
-     top: 340,
-     left: 46,
-     fontSize: 16,
-     color: '#0C1421'
-  },
-  input1: {
-     width: '78%',
-     height: 40,
-     top: 368,
-     backgroundColor: '#F3F7FB',
-     borderRadius: 8,
-     color: '#8897AD',
-     fontFamily: 'SmileySans-Oblique',
-     fontWeight: '400',
-     fontSize: 14,
-     letterSpacing: 1.4,
-     textAlign: 'left',
-     paddingHorizontal: 10,
-  },
-  text4: {
-     fontFamily: 'SmileySans-Oblique',
-     position: 'absolute',
-     top: 420,
-     left: 46,
-     fontSize: 16,
-     color: '#0C1421'
-  },
-  input2: {
-     width: '78%',
-     height: 40,
-     top: 410,
-     backgroundColor: '#F3F7FB',
-     borderRadius: 8,
-     color: '#8897AD',
-     fontFamily: 'SmileySans-Oblique',
-     fontWeight: '400',
-     fontSize: 14,
-     letterSpacing: 1.4,
-     textAlign: 'left',
-     paddingHorizontal: 10,
+  input: {
+    backgroundColor: '#F3F7FB',
+    color: 'black',
+    borderRadius: 10,
   },
   button: {
-      width: '78%',
-      position: 'absolute',
-      height: 36,
-      top: 530,
-      borderRadius: 12,
-      paddingVertical: 0,
-      paddingHorizontal: 14,
-      backgroundColor: '#162D3A',
-      justifyContent: 'center',
-      alignItems: 'center',
+    marginTop: 0.039 * height,
+    borderRadius: 12,
   },
-  buttonText: {
-      fontSize: 16,
-      fontWeight: '400',
-      letterSpacing: 1.6,
-      color: '#FFFFFF',
-      fontFamily: 'SmileySans-Oblique',
+  signupText: {
+    fontSize: 16,
+    color: 'black',
+    textAlign: 'center',
+    marginTop: 0.026 * height,
   },
-  text5: {
-      fontFamily: 'SmileySans-Oblique',
-      top: 520,
-      fontSize: 16,
-      fontWeight: '400',
-      letterSpacing: 1.6,
-      color: '#8897AD',
-  },
-  signUpText: {
-      color: '#1E4AE9',
+  signupLink: {
+    fontWeight: 'bold',
+    color: '#4f6d7a',
   },
 });
 
 export default LogIn;
-

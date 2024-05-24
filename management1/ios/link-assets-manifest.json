@@ -2,12 +2,28 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "node_modules/@ant-design/icons-react-native/fonts/antfill.ttf",
-      "sha1": "56960e7721fc92b62e0f7c4d131ffe34ed042c49"
+      "path": "assets/fonts/AlimamaShuHeiTi-Bold.ttf",
+      "sha1": "65b941457420a6e809c8356f1002859e9a8db282"
     },
     {
-      "path": "node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf",
-      "sha1": "66720607b7496a48f145425386b2082b73662fd1"
+      "path": "assets/fonts/HedvigLettersSans-Regular.ttf",
+      "sha1": "7eb8683ee95a19156a909cef8c90602a559717cd"
+    },
+    {
+      "path": "assets/fonts/MaterialCommunityIcons.ttf",
+      "sha1": "4c2a838b00dbb5e8bb1b368fce0de534e8eb241c"
+    },
+    {
+      "path": "assets/fonts/Nunito-Italic-VariableFont_wght.ttf",
+      "sha1": "0b4c3a612cf31e069014ede3a502381c034fc736"
+    },
+    {
+      "path": "assets/fonts/SmileySans-Oblique.ttf",
+      "sha1": "1a6f0098377564a0baaf95d1a859c212f4fe6231"
+    },
+    {
+      "path": "assets/fonts/SourceHanSansHC-VF.ttf",
+      "sha1": "3fca1d71fc5fed85147d0bfcf89e1af68187b926"
     }
   ]
 }

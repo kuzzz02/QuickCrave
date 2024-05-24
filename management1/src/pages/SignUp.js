@@ -1,178 +1,165 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, StyleSheet, Image ,TouchableOpacity, TextInput } from 'react-native';
+import {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ImageBackground,
+  Dimensions,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
+import {Button} from 'react-native-paper';
+// import UserService from '../services/UserService';
 
+const {width, height} = Dimensions.get('window');
 
 const SignUp = () => {
+  const [username, setUsername] = useState('');
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
   const navigation = useNavigation();
+  const handleLoginPress = () => {
+    navigation.navigate('LogIn');
+  };
   const handleSignUpPress = () => {
+    // if (!username || !password2) {
+    //   Alert.alert('Error', 'Username and password cannot be empty');
+    //   return;
+    // }
+    // if (password1 !== password2) {
+    //   Alert.alert('Password does not match');
+    //   return;
+    // }
+    // UserService.signup({name: username, password: password2})
+    //   .then(res => {
+    //     navigation.navigate('LogIn');
+    //   })
+    //   .catch(error => {
+    //     Alert.alert('Invalid username or password');
+    //     console.log(error + ' ' + '111');
+    //   });
+    navigation.navigate('Register');
   };
 
   return (
-    <View style={styles.container}>
-      <Image
+    <ScrollView>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior="height"
+      keyboardVerticalOffset={-25}
+      enabled>
+      <ImageBackground
         source={require('../common/SU.jpg')}
-        style={styles.image}
-      />
-      <View style={styles.textBox}>
-        <Text style={styles.text1}>Welcome to QuickCrave</Text>
-        <Text style={styles.text2}>Get best experience in QuickCrave by signing up!</Text>
+        style={styles.backgroundImage}
+        resizeMode="cover"
+        imageStyle={{borderRadius: 20}}></ImageBackground>
+      <Text style={styles.title}>Welcome to QuickCrave Management-Side</Text>
+      <Text style={styles.subtitle}>
+        Get best experience in QuickCrave by signing up!
+      </Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.text}>Username</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Please input your Username"
+          onChangeText={text => setUsername(text)}
+          // keyboardType="phone-pad"
+        />
+        <Text style={styles.text}>Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Please set your password"
+          onChangeText={text => setPassword1(text)}
+          secureTextEntry={true}
+        />
+        <Text style={styles.text}>Confirm your password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Please confirm your password"
+          onChangeText={text => setPassword2(text)}
+          secureTextEntry={true}
+        />
       </View>
-      <Text style={styles.text3}>Phone</Text>
-      <TextInput
-              style={styles.input1}
-              placeholder="Please input your Phone number"
-              placeholderTextColor="#8897AD"
-      />
-      <Text style={styles.text4}>Password</Text>
-      <TextInput
-              style={styles.input2}
-              placeholder="Please input your password"
-              placeholderTextColor="#8897AD"
-
-      />
-      <Text style={styles.text5}>Confirm your password</Text>
-      <TextInput
-              style={styles.input3}
-              placeholder="Please input your password again"
-              placeholderTextColor="#8897AD"
-
-      />
-      <TouchableOpacity style={styles.button} /*跳转到了购物车 记得修改*/onPress={()=> navigation.navigate('ShoppingCart')}>
-        <Text style={styles.buttonText}>Sign up</Text>
-      </TouchableOpacity>
-
-     </View>
+      <Button
+        style={styles.button}
+        labelStyle={{fontSize: 16}}
+        buttonColor="#162D3A"
+        mode="contained"
+        onPress={handleSignUpPress}>
+        Sign Up
+      </Button>
+      <Text style={styles.signupText}>
+        Already have an account?{' '}
+        <Text style={styles.loginLink} onPress={handleLoginPress}>
+          Login
+        </Text>
+      </Text>
+    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    position: 'relative',
+    // backgroundColor: 'blue',
+    padding: 0.104 * width,
+    paddingTop: 0.02 * height,
   },
-  image: {
-    width: '78%',
-    height: '28%',
+  backgroundImage: {
+    justifyContent: 'center',
     borderRadius: 20,
-    position: 'absolute',
-    top: 42,
+    height: height * 0.3,
   },
-
-  textBox: {
-    position: 'absolute',
-    width: '78%',
-    height: '13%',
-    top: 250,
-    padding: 0,
-    paddingLeft: 1,
-  },
-  text1: {
-    fontFamily: 'SmileySans-Oblique',
-    fontWeight: '700',
-    fontSize: 24,
-    letterSpacing: 0.24,
+  title: {
+    fontSize: 26,
     color: 'black',
-    textAlign: 'left',
+    // fontWeight: 'bold',
+    marginTop: 0.013 * height,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+    // alignSelf: 'center',
   },
-  text2: {
-    fontFamily: 'SmileySans-Oblique',
-    fontWeight: '700',
+  subtitle: {
+    fontSize: 18,
+    color: 'black',
+    marginTop: 0.013 * height,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+  },
+  inputContainer: {
+    marginTop: 0.02 * height,
+    flexGrow: 1,
+    // justifyContent: 'space-around',
+  },
+  text: {
+    marginTop: 5,
     fontSize: 16,
-    letterSpacing: 0.14,
     color: 'black',
-    textAlign: 'left',
-    marginTop: 1,
+    // fontFamily: 'SmileySans-Oblique',
   },
-  text3: {
-     fontFamily: 'SmileySans-Oblique',
-     position: 'absolute',
-     top: 340,
-     left: 46,
-     fontSize: 16,
-     color: 'black'
-  },
-  input1: {
-     width: '78%',
-     height: 40,
-     top: 368,
-     backgroundColor: '#F3F7FB',
-     borderRadius: 8,
-     color: '#8897AD',
-     fontFamily: 'SmileySans-Oblique',
-     fontWeight: '400',
-     fontSize: 14,
-     letterSpacing: 1.4,
-     textAlign: 'left',
-     paddingHorizontal: 10,
-  },
-  text4: {
-     fontFamily: 'SmileySans-Oblique',
-     position: 'absolute',
-     top: 420,
-     left: 46,
-     fontSize: 16,
-     color: '#0C1421',
-  },
-  input2: {
-     width: '78%',
-     height: 40,
-     top: 410,
-     backgroundColor: '#F3F7FB',
-     borderRadius: 8,
-     color: '#8897AD',
-     fontFamily: 'SmileySans-Oblique',
-     fontWeight: '400',
-     fontSize: 14,
-     letterSpacing: 1.4,
-     textAlign: 'left',
-     paddingHorizontal: 10,
-  },
-  text5: {
-     fontFamily: 'AlibabaSans',
-     position: 'absolute',
-     top: 500,
-     left: 46,
-     fontSize: 16,
-     color: '#0C1421',
-     fontFamily: 'SmileySans-Oblique',
-  },
-  input3: {
-     width: '78%',
-     height: 40,
-     top: 450,
-     backgroundColor: '#F3F7FB',
-     borderRadius: 8,
-     color: '#8897AD',
-     fontFamily: 'SmileySans-Oblique',
-     fontWeight: '400',
-     fontSize: 14,
-     letterSpacing: 1.4,
-     textAlign: 'left',
-     paddingHorizontal: 10,
+  input: {
+    backgroundColor: '#F3F7FB',
+    color: 'black',
+    borderRadius: 10,
   },
   button: {
-      width: '78%',
-      position: 'absolute',
-      height: 36,
-      top: 600,
-      borderRadius: 12,
-      paddingVertical: 0,
-      paddingHorizontal: 14,
-      backgroundColor: '#162D3A',
-      justifyContent: 'center',
-      alignItems: 'center',
+    marginTop: 0.039 * height,
+    borderRadius: 12,
   },
-  buttonText: {
-      fontSize: 16,
-      fontWeight: '400',
-      letterSpacing: 1.6,
-      fontFamily: 'SmileySans-Oblique',
-      color: '#FFFFFF',
+  signupText: {
+    fontSize: 16,
+    color: 'black',
+    textAlign: 'center',
+    marginTop: 0.026 * height,
   },
-
+  loginLink: {
+    fontWeight: 'bold',
+    color: '#4f6d7a',
+  },
 });
 
 export default SignUp;
-
