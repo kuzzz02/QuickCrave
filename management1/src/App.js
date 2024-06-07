@@ -9,7 +9,7 @@ import SignUp from './pages/SignUp';
 import Register from './pages/Register';
 // import Track from './pages/Track';
 // import ShoppingCart from './pages/ShoppingCart';
-import YourComponent from './pages/YourComponent';
+import OrderDetail from './pages/OrderDetail';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -18,7 +18,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{
         headerShown: false
       }}>
-        {/* <Stack.Screen name="YourComponent" component={YourComponent} /> */}
+        <Stack.Screen name="OrderDetail" component={OrderDetail} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Start" component={Start} />
         <Stack.Screen name="Init" component={Init} />
