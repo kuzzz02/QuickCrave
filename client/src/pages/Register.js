@@ -11,19 +11,16 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
 
 const {width, height} = Dimensions.get('window');
 
-const SignUp = () => {
-  const [username, setUsername] = useState('');
+const Register = () => {
+  const [phone, setPhone] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
   const navigation = useNavigation();
   const handleLoginPress = () => {
     navigation.navigate('LogIn');
@@ -37,7 +34,7 @@ const SignUp = () => {
       Alert.alert('Password does not match');
       return;
     }
-    UserService.signup({name: username, password: password2})
+    UserService.update({name: username, password: password2})
       .then(res => {
         navigation.navigate('LogIn');
       })
@@ -48,13 +45,11 @@ const SignUp = () => {
   };
 
   return (
-    
     <KeyboardAvoidingView
       style={styles.container}
       behavior="height"
-      keyboardVerticalOffset={-20}
+      keyboardVerticalOffset={-25}
       enabled>
-        <ScrollView>
       <ImageBackground
         source={require('../common/SU.jpg')}
         style={styles.backgroundImage}
@@ -62,14 +57,13 @@ const SignUp = () => {
         imageStyle={{borderRadius: 20}}></ImageBackground>
       <Text style={styles.title}>Welcome to QuickCrave</Text>
       <Text style={styles.subtitle}>
-        Get best experience in QuickCrave by signing up!
+        Register your basic information to start your trip!
       </Text>
-      
       <View style={styles.inputContainer}>
-        <Text style={styles.text}>Set Username</Text>
+        <Text style={styles.text}>Phone Number</Text>
         <TextInput
           style={styles.input}
-          placeholder="Please input your Username"
+          placeholder="Please input your phone number"
           onChangeText={text => setUsername(text)}
           // keyboardType="phone-pad"
         />
@@ -87,22 +81,7 @@ const SignUp = () => {
           onChangeText={text => setPassword2(text)}
           secureTextEntry={true}
         />
-        <Text style={styles.text}>Set your address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Please set your address"
-          onChangeText={text => setAddress(text)}
-          secureTextEntry={true}
-        />
-        <Text style={styles.text}>Set your phone number</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Please set your phone number"
-          onChangeText={text => setPhone(text)}
-          secureTextEntry={true}
-        />
       </View>
-      </ScrollView>
       <Button
         style={styles.button}
         labelStyle={{fontSize: 16}}
@@ -179,4 +158,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default Register;

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 
+
 import {
   StyleSheet,
   View,
@@ -38,7 +39,6 @@ const Main = () => {
 
   const [images, setImages] = useState({});
 
-  // const placeholderImage = require('../common/qu.png');
 
   useEffect(() => {
     const fetchVendorDetails = async () => {

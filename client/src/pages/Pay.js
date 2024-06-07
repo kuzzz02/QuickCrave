@@ -1,11 +1,21 @@
 import React from 'react';
+import {useState} from 'react';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('window');
 
+
+
+
 const Pay = ({route}) => {
   const {total} = route.params;
+  const {vendor} = route.params;
+  const navigation = useNavigation();
+  const handlePayPress = () => {
+    navigation.navigate('Track',{vendor});
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -13,6 +23,7 @@ const Pay = ({route}) => {
         <Text style={styles.text2}>€{total}</Text>
         <Button
           style={styles.button1}
+          onPress={handlePayPress}
           labelStyle={{fontSize: 16}}
           mode="contained">
           <Text
@@ -28,6 +39,7 @@ const Pay = ({route}) => {
           //   icon={source={require('../common/alipay.png')}}
           style={styles.button2}
           labelStyle={{fontSize: 16}}
+          onPress={handlePayPress}
           mode="contained">
           <Text
             style={{

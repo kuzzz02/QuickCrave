@@ -6,7 +6,7 @@ class OrdersService {
   }
 
   getById(id) {
-    return http.get(`/orders/selectById/${id}`);
+    return http.get(`/orders/selectById?id=${id}`);
   }
 
   create(data) {

@@ -31,7 +31,7 @@ const LogIn = () => {
     }
     UserService.login({name: username, password: password})
       .then(res => {
-        if (res.status === 200) {  // 检查状态码是否为200
+        if (res.status === 200) {  
           navigation.navigate('Main');
         } else {
           console.log("Login failed: ", res.status);
@@ -43,6 +43,8 @@ const LogIn = () => {
         Alert.alert('Login error, please try again');
       });
   };
+
+  console.log(UserService.getByName(username), ' 1111');
 
   return (
     <KeyboardAvoidingView

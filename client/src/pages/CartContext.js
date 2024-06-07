@@ -2,6 +2,7 @@ import React, {createContext, useContext, useState} from 'react';
 import {useEffect} from 'react';
 import GoodsService from '../services/GoodsService';
 import ImageService from '../services/ImageService';
+import VendorService from '../services/VendorService';
 
 const CartContext = createContext();
 
@@ -11,6 +12,7 @@ export const CartProvider = ({children}) => {
   const [goods, setGoods] = useState([]);
   const [counts, setCounts] = useState([]);
   const [images, setImages] = useState({});
+  const [vendors, setVendor] = useState({});
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -21,20 +23,25 @@ export const CartProvider = ({children}) => {
         setGoods(goodsArray);
         setCounts(new Array(goodsData.length).fill(0));
 
-        // 加载每个商品的图片
         goodsArray.forEach(async (good) => {
-          const imageSrc = await ImageService.getGoodsImage(good.image); // 假设 getGoodsImage 方法返回图片的 URL
+          const imageSrc = await ImageService.getGoodsImage(good.image); 
           setImages(prevImages => ({
             ...prevImages,
             [good.id]: imageSrc
           }));
         });
+
+      
+
       } catch (error) {
         console.error('Error fetching user details: ', error);
       }
     };
+
     fetchVendorDetails();
   }, []);
+
+  
  
 
   const handleIncrease = index => {
@@ -68,6 +75,7 @@ export const CartProvider = ({children}) => {
         goods,
         counts,
         images,
+        vendors,
         handleIncrease,
         handleDecrease,
         setCounts,

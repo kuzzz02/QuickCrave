@@ -6,11 +6,11 @@ class UserService {
   }
 
   getByName(name) {
-    return http.get(`/user/selectByName/${name}`);
+    return http.get(`/user/selectByName?name=${name}`);
   }
 
   getById(id) {
-    return http.get(`/user/selectById/${id}`);
+    return http.get(`/user/selectById?id=${id}`);
   }
 
   create(data) {

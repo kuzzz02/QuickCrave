@@ -1,28 +1,67 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
   Dimensions,
+  TextInput,
+  Modal,
   Image,
+  Touchable,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 import {useCart} from './CartContext';
+import OrdersService from '../services/OrdersSerivce';
 
 const {width, height} = Dimensions.get('window');
 
 const ShoppingCart = () => {
   const {goods, counts, handleIncrease, handleDecrease, images} = useCart();
 
-  const man = [{id:"1", phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'}];
+  const man = [
+    {id: '1', phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'},
+  ];
+
+  const [manState, setManState] = useState(man);
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [newLocation, setNewLocation] = useState('');
 
   const navigation = useNavigation();
 
-  const handleOrderPress = () => {
+  // const handleOrderPress = () => {
+  //   const total = calculateTotal();
+  //   navigation.navigate('Pay', {total});
+  // };
+
+  const handleOrderPress = async () => {
     const total = calculateTotal();
-    navigation.navigate('Pay', {total});
+    const orderData = {
+      vendorId: vendor.id, 
+      items: goods.filter((_, index) => counts[index] > 0).map((item, index) => ({
+        itemId: item.id,
+        name: item.name,
+        quantity: counts[index],
+        price: item.price,
+        total: item.price * counts[index]
+      })),
+      total: total,
+      deliveryLocation: manState[0].location, 
+    };
+  
+    console.log('Order data to send:', orderData);
+  
+    try {
+      const response = await OrdersService.create(orderData);
+      console.log('Order placed successfully:', response);
+      navigation.navigate('Pay', {total,vendor});
+      // Optionally reset the cart or show a success message
+    } catch (error) {
+      console.error('Failed to place order:', error);
+    }
   };
 
   const calculateTotal = () => {
@@ -33,10 +72,15 @@ const ShoppingCart = () => {
     return total;
   };
 
+  const handleSaveLocation = () => {
+    const updatedMan = { ...manState[0], location: newLocation };
+    setManState([updatedMan]); 
+    setModalVisible(false); 
+  };
+
   const route = useRoute();
 
   const vendor = route.params.vendor;
-
 
   return (
     <View style={styles.container}>
@@ -45,9 +89,16 @@ const ShoppingCart = () => {
           if (counts[index] > 0) {
             return (
               <View style={styles.productContainer}>
-                <Image source={{ uri: images[item.id] }} style={styles.foodImage}></Image>
+                <Image
+                  source={{uri: images[item.id]}}
+                  style={styles.foodImage}></Image>
                 <View key={item.id} style={styles.item}>
-                  <Text numberOfLines={1} ellipsizeMode="tail" style={styles.foodName}>{item.name}</Text>
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={styles.foodName}>
+                    {item.name}
+                  </Text>
                   <Text style={styles.foodRestaurant}>{vendor.name}</Text>
                   <Text style={styles.foodPrice}>€{item.price}</Text>
                   <Text style></Text>
@@ -76,8 +127,10 @@ const ShoppingCart = () => {
           }
         })}
         <View style={styles.locationContainer}>
-          {man.map(item => (
-            <View key={item.id} style={{height: 0.133 * height, width: 0.729 * width}}>
+          {manState.map(item => (
+            <View
+              key={item.id}
+              style={{height: 0.133 * height, width: 0.729 * width}}>
               <Text style={styles.locationTitle}>Deliver To</Text>
               {/* <Icon source="map-marker" style={{marginLeft:100}} color="yellow"size={40}/> */}
               <Text
@@ -93,10 +146,44 @@ const ShoppingCart = () => {
             </View>
           ))}
           <View style={{marginLeft: 0.026 * width}}>
-            <Text style={styles.editLink}>Edit</Text>
+            <Text
+              style={styles.editLink}
+              onPress={() => {
+                setModalVisible(true);
+                setNewLocation(man[0].location); // initialize the new location
+              }}>
+              Edit
+            </Text>
           </View>
         </View>
       </ScrollView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TextInput
+              style={styles.modalText}
+              onChangeText={setNewLocation}
+              value={newLocation}
+              placeholder="Enter new address"
+            />
+            <Button
+        style={styles.savebutton}
+        labelStyle={{fontSize: 16}}
+        buttonColor="#06c168"
+        mode="contained"
+        onPress={handleSaveLocation}>
+        Save address
+      </Button>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.totalContainer}>
         <View style={styles.left}>
           <Text style={styles.total}>Sub-Total: </Text>
@@ -104,7 +191,7 @@ const ShoppingCart = () => {
           <Text style={styles.total1}>Total: </Text>
         </View>
         <View style={styles.right}>
-          <Text style={styles.money}>€{calculateTotal()-vendor.fee}</Text>
+          <Text style={styles.money}>€{calculateTotal() - vendor.fee}</Text>
           <Text style={styles.money}>€{vendor.fee}</Text>
           <Text style={styles.money1}>€{calculateTotal()}</Text>
         </View>
@@ -136,7 +223,6 @@ const styles = StyleSheet.create({
   },
   item: {
     width: 0.377 * width,
-
   },
   productContainer: {
     flexDirection: 'row',
@@ -270,6 +356,34 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0.012 * height,
     width: width * 0.85,
+    borderRadius: 12,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  savebutton: {
     borderRadius: 12,
   },
 });
