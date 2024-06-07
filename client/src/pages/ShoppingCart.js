@@ -13,16 +13,17 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 import {useCart} from './CartContext';
-import OrdersService from '../services/OrdersSerivce';
+
 
 const {width, height} = Dimensions.get('window');
 
 const ShoppingCart = () => {
-  const {goods, counts, handleIncrease, handleDecrease, images} = useCart();
+  const {goods, counts, handleIncrease, handleDecrease, goodsImages} = useCart();
 
   const man = [
     {id: '1', phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'},
   ];
+
 
   const [manState, setManState] = useState(man);
 
@@ -32,36 +33,10 @@ const ShoppingCart = () => {
 
   const navigation = useNavigation();
 
-  // const handleOrderPress = () => {
-  //   const total = calculateTotal();
-  //   navigation.navigate('Pay', {total});
-  // };
 
-  const handleOrderPress = async () => {
+  const handleOrderPress = () => {
     const total = calculateTotal();
-    const orderData = {
-      vendorId: vendor.id, 
-      items: goods.filter((_, index) => counts[index] > 0).map((item, index) => ({
-        itemId: item.id,
-        name: item.name,
-        quantity: counts[index],
-        price: item.price,
-        total: item.price * counts[index]
-      })),
-      total: total,
-      deliveryLocation: manState[0].location, 
-    };
-  
-    console.log('Order data to send:', orderData);
-  
-    try {
-      const response = await OrdersService.create(orderData);
-      console.log('Order placed successfully:', response);
-      navigation.navigate('Pay', {total,vendor});
-      // Optionally reset the cart or show a success message
-    } catch (error) {
-      console.error('Failed to place order:', error);
-    }
+    navigation.navigate('Pay',{total, vendor});
   };
 
   const calculateTotal = () => {
@@ -90,7 +65,7 @@ const ShoppingCart = () => {
             return (
               <View style={styles.productContainer}>
                 <Image
-                  source={{uri: images[item.id]}}
+                  source={{uri: goodsImages[item.id]}}
                   style={styles.foodImage}></Image>
                 <View key={item.id} style={styles.item}>
                   <Text

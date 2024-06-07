@@ -1,8 +1,10 @@
 import React from 'react';
 import {useState} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {StyleSheet, View, Text, Dimensions, Alert} from 'react-native';
 import {Button, IconButton, Icon} from 'react-native-paper';
+import OrdersService from '../services/OrdersSerivce';
+import {useCart} from './CartContext';
 
 const {width, height} = Dimensions.get('window');
 
@@ -13,9 +15,46 @@ const Pay = ({route}) => {
   const {total} = route.params;
   const {vendor} = route.params;
   const navigation = useNavigation();
-  const handlePayPress = () => {
+  const {goods, counts, handleIncrease, handleDecrease, goodsImages, } = useCart();
+  const handleWechatPayPress = () => {
     navigation.navigate('Track',{vendor});
   };
+  // const handleAliPayPress = () => {
+  //   navigation.navigate('Track',{vendor});
+  // };
+
+  const handleAliPayPress = async () => {
+    // const total = calculateTotal();
+    const today = new Date().toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+
+    try {
+      goods.forEach(async (item, index) => {
+        if (counts[index] > 0) {
+          await OrdersService.create(
+            item.id,
+            user.id,
+            vendor.id,
+            1, // Suppose there is a default delivery_id
+            "Pending", // Default order state
+            today,
+            manState[0].location,
+            manState[0].phoneNumber,
+            "AliPay", // Assume a default payment method
+            total // Total price for this item
+          );
+        }
+      });
+      Alert.alert('Success', 'Order placed successfully');
+      console.log('Order placed successfully');
+      navigation.navigate('Track', { vendor });
+      // Optionally reset the cart or show a success message
+    } catch (error) {
+      console.error('Failed to place order:', error);
+      Alert.alert('Order error', 'Failed to place the order, please try again');
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -23,7 +62,7 @@ const Pay = ({route}) => {
         <Text style={styles.text2}>€{total}</Text>
         <Button
           style={styles.button1}
-          onPress={handlePayPress}
+          onPress={handleAliPayPress}
           labelStyle={{fontSize: 16}}
           mode="contained">
           <Text
@@ -39,7 +78,7 @@ const Pay = ({route}) => {
           //   icon={source={require('../common/alipay.png')}}
           style={styles.button2}
           labelStyle={{fontSize: 16}}
-          onPress={handlePayPress}
+          onPress={handleWechatPayPress}
           mode="contained">
           <Text
             style={{

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import {useCart} from './CartContext';
+
 
 import {
   StyleSheet,
@@ -19,13 +19,13 @@ import {
   Icon,
   Button,
 } from 'react-native-paper';
+import VendorService from '../services/VendorService';
+import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
 
 const Main = () => {
   const navigation = useNavigation();
-
-  const { vendors, vendorsImages } = useCart(); 
 
   const categories = [
     {key: 'burger', text: '🍔 Burger'},
@@ -33,17 +33,34 @@ const Main = () => {
     {key: 'sandwich', text: '🥪 Sandwich'},
   ];
 
-  // const [vendors, setVendors] = useState([]);
+  const [vendors, setVendors] = useState([]);
 
-  const [filteredVendors, setFilteredVendors] = useState(vendors);
+  const [filteredVendors, setFilteredVendors] = useState([]);
 
-
-  // const [images, setImages] = useState({});
+  const [images, setImages] = useState({});
 
 
   useEffect(() => {
-    setFilteredVendors(vendors);
-  }, [vendors]);
+    const fetchVendorDetails = async () => {
+      try {
+        const response = await VendorService.getAll();
+        const data = response.data;
+        const vendorsArray = Array.isArray(data) ? data : [data];
+        setVendors(vendorsArray);
+        setFilteredVendors(vendorsArray);
+        vendorsArray.forEach(async vendor => {
+          const imageSrc = await ImageService.getVendorImage(vendor.portrait);
+          setImages(prevImages => ({
+            ...prevImages,
+            [vendor.id]: imageSrc,
+          }));
+        });
+      } catch (error) {
+        console.error('Error fetching user details: ', error);
+      }
+    };
+    fetchVendorDetails();
+  }, []);
 
   const renderRating = rating => {
     const filledStars = Math.floor(rating);
@@ -67,10 +84,12 @@ const Main = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('');
 
   const handlePress = categoryKey => {
+    // 如果已经选中的类别被再次点击，取消选中并显示所有商家
     if (selectedCategory === categoryKey) {
       setSelectedCategory('');
       setFilteredVendors(vendors);
     } else {
+      // 否则更新选中的类别并过滤商家
       setSelectedCategory(categoryKey);
       const filtered = vendors.filter(
         vendor => vendor.category === categoryKey,
@@ -82,7 +101,7 @@ const Main = () => {
   const handleSearch = query => {
     setSearchQuery(query);
     if (query.trim() === '') {
-      setFilteredVendors(vendors); 
+      setFilteredVendors(vendors); // 如果搜索框为空，则显示所有商家
     } else {
       const filtered = vendors.filter(vendor =>
         vendor.name.toLowerCase().includes(query.toLowerCase()),
@@ -107,6 +126,7 @@ const Main = () => {
           style={styles.imageD}
         />
       </View>
+      {/* //TODO:change this search bar into normal */}
       <Searchbar
         style={styles.searchBar}
         placeholder="Search For Food"
@@ -146,8 +166,7 @@ const Main = () => {
             style={styles.item}
             onPress={() => handleDetailPress(vendor)}>
             <View style={styles.imageBox}>
-            <Image style={styles.logo} source={{uri: vendorsImages[vendor.id]}} />
-            
+            <Image style={styles.logo} source={{uri: images[vendor.id]}} />
             </View>
             <View style={styles.details}>
               <Text style={styles.itemName}>{vendor.name}</Text>
@@ -249,7 +268,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: width * 0.9,
     marginHorizontal: width * 0.05,
+    // justifyContent: 'center',
     justifyContent: 'space-between',
+    // padding: 10,
   },
   item: {
     width: 0.43*width,
@@ -259,6 +280,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     margin: 0.025 * width,
+    // padding: 10,
+    // justifyContent: 'center',
+    // textAlign: 'center',
+    // alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
@@ -305,7 +330,13 @@ const styles = StyleSheet.create({
     height: 0.1 * height,
     left: 0,
     right: 0,
+    // justifyContent: 'space-around',
+    // paddingVertical: 10,
+    // borderTopWidth: 1,
+    // borderTopColor: '#eee',
+    // marginBottom: 10,
     marginTop: 5,
+    // backgroundColor: 'red',
   },
   navButton: {
     alignItems: 'center',
@@ -313,3 +344,117 @@ const styles = StyleSheet.create({
 });
 
 export default Main;
+
+import React, {useState, useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import {useCart} from './CartContext';
+
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  Alert,
+} from 'react-native';
+import {
+  Text,
+  Searchbar,
+  BottomNavigation,
+  Icon,
+  Button,
+} from 'react-native-paper';
+import VendorService from '../services/VendorService';
+import ImageService from '../services/ImageService';
+
+const { width, height } = Dimensions.get('window');
+
+const Main = () => {
+  const navigation = useNavigation();
+  const { vendors, images } = useCart();  // 从全局状态获取供应商和图片信息
+
+  const categories = [
+    { key: 'burger', text: '🍔 Burger' },
+    { key: 'pizza', text: '🍕 Pizza' },
+    { wey: 'sandwich', text: '🥪 Sandwich' },
+  ];
+
+  const [filteredVendors, setFilteredVendors] = useState(vendors);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // 当供应商列表变化时更新过滤后的供应商列表
+  React.useEffect(() => {
+    setFilteredVendors(vendors);
+  }, [vendors]);
+
+  const handleDetailPress = vendor => {
+    navigation.navigate('Detail', { vendor });
+  };
+
+  const handlePress = categoryKey => {
+    if (!categoryKey) {
+      setFilteredVendors(vendors);
+    } else {
+      setFilteredVendors(vendors.filter(vendor => vendor.category === categoryKey));
+    }
+  };
+
+  const handleSearch = query => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      setFilteredVendors(vendors);
+    } else {
+      setFilteredVendors(vendors.filter(vendor =>
+        vendor.name.toLowerCase().includes(query.toLowerCase())
+      ));
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>
+        <Icon source="map-marker" color="#06C168" size={0.057 * width} />
+        SCNU, CN
+      </Text>
+      {/* 其他 UI 组件 */}
+      <Searchbar
+        style={styles.searchBar}
+        placeholder="Search For Food"
+        onChangeText={handleSearch}
+        value={searchQuery}
+      />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryContainer}>
+        {categories.map(category => (
+          <TouchableOpacity
+            key={category.key}
+            style={[
+              styles.category,
+              category.key === searchQuery ? styles.selected : null,
+            ]}
+            onPress={() => handlePress(category.key)}>
+            <Text
+              style={[
+                styles.categoryText,
+                category.key === searchQuery ? styles.selectedT : null,
+              ]}>
+              {category.text}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <ScrollView contentContainerStyle={styles.itemContainer}>
+        {filteredVendors.map(vendor => (
+          <TouchableOpacity
+            key={vendor.id}
+            style={styles.item}
+            onPress={() => handleDetailPress(vendor)}>
+            <Image style={styles.logo} source={{ uri: images[vendor.id] }} />
+            <Text style={styles.itemName}>{vendor.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    </View>
+  );
+};

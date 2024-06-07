@@ -16,12 +16,11 @@ import {
 } from 'react-native-paper';
 import {useCart} from './CartContext';
 import GoodsService from '../services/GoodsService';
-import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
 
 const Detail = () => {
-  const {counts, handleIncrease, handleDecrease, calculateTotal, images} = useCart();
+  const {counts, handleIncrease, handleDecrease, calculateTotal, goodsImages} = useCart();
 
   const newTheme = {
     ...DefaultTheme,
@@ -106,7 +105,7 @@ const Detail = () => {
         <View style={styles.categoryContainer}>
           {goods.map((good, index) => (
             <View key={good.id} style={styles.foodCategory}>
-              <Image style={{width: 0.312 * width, height: 0.159 * height, marginBottom: 5}} source={{uri: images[good.id]}} />
+              <Image style={{width: 0.312 * width, height: 0.159 * height, marginBottom: 5}} source={{uri: goodsImages[good.id]}} />
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"

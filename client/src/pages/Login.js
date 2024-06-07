@@ -13,7 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import {Button} from 'react-native-paper';
-import UserService from '../services/UserService';
+import { useCart } from './CartContext';
 
 const {width, height} = Dimensions.get('window');
 
@@ -21,6 +21,7 @@ const LogIn = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
+  const { login } = useCart(); 
   const handleSignUpPress = () => {
     navigation.navigate('SignUp');
   };
@@ -29,22 +30,17 @@ const LogIn = () => {
       Alert.alert('Error', 'Username and password cannot be empty');
       return;
     }
-    UserService.login({name: username, password: password})
-      .then(res => {
-        if (res.status === 200) {  
-          navigation.navigate('Main');
-        } else {
-          console.log("Login failed: ", res.status);
-          Alert.alert('Invalid username or password');
-        }
+    login({ name: username, password: password })
+      .then(user => {
+        // 假设登录成功后，user 对象会被返回
+        navigation.navigate('Main');
       })
       .catch(error => {
-        console.log(error, ' 2222');
+        console.error(error);
         Alert.alert('Login error, please try again');
       });
   };
 
-  console.log(UserService.getByName(username), ' 1111');
 
   return (
     <KeyboardAvoidingView

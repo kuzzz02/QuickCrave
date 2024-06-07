@@ -39,11 +39,11 @@ class ImageService {
   }
 
   getUserImage(imageName) {
-    return http.get(`/image/user/${imageName}`);
+    return http.get(`/image/user?imageName=${imageName}`);
   }
 
   getDeliveryImage(imageName) {
-    return http.get(`/image/delivery/${imageName}`);
+    return http.get(`/image/delivery?imageName=${imageName}`);
   }
 }
 
