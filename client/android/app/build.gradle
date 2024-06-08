@@ -112,6 +112,7 @@ android {
     }
 }
 
+// ./gradlew --refresh-dependencies
 // ./gradlew clean
 // ./gradlew assembleRelease
 
@@ -119,6 +120,8 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
+
+    implementation("com.amap.api:navi-3dmap-location-search:10.0.700_3dmap10.0.700_loc6.4.5_sea9.7.2")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
