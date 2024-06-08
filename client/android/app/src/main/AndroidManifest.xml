@@ -45,7 +45,19 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />  
 
     <!--允许读设备等信息，用于问题排查-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <queries>
+        <package android:name="com.eg.android.AlipayGphone" /> <!-- 支付宝 -->
+        <package android:name="hk.alipay.wallet" /> <!-- AlipayHK -->
+    </queries>
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
 
 
     <!-- android:roundIcon="@mipmap/ic_launcher_round" -->
@@ -59,13 +71,8 @@
       android:usesCleartextTraffic="true">
 
       <meta-data
-        android:name="com.amap.api.v2.apikey"
-        android:value="9ce3469d672f3e6922680464e4b159ce" />
-      <service android:name="com.amap.api.location.APSService"></service>
-      <activity
-        android:name="com.amap.api.navi.AmapRouteActivity"
-        android:theme="@android:style/Theme.NoTitleBar"
-        android:configChanges="orientation|keyboardHidden|screenSize|navigation" />
+        android:name="com.google.android.maps.v2.API_KEY"
+        android:value="AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s" />
 
       <activity
         android:name=".MainActivity"

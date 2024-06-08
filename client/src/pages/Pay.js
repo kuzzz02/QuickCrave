@@ -5,6 +5,8 @@ import {StyleSheet, View, Text, Dimensions, Alert} from 'react-native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 import OrdersService from '../services/OrdersSerivce';
 import {useCart} from './CartContext';
+import alipay from '../middleware/alipay';
+import { NativeModules } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -46,7 +48,15 @@ const Pay = ({route}) => {
       });
       Alert.alert('Success', 'Order placed successfully');
       console.log('Order placed successfully');
-      navigation.navigate('Track', { vendor });
+      // navigation.navigate('Track', { vendor });
+      alipay.pay()
+      .then(response => {
+        console.log(response.data);
+        const result_code = NativeModules.Alipay.pay(response.data)
+      })
+      .catch(error => {
+        console.log(error);
+      });
       // Optionally reset the cart or show a success message
     } catch (error) {
       console.error('Failed to place order:', error);
