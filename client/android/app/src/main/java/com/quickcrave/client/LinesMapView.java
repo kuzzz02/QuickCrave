@@ -1,14 +1,14 @@
-package com.quickcrave.client;
+// package com.quickcrave.client;
 
-import android.content.Context;
+// import android.content.Context;
 
-import com.amap.api.maps.TextureMapView;
+// import com.amap.api.maps.TextureMapView;
 
 
-public class LinesMapView extends TextureMapView {
+// public class LinesMapView extends TextureMapView {
 
-    public LinesMapView(Context context) {
-        super(context);
-        super.onCreate(null);
-    }
-}
+//     public LinesMapView(Context context) {
+//         super(context);
+//         super.onCreate(null);
+//     }
+// }
