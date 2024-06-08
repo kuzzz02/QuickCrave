@@ -4,7 +4,6 @@ import GoodsService from '../services/GoodsService';
 import ImageService from '../services/ImageService';
 import VendorService from '../services/VendorService';
 import UserService from '../services/UserService';
-import OrdersService from '../services/OrdersService';
 
 const CartContext = createContext();
 
@@ -17,7 +16,6 @@ export const CartProvider = ({children}) => {
   const [goodsImages, setGoodsImages] = useState({});
   const [vendorsImages, setVendorsImages] = useState({});
   const [vendors, setVendors] = useState({});
-  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -48,19 +46,6 @@ export const CartProvider = ({children}) => {
             [vendor.id]: imageSrc
           }));
         });
-
-        const ordersResponse = await OrdersService.getAll();
-        const ordersData = ordersResponse.data;
-        const ordersArray = Array.isArray(ordersData) ? ordersData : [ordersData];
-        setOrders(ordersArray);
-
-        // ordersArray.forEach(async (order) => {
-        //   const imageSrc = await ImageService.getGoodsImage(good.image); 
-        //   setOrdersImages(prevImages => ({
-        //     ...prevImages,
-        //     [good.id]: imageSrc
-        //   }));
-        // });
 
       } catch (error) {
         console.error('Error fetching user details: ', error);
@@ -111,6 +96,8 @@ export const CartProvider = ({children}) => {
     });
     return total;
   };
+
+
 
 
   return (

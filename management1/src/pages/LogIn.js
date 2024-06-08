@@ -13,36 +13,34 @@ import {
   Platform,
 } from 'react-native';
 import {Button} from 'react-native-paper';
-// import UserService from '../services/UserService';
+import { useCart } from './CartContext';
 
 const {width, height} = Dimensions.get('window');
 
 const LogIn = () => {
-  const [username, setUsername] = useState('');
+  const [vendorname, setVendorname] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
+  const { login } = useCart(); 
   const handleSignUpPress = () => {
     navigation.navigate('SignUp');
   };
   const handleLogInPress = () => {
-    // if (!username || !password) {
-    //   Alert.alert('Error', 'Username and password cannot be empty');
-    //   return;
-    // }
-    // UserService.login({name: username, password: password})
-    //   .then(res => {
-    //     if (res.status === 200) {  // 检查状态码是否为200
-    //       navigation.navigate('Main');
-    //     } else {
-    //       console.log("Login failed: ", res.status);
-    //       Alert.alert('Invalid username or password');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log(error, ' 2222');
-    //     Alert.alert('Login error, please try again');
-    //   });
+    if (!vendorname || !password) {
+      Alert.alert('Error', 'Username and password cannot be empty');
+      return;
+    }
+    login({ name: vendorname, password: password })
+      .then(user => {
+        // 假设登录成功后，user 对象会被返回
+        navigation.navigate('OrderDetail');
+      })
+      .catch(error => {
+        console.error(error);
+        Alert.alert('Login error, please try again');
+      });
   };
+
 
   return (
     <KeyboardAvoidingView
@@ -57,14 +55,14 @@ const LogIn = () => {
         imageStyle={{borderRadius: 20}}></ImageBackground>
       <Text style={styles.title}>Welcome Back 👋</Text>
       <Text style={styles.subtitle}>
-        Login in to help you better managing your restaurant!
+        It's time for you to enjoy your delicious. Login in to start your trip!
       </Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.text}>Username</Text>
+        <Text style={styles.text}>Phone Number</Text>
         <TextInput
           style={styles.input}
-          placeholder="Please input your Username"
-          onChangeText={text => setUsername(text)}
+          placeholder="Please input your phone number"
+          onChangeText={text => setVendorname(text)}
           // keyboardType="phone-pad"
         />
         <Text style={styles.text2}>Password</Text>

@@ -34,7 +34,7 @@ const BottomNav = () => {
     navigation.navigate('OrderDetail');
   };
   const handleAnalysisPress = () => {
-    navigation.navigate('Analysis');
+    navigation.navigate('LogIn');
   };
   const handleInformationPress = () => {
     navigation.navigate('Information');
