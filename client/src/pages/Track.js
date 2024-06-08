@@ -41,8 +41,57 @@ const Track = () => {
     fetchVendor();
   }, []);
 
+  // AMapSdk.init(
+  //   Platform.select({
+  //     android: "9ce3469d672f3e6922680464e4b159ce"
+  //   })
+  // );
+
+
+
   return (
     <View style={styles.container}>
+     {/* <MapView
+        style={{width: width, height: height*0.7}}
+        mapType={MapType.Standard}
+
+        minZoom={0}
+        showsScale={true}
+        compassEnabled={false}
+        myLocationEnabled={true}
+        rotateGesturesEnabled={false}
+        zoomControlsEnabled={false}
+        tiltGesturesEnabled={false}
+
+        initialCameraPosition={{
+          target: {
+            latitude: 23.149011880643513,
+            longitude: 113.03132632747293,
+            // latitude: coords.latitude,
+            // longitude: coords.longitude,
+          },
+          zoom: 12,
+        }}
+
+        onLoad={() => console.log("onLoad")}
+        locationEnabled={true}
+        onLocation={({ nativeEvent }) => {
+          setCoords(nativeEvent);
+          console.log(nativeEvent);
+        }}
+        // onPress={({ nativeEvent }) => console.log(nativeEvent)}
+        // onCameraIdle={({ nativeEvent }) => console.log(nativeEvent)}
+      >
+        <Marker coordinate={{latitude: 23.149011880643513, longitude: 113.03132632747293}} />
+        {coords.length > 1 && (
+          <Polyline
+            coordinates={coords}
+            strokeColor="rgba(0, 0, 255, 0.5)"
+            strokeWidth={5}
+          />
+        )}
+      </MapView> */}
+
       <View style={styles.informationContainer}>
         <View style={styles.header}>
           <Text style={{ fontFamily: 'AlimamaShuHeiTi-Bold', fontSize: 20, color:'black' }}>
