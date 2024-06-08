@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,23 +13,30 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 import {useCart} from './CartContext';
-
+import UserService from '../services/UserService';
 
 const {width, height} = Dimensions.get('window');
 
 const ShoppingCart = () => {
-  const {goods, counts, handleIncrease, handleDecrease, goodsImages} = useCart();
+  const {goods, counts, handleIncrease, handleDecrease, goodsImages, name} = useCart();
+  const [users, setUsers] = useState([]);
 
-  const man = [
-    {id: '1', phoneNumber: '1314', location: 'H244, SCNU', name: 'Hong Cao'},
-  ];
-
-
-  const [manState, setManState] = useState(man);
+  useEffect(() => {
+    if (name) {
+      UserService.getByName(name)
+        .then(response => {
+          setUsers(response.data);
+        })
+        .catch(error => {
+          console.error('获取用户详情失败', error);
+          setUsers({}); 
+        });
+    }
+  }, [name]);
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [newLocation, setNewLocation] = useState('');
+  const [newLocation, setNewStatus] = useState(users.address || '');
 
   const navigation = useNavigation();
 
@@ -48,8 +55,8 @@ const ShoppingCart = () => {
   };
 
   const handleSaveLocation = () => {
-    const updatedMan = { ...manState[0], location: newLocation };
-    setManState([updatedMan]); 
+    const updatedUser = {...users, address: newLocation};
+    setUsers(updatedUser); 
     setModalVisible(false); 
   };
 
@@ -102,9 +109,8 @@ const ShoppingCart = () => {
           }
         })}
         <View style={styles.locationContainer}>
-          {manState.map(item => (
+          
             <View
-              key={item.id}
               style={{height: 0.133 * height, width: 0.729 * width}}>
               <Text style={styles.locationTitle}>Deliver To</Text>
               {/* <Icon source="map-marker" style={{marginLeft:100}} color="yellow"size={40}/> */}
@@ -116,16 +122,16 @@ const ShoppingCart = () => {
                   fontSize: 24,
                   marginLeft: 0.052 * width,
                 }}>
-                {item.location}
+                {users.address}
               </Text>
             </View>
-          ))}
+         
           <View style={{marginLeft: 0.026 * width}}>
             <Text
               style={styles.editLink}
               onPress={() => {
                 setModalVisible(true);
-                setNewLocation(man[0].location); // initialize the new location
+                setNewStatus(users.address); // initialize the new location
               }}>
               Edit
             </Text>
@@ -137,14 +143,13 @@ const ShoppingCart = () => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <TextInput
               style={styles.modalText}
-              onChangeText={setNewLocation}
+              onChangeText={setNewStatus}
               value={newLocation}
               placeholder="Enter new address"
             />
@@ -194,7 +199,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: width * 0.05,
-    // backgroundColor: 'green',
   },
   item: {
     width: 0.377 * width,
@@ -293,14 +297,14 @@ const styles = StyleSheet.create({
     fontFamily: 'AlimamaShuHeiTi-Bold',
     fontSize: 20,
     marginTop: 0.013 * height,
-    marginLeft: 0.052 * width,
+    marginLeft: 0.05 * width,
   },
   editLink: {
     color: '#06c168',
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     marginTop: 0.013 * height,
-    marginRight: 0.052 * width,
+    marginRight: 0.053 * width,
   },
   totalContainer: {
     flexDirection: 'row',

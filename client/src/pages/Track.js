@@ -26,7 +26,7 @@ const Track = () => {
   useEffect(() => {
     const fetchVendor = async () => {
       try {
-        const response = await VendorService.getByName(vendor.name); // 使用真实的商家ID
+        const response = await VendorService.getByName(vendor.name);
         // if (response.data) {
         //   setVendor({
         //     name: response.data.name,

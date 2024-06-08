@@ -3,19 +3,18 @@ import {useEffect} from 'react';
 import GoodsService from '../services/GoodsService';
 import ImageService from '../services/ImageService';
 import VendorService from '../services/VendorService';
-import UserService from '../services/UserService';
 
 const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({children}) => {
-  const [user, setUser] = useState(null);
   const [goods, setGoods] = useState([]);
   const [counts, setCounts] = useState([]);
   const [goodsImages, setGoodsImages] = useState({});
   const [vendorsImages, setVendorsImages] = useState({});
   const [vendors, setVendors] = useState({});
+  const [name, setName] = useState("");
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -55,25 +54,6 @@ export const CartProvider = ({children}) => {
     fetchVendorDetails();
   }, []);
 
-  const login = async (data) => {
-    try {
-      const res = await UserService.login(data);
-      if (res.status === 200) {
-        setUser(res.data);
-        return res.data;
-      } else {
-        throw new Error('Failed to log in');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
-  };
-
-  const logout = () => {
-    setUser(null);  // 清除用户状态
-  };
- 
 
   const handleIncrease = index => {
     const newCounts = [...counts];
@@ -108,10 +88,9 @@ export const CartProvider = ({children}) => {
         goodsImages,
         vendorsImages,
         vendors,
-        user,
-        login,
-        logout,
+        name,
         handleIncrease,
+        setName,
         handleDecrease,
         setCounts,
         calculateTotal,

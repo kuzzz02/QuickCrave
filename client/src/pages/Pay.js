@@ -1,59 +1,68 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View, Text, Dimensions, Alert} from 'react-native';
 import {Button, IconButton, Icon} from 'react-native-paper';
 import OrdersService from '../services/OrdersSerivce';
 import {useCart} from './CartContext';
+import UserService from '../services/UserService';
+
 
 const {width, height} = Dimensions.get('window');
 
-
-
-
-const Pay = ({route}) => {
-  const {total} = route.params;
-  const {vendor} = route.params;
+const Pay = ({ route }) => {
+  const { total } = route.params;
+  const { vendor } = route.params;
   const navigation = useNavigation();
-  const {goods, counts, handleIncrease, handleDecrease, goodsImages, } = useCart();
-  const handleWechatPayPress = () => {
-    navigation.navigate('Track',{vendor});
-  };
-  // const handleAliPayPress = () => {
-  //   navigation.navigate('Track',{vendor});
-  // };
+  const { goods, counts, name } = useCart();
+  const [user, setUser] = useState({});
 
-  const handleAliPayPress = async () => {
-    // const total = calculateTotal();
-    const today = new Date().toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+  useEffect(() => {
+    if (name) {
+      UserService.getByName(name)
+        .then(response => {
+          setUser(response.data);
+        })
+        .catch(error => {
+          console.error('Failed to fetch user details', error);
+          setUser({});
+        });
+    }
+  }, [name]);
 
-    try {
-      goods.forEach(async (item, index) => {
-        if (counts[index] > 0) {
-          await OrdersService.create(
-            item.id,
-            user.id,
-            vendor.id,
-            1, // Suppose there is a default delivery_id
-            "Pending", // Default order state
-            today,
-            manState[0].location,
-            manState[0].phoneNumber,
-            "AliPay", // Assume a default payment method
-            total // Total price for this item
-          );
-        }
-      });
+  const createOrder = async (paymentType) => {
+    const today = new Date().toISOString().split('T')[0];
+    const response = await OrdersService.create(
+      goods[0].id,
+      user.id,
+      vendor.id,
+      1111, 
+      'Ordered',
+      today,
+      user.address,
+      user.phone,
+      paymentType,
+      total
+    )
+    .then(response => {
+      return response;
+    })
+
+    if (response.data) {
       Alert.alert('Success', 'Order placed successfully');
-      console.log('Order placed successfully');
       navigation.navigate('Track', { vendor });
-      // Optionally reset the cart or show a success message
-    } catch (error) {
-      console.error('Failed to place order:', error);
-      Alert.alert('Order error', 'Failed to place the order, please try again');
+    } else {
+      Alert.alert('Error', 'Failed to place the order');
     }
   };
 
+  const handleWechatPayPress = () => {
+    createOrder('WechatPay');
+  };
+
+  const handleAliPayPress = () => {
+    createOrder('AliPay');
+  };
 
   return (
     <View style={styles.container}>

@@ -37,7 +37,7 @@ const SignUp = () => {
       Alert.alert('Password does not match');
       return;
     }
-    UserService.signup({name: username, password: password2})
+    UserService.signup({name: username, password: password2, address: address, phone: phone})
       .then(res => {
         navigation.navigate('LogIn');
       })
@@ -54,7 +54,7 @@ const SignUp = () => {
       behavior="height"
       keyboardVerticalOffset={-20}
       enabled>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
       <ImageBackground
         source={require('../common/SU.jpg')}
         style={styles.backgroundImage}
@@ -92,14 +92,12 @@ const SignUp = () => {
           style={styles.input}
           placeholder="Please set your address"
           onChangeText={text => setAddress(text)}
-          secureTextEntry={true}
         />
         <Text style={styles.text}>Set your phone number</Text>
         <TextInput
           style={styles.input}
           placeholder="Please set your phone number"
           onChangeText={text => setPhone(text)}
-          secureTextEntry={true}
         />
       </View>
       </ScrollView>

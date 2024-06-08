@@ -23,13 +23,6 @@ class MainApplication : Application(), ReactApplication {
             // Packages that cannot be autolinked yet can be added manually here, for example:
             // add(MyReactNativePackage())
           }
-//        override fun getPackages(): List<ReactPackage> {
-//          return listOf(
-//              MainReactPackage(),
-//              ReactModulePackage()
-//          )
-        }
-
         override fun getJSMainModuleName(): String = "index"
 
         override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG

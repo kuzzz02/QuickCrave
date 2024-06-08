@@ -33,12 +33,8 @@ const Main = () => {
     {key: 'sandwich', text: '🥪 Sandwich'},
   ];
 
-  // const [vendors, setVendors] = useState([]);
-
   const [filteredVendors, setFilteredVendors] = useState(vendors);
 
-
-  // const [images, setImages] = useState({});
 
 
   useEffect(() => {
@@ -180,8 +176,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   header: {
-    flexDirection: 'row', // 水平排列
-    alignItems: 'center', // 垂直居中
+    flexDirection: 'row', 
+    alignItems: 'center', 
     marginHorizontal: width * 0.05,
     marginTop: 0.02 * height,
   },
