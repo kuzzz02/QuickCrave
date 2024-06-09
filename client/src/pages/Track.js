@@ -1,13 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Image, Text, Dimensions, Touchable} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Text,
+  Dimensions,
+  Touchable,
+} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {Avatar} from 'react-native-paper';
 import {DefaultTheme, Button, Icon} from 'react-native-paper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import VendorService from '../services/VendorService';
-import MapView,{Marker} from 'react-native-maps';
+import UserService from '../services/UserService';
+import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import http from '../http';
+import {useCart} from './CartContext';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,8 +31,12 @@ const theme = {
 
 const Track = () => {
   const route = useRoute();
+  const {name} = useCart();
   const navigation = useNavigation();
   const {vendor} = route.params;
+  const [users, setUsers] = useState([]);
+  console.log('users', users.address);
+  console.log('vendor:', vendor.address);
 
   useEffect(() => {
     const fetchVendor = async () => {
@@ -44,44 +57,54 @@ const Track = () => {
     fetchRoute();
   }, []);
 
-
-  
-  const [region, setRegion] = useState();
+  useEffect(() => {
+    if (name) {
+      UserService.getByName(name)
+        .then(response => {
+          setUsers(response.data);
+        })
+        .catch(error => {
+          console.error('获取用户详情失败', error);
+          setUsers({}); 
+        });
+    }
+  }, [name]);
 
   const [origin, setOrigin] = useState();
   const [destination, setDestination] = useState();
   const GOOGLE_MAPS_APIKEY = 'AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s';
 
-  async function fetchRoute () {
-   const _origin = await getPosition("上海市浦东新区川沙新镇川沙公园")
-   const _destination = await getPosition("上海市浦东新区川沙新镇川沙人民医院")
-    setRegion({
-      ..._origin,
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
-    });
-    setOrigin(_origin)
-    setDestination(_destination)
+  async function fetchRoute() {
+    const _origin = await getPosition(users.address);
+    const _destination =
+      await getPosition("佛山市南海区狮山镇信息大道南18号综合楼一层1号");
+    setOrigin(_origin);
+    setDestination(_destination);
   }
-  async function getPosition(address){
-  const res = await http.get(`https://maps.google.com/maps/api/geocode/json?address=${encodeURI(address)}&key=${GOOGLE_MAPS_APIKEY}`)
-  const data = res.data;
-  if(!data.status === 'OK'){
-    return {
-      latitude:0,
-      longitude:0,
+  async function getPosition(address) {
+    try {
+      const res = await http.get(
+        `https://maps.google.com/maps/api/geocode/json?address=${encodeURI(address)}&key=${GOOGLE_MAPS_APIKEY}`,
+      );
+      const data = res.data;
+      if (!data.status === 'OK') {
+        return {
+          latitude: 0,
+          longitude: 0,
+        };
+      }
+      const location = data.results[0].geometry.location;
+      return {
+        latitude: location.lat,
+        longitude: location.lng,
+      };
+    } catch (e) {
+      console.log(e);
     }
-  }
-  const location = data.results[0].geometry.location;
-  return {
-    latitude: location.lat,
-    longitude: location.lng,
-  }
   }
 
   return (
     <View style={styles.container}>
-      
       {origin && destination && (
         <MapView
           style={{flex: 1}}

@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, ScrollView, StyleSheet, Image, Dimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
   Avatar,
   Button,
   Card,
+  TouchableOpacity,
   Text,
   Title,
   Paragraph,
@@ -13,56 +14,66 @@ import {
   BottomNavigation,
 } from 'react-native-paper';
 import BottomNav from './BottomNav';
+import {useCart} from './CartContext';
+import VendorService from '../services/VendorService';
+import GoodsService from '../services/GoodsService';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 
 const {width, height} = Dimensions.get('window');
 
 const OrderDetail = () => {
+
+  const {orderDetails, goodsImages} = useCart();
+
+
   const navigation = useNavigation();
-  const handleInformationPress = () => {
-    navigation.navigate('Information');
-  };
+
+  const [vendors, setVendors] = useState([]);
+
+  const [goods, setGoods] = useState([]);
+
+  useEffect(() => {
+    if (orderDetails.vendor_id) {
+      VendorService.getById(orderDetails.vendor_id)
+        .then(response => {
+          setVendors(response.data);
+        })
+        .catch(error => {
+          console.error('获取用户详情失败', error);
+          setVendors({}); 
+        });
+    }
+  }, [orderDetails.vendor_id]);
+
+  useEffect(() => {
+    if (orderDetails.goods_id) {
+      GoodsService.getById(orderDetails.goods_id)
+        .then(response => {
+          setGoods(response.data);
+        })
+        .catch(error => {
+          console.error('获取用户详情失败', error);
+          setGoods({}); 
+        });
+    }
+  }, [orderDetails.goods_id]);
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.ScrollView}>
-        <Text style={styles.title}>
-          <Icon source="map-marker" color="#06C168" size={0.057 * width} />
-          Restaurant Name
-        </Text>
-        <View style={styles.header}>
-          <Text style={styles.subtitle}>
-            Manage your Orders{'\n'} with QuickCrave{'\n'}
-          </Text>
-          <Image
-            source={require('../common/delivery_staff.png')}
-            style={styles.imageD}
-          />
-        </View>
-        <Card style={styles.orderCard} mode="contained">
-          <Card.Title
-            title="Order Details"
-            subtitle="Restaurant Name"
-            left={LeftContent}
-            style={styles.cardTitle}
-          />
-          <View style={styles.orderCard1}>
-            <Image
-              source={require('../common/70.jpg')}
-              style={styles.foodImage}></Image>
-            <View style={styles.item}>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={styles.foodName}>
-                11111111111111111
-              </Text>
-              <Text style={styles.foodRestaurant}>11</Text>
-              <Text style={styles.foodPrice}>€111</Text>
-              <Text style></Text>
-            </View>
-          </View>
-        </Card>
+      {orderDetails.map((order, index) => (
+        <TouchableOpacity key={order.id} onPress={() => navigation.navigate('OrderDetail', { orderId: order.id })}>
+          <Card style={styles.card}>
+            <Card.Title title={`Order #${order.id}`} subtitle={`Total: €${order.total}`} />
+            <Card.Content>
+              <Text>Date: {order.date}</Text>
+              <Text>Address: {order.address}</Text>
+              {/* 其他你想展示的订单信息 */}
+            </Card.Content>
+          </Card>
+        </TouchableOpacity>
+      ))}
       </ScrollView>
       <BottomNav />
     </View>
@@ -106,17 +117,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 0.024 * height,
     width: width * 0.9,
-    height: 0.135 * height,
+    height: 0.185 * height,
   },
   item: {
     width: 0.377 * width,
     marginLeft: 0.02 * width,
   },
+  date: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   foodName: {
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     color: 'black',
-    marginTop: 0.013 * height,
+    // marginTop: 0.013 * height,
+  },
+  date1: {
+    position: 'absolute',
+    left: 120,
+    fontSize: 15,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+    color: 'black',
+    // marginTop: 0.013 * height,
+    marginLeft: 0.04 * width,
   },
   foodRestaurant: {
     fontSize: 18,
@@ -125,6 +149,12 @@ const styles = StyleSheet.create({
     marginTop: 0.013 * height,
   },
   foodPrice: {
+    fontSize: 20,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+    color: '#06c168',
+    marginTop: 0.013 * height,
+  },
+  foodAddress: {
     fontSize: 20,
     fontFamily: 'AlimamaShuHeiTi-Bold',
     color: '#06c168',

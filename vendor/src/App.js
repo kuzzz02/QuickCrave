@@ -9,7 +9,6 @@ import Register from './pages/Register';
 import OrderDetail from './pages/OrderDetail';
 import Analysis from './pages/Analysis';
 import Information from './pages/Information';
-import Main from './pages/Main';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -20,7 +19,7 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}>
-          <Stack.Screen name="Main" component={Main} />
+          {/* <Stack.Screen name="Main" component={Main} /> */}
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="Start" component={Start} />
           <Stack.Screen name="Init" component={Init} />
@@ -29,8 +28,6 @@ export default function App() {
           <Stack.Screen name="OrderDetail" component={OrderDetail} />
         <Stack.Screen name="Information" component={Information} />
         <Stack.Screen name="Analysis" component={Analysis} />
-        
-        
         
       </Stack.Navigator>
     </NavigationContainer>

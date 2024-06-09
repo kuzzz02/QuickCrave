@@ -13,6 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import VendorService from '../services/VendorService';
+import OrdersService from '../services/OrdersService';
 import {Button} from 'react-native-paper';
 import { useCart } from './CartContext';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -25,29 +26,36 @@ const LogIn = () => {
   const { setName } = useCart();
   const navigation = useNavigation();
   const handleSignUpPress = () => {
-    navigation.navigate('Register');
+    // navigation.navigate('Register');
+    OrdersService.getById(1)
+  .then(response => {
+    console.log('GetByName response: ', response);
+  })
+  .catch(error => {
+    console.error('GetByName error: ', error);
+  });
   };
+  
   const handleLogInPress = () => {
-    if (!vendorName || !password) {
-      Alert.alert('Error', 'Username and password cannot be empty');
-      return;
-    }
-    VendorService.login({name: vendorName, password: password})
-    .then(res => {
-      if (res.data.message === "success login") {  
-        setName(vendorName);
-        navigation.navigate('OrderDetail');
-      } else {
-        console.log("Login failed: ", res.status);
-        console.log('Login error1: ', VendorService.getByName("MC"));
-        Alert.alert('Login failed, please try again');
-      }
-    })
-      .catch(error => {
-        console.log(error, ' 2222');
-        console.log('Login error111: ', VendorService.getByName("MC"));
-        Alert.alert('Login error, please try again');
-      });
+    // if (!vendorName || !password) {
+    //   Alert.alert('Error', 'Username and password cannot be empty');
+    //   return;
+    // }
+    // VendorService.login({name: vendorName, password: password})
+    // .then(res => {
+    //   if (res.data.message === "success login") {  
+    //     setName(vendorName);
+    //     navigation.navigate('OrderDetail');
+    //   } else {
+    //     console.log("Login failed: ", res.status);
+    //     Alert.alert('Login failed, please try again');
+    //   }
+    // })
+    //   .catch(error => {
+    //     console.log(error, ' 2222');
+    //     Alert.alert('Login error, please try again');
+    //   });
+    navigation.navigate('OrderDetail');
   };
 
   
