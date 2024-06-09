@@ -36,37 +36,24 @@ const Track = () => {
   const {vendor} = route.params;
   const [users, setUsers] = useState([]);
 
+
   useEffect(() => {
     const fetchVendor = async () => {
-      try {
-        const response = await VendorService.getByName(vendor.name);
-        // if (response.data) {
-        //   setVendor({
-        //     name: response.data.name,
-        //     phone: response.data.phone,
-        //   });
-        // }
-      } catch (error) {
-        console.error('Failed to fetch vendor data:', error);
-      }
-    };
-
+      if (name) {
+        UserService.getByName(name)
+          .then(response => {
+            setUsers(response.data);
+          })
+          .catch(error => {
+            console.error('获取用户详情失败', error);
+            setUsers({}); 
+          });
+      }};
     fetchVendor();
     fetchRoute();
-  }, []);
+  }, [users.address,vendor.address]);
 
-  useEffect(() => {
-    if (name) {
-      UserService.getByName(name)
-        .then(response => {
-          setUsers(response.data);
-        })
-        .catch(error => {
-          console.error('获取用户详情失败', error);
-          setUsers({}); 
-        });
-    }
-  }, [name]);
+
 
   const [origin, setOrigin] = useState();
   const [destination, setDestination] = useState();
@@ -74,8 +61,8 @@ const Track = () => {
   console.log(users.address,vendor.address)
 
   async function fetchRoute() {
-    const _origin = await getPosition(users.address);
     console.log("1333222",users.address,vendor.address);
+    const _origin = await getPosition(users.address);
     const _destination =
       await getPosition(vendor.address);
     setOrigin(_origin);
