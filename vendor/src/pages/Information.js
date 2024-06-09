@@ -3,16 +3,18 @@ import { View, ScrollView, StyleSheet, Dimensions, Text, Image, KeyboardAvoiding
 import { TextInput, Button, Card, Title, Paragraph,Icon } from 'react-native-paper';
 import BottomNav from './BottomNav';
 import VendorService from '../services/VendorService';
+import {useCart} from './CartContext';
 
 const {width, height} = Dimensions.get('window');
 
 const Information = () => {
-  const {goods, counts, handleIncrease, handleDecrease, goodsImages, name} = useCart();
+  const {name} = useCart();
+  // const [vendors, setVendors] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [name1, setName1] = useState(vendors.name);
   const [address, setAddress] = useState(vendors.address);
   const [phone, setPhone] = useState(vendors.phone);
-  const [description, setDescription] = useState('The best place in town to satisfy your cravings!');
+  
 
   useEffect(() => {
     if (name) {
@@ -22,14 +24,17 @@ const Information = () => {
         })
         .catch(error => {
           console.error('Failed', error);
-          setVendors({}); 
         });
     }
   }, [name]);
 
   const handleSave = () => {
-    // 这里可以添加代码以将数据保存到服务器或本地存储
+    VendorService.updateName(vendors.id, vendors.name);
+    VendorService.updateAddress(vendors.id, vendors.address);
+    VendorService.updatePhone(vendors.id, vendors.phone);
+    VendorService.updateDescription(vendors.id, vendors.description);
     alert('Information saved!');
+    // console.log('In',vendors.id);
   };
 
   return (
@@ -40,10 +45,7 @@ const Information = () => {
         keyboardVerticalOffset={25}
         enabled>
     <ScrollView style={styles.ScrollView} showsVerticalScrollIndicator={false}>
-    <Text style={styles.title}>
-          <Icon source="map-marker" color="#06C168" size={0.057 * width} />
-          Restaurant Name
-        </Text>
+    
         <View style={styles.header}>
           <Text style={styles.subtitle}>
             Managing{'\n'}Detailed Information{'\n'}
@@ -58,30 +60,30 @@ const Information = () => {
           <Title>Restaurant Information</Title>
           <Paragraph>Edit your business information below:</Paragraph>
           <TextInput
-            label="Name"
+            label={vendors.name}
             value={name1}
-            onChangeText={text => setName1(text)}
+            onChangeText={text => setVendors(prev => ({ ...prev, name1: text }))}
             style={styles.input}
             mode="outlined"
           />
           <TextInput
-            label="Address"
+            label={vendors.address}
             value={address}
-            onChangeText={text => setAddress(text)}
+            onChangeText={text => setVendors(prev => ({ ...prev, address: text }))}
             style={styles.input}
             mode="outlined"
           />
           <TextInput
-            label="Phone"
+            label={vendors.phone}
             value={phone}
-            onChangeText={text => setPhone(text)}
+            onChangeText={text => setVendors(prev => ({ ...prev, phone: text }))}
             style={styles.input}
             mode="outlined"
           />
           <TextInput
             label="Description"
-            value={description}
-            onChangeText={text => setDescription(text)}
+            value={vendors.description}
+            onChangeText={text => setVendors(prev => ({ ...prev, description: text }))}
             multiline
             numberOfLines={5}
             style={styles.input}
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 0.026 * height,
-    marginHorizontal: width * 0.01,
+    marginLeft: -0.01 * width,
     color: '#06C168',
     fontSize: 20,
     fontWeight: 'bold',
@@ -118,11 +120,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: width * 0.04,
     marginTop: 0.02 * height,
   },
   imageD: {
-    marginTop: -0.05 * height,
+    marginTop: -0.03 * height,
   },
   subtitle: {
     fontSize: 23,

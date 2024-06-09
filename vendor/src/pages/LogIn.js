@@ -37,25 +37,24 @@ const LogIn = () => {
   };
   
   const handleLogInPress = () => {
-    // if (!vendorName || !password) {
-    //   Alert.alert('Error', 'Username and password cannot be empty');
-    //   return;
-    // }
-    // VendorService.login({name: vendorName, password: password})
-    // .then(res => {
-    //   if (res.data.message === "success login") {  
-    //     setName(vendorName);
-    //     navigation.navigate('OrderDetail');
-    //   } else {
-    //     console.log("Login failed: ", res.status);
-    //     Alert.alert('Login failed, please try again');
-    //   }
-    // })
-    //   .catch(error => {
-    //     console.log(error, ' 2222');
-    //     Alert.alert('Login error, please try again');
-    //   });
-    navigation.navigate('OrderDetail');
+    if (!vendorName || !password) {
+      Alert.alert('Error', 'Username and password cannot be empty');
+      return;
+    }
+    VendorService.login({name: vendorName, password: password})
+    .then(res => {
+      if (res.data.message === "success login") {  
+        setName(vendorName);
+        navigation.navigate('OrderDetail');
+      } else {
+        console.log("Login failed: ", res.status);
+        Alert.alert('Login failed, please try again');
+      }
+    })
+      .catch(error => {
+        console.log(error, ' 2222');
+        Alert.alert('Login error, please try again');
+      });
   };
 
   

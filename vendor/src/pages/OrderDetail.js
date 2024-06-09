@@ -1,12 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {View, ScrollView, StyleSheet, Image, Dimensions} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, StyleSheet, Image, Dimensions, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {
   Avatar,
   Button,
   Card,
-  TouchableOpacity,
-  Text,
   Title,
   Paragraph,
   Icon,
@@ -14,66 +12,58 @@ import {
   BottomNavigation,
 } from 'react-native-paper';
 import BottomNav from './BottomNav';
-import {useCart} from './CartContext';
+import { useCart } from './CartContext';
 import VendorService from '../services/VendorService';
 import GoodsService from '../services/GoodsService';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
-
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const OrderDetail = () => {
-
-  const {orderDetails, goodsImages} = useCart();
-
-
   const navigation = useNavigation();
 
-  const [vendors, setVendors] = useState([]);
-
-  const [goods, setGoods] = useState([]);
-
-  useEffect(() => {
-    if (orderDetails.vendor_id) {
-      VendorService.getById(orderDetails.vendor_id)
-        .then(response => {
-          setVendors(response.data);
-        })
-        .catch(error => {
-          console.error('获取用户详情失败', error);
-          setVendors({}); 
-        });
-    }
-  }, [orderDetails.vendor_id]);
+  const { name, filteredOrders } = useCart(); 
+  const [vendor, setVendor] = useState([]);
 
   useEffect(() => {
-    if (orderDetails.goods_id) {
-      GoodsService.getById(orderDetails.goods_id)
+    if (name) {
+      VendorService.getByName(name)
         .then(response => {
-          setGoods(response.data);
+          const vendorId = response.data.id;
+          setVendor(response.data);
         })
         .catch(error => {
-          console.error('获取用户详情失败', error);
-          setGoods({}); 
+          console.error('Error fetching vendor details:', error);
+          setVendor(null);
         });
     }
-  }, [orderDetails.goods_id]);
+  }, [name]);
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.ScrollView}>
-      {orderDetails.map((order, index) => (
-        <TouchableOpacity key={order.id} onPress={() => navigation.navigate('OrderDetail', { orderId: order.id })}>
-          <Card style={styles.card}>
-            <Card.Title title={`Order #${order.id}`} subtitle={`Total: €${order.total}`} />
+      <View style={styles.tt}>
+      <Text style={styles.title}>
+        {vendor.name}
+      </Text>
+      <Text style={styles.title1}>
+        <Icon source="map-marker" color="#06C168" size={0.057 * width} />
+        {vendor.address}
+      </Text>
+      </View>
+      <ScrollView style={styles.scrollView}>
+        {filteredOrders.map(order => (
+          <Card key={order.id} style={{ margin: 8, elevation: 4 }}>
             <Card.Content>
-              <Text>Date: {order.date}</Text>
-              <Text>Address: {order.address}</Text>
-              {/* 其他你想展示的订单信息 */}
+              <Title style={styles.t1}>Order #{order.id}</Title>
+              <Paragraph>Date: {order.date}</Paragraph>
+              <Paragraph>Total: €{order.total}</Paragraph>
+              <Paragraph>Address: {order.address}</Paragraph>
+              <Paragraph>Payment: {order.payment}</Paragraph>
+              <Paragraph>State: {order.state}</Paragraph>
+              <Paragraph>Phone: {order.phone}</Paragraph>
             </Card.Content>
           </Card>
-        </TouchableOpacity>
-      ))}
+        ))}
       </ScrollView>
       <BottomNav />
     </View>
@@ -85,16 +75,26 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 0.05 * width,
   },
-  ScrollView: {
+  scrollView: {
+    marginBottom: 70,
     flex: 1,
-    // marginBottom: 160,
-    // backgroundColor: 'red',
   },
+  tt:{
+    height: 0.15 * height,
+   },
   title: {
-    marginTop: 0.026 * height,
-    marginHorizontal: width * 0.01,
-    fontSize: 20,
-    fontWeight: 'bold',
+    marginTop: 0.03 * height,
+    marginLeft: 0.02 * width,
+    fontSize: 22,
+    color: 'black',
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+  },
+  title1: {
+    marginLeft: 0.02 * width,
+    marginTop: 0.01 * height,
+    fontSize: 22,
+    color: 'black',
+    fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   header: {
     flexDirection: 'row',
@@ -122,6 +122,11 @@ const styles = StyleSheet.create({
   item: {
     width: 0.377 * width,
     marginLeft: 0.02 * width,
+  },
+  t1: {
+    fontSize: 20,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+    color: 'black',
   },
   date: {
     flexDirection: 'row',

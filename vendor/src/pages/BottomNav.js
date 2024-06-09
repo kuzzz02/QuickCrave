@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, ScrollView, StyleSheet, Image, Dimensions, Text} from 'react-native';
+import {View, ScrollView, StyleSheet, Image, Dimensions, Text, KeyboardAvoidingView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import { IconButton } from 'react-native-paper';
 

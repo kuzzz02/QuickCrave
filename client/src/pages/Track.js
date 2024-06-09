@@ -35,8 +35,6 @@ const Track = () => {
   const navigation = useNavigation();
   const {vendor} = route.params;
   const [users, setUsers] = useState([]);
-  console.log('users', users.address);
-  console.log('vendor:', vendor.address);
 
   useEffect(() => {
     const fetchVendor = async () => {
@@ -73,9 +71,11 @@ const Track = () => {
   const [origin, setOrigin] = useState();
   const [destination, setDestination] = useState();
   const GOOGLE_MAPS_APIKEY = 'AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s';
+  console.log(users.address,vendor.address)
 
   async function fetchRoute() {
     const _origin = await getPosition(users.address);
+    console.log("1333222",users.address,vendor.address);
     const _destination =
       await getPosition(vendor.address);
     setOrigin(_origin);

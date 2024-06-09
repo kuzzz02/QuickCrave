@@ -17,6 +17,27 @@ export const CartProvider = ({children}) => {
   const [vendors, setVendors] = useState({});
   const [name, setName] = useState("");
   const [orderDetails, setOrderDetails] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [vendor, setVendor] = useState(null); 
+
+  useEffect(() => {
+    // Existing useEffect code for fetching vendor details and order details
+
+    // Add your new useEffect here
+    if (name) {
+      VendorService.getByName(name)
+        .then(response => {
+          const vendorId = response.data.id;
+          setVendor(response.data);
+          const relevantOrders = orderDetails.filter(order => order.vendor_id === vendorId);
+          setFilteredOrders(relevantOrders);
+        })
+        .catch(error => {
+          console.error('Error fetching vendor details:', error);
+          setVendor(null);
+        });
+    }
+  }, [name, orderDetails]);
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -60,13 +81,18 @@ export const CartProvider = ({children}) => {
         console.error('Error fetching vendor details: ', error);
       }
     };
+
+    
+
+    
   
     const fetchOrderDetails = async () => {
       try {
-        const ordersResponse = await OrdersService.getAll(); // 确保这里传递正确的参数
+        const ordersResponse = await OrdersService.getAll(); 
         const ordersData = ordersResponse.data;
         const ordersArray = Array.isArray(ordersData) ? ordersData : [ordersData];
         setOrderDetails(ordersArray);
+        console.log('ordersArray:', ordersArray);
       } catch (error) {
         console.error('Error fetching order details:', error);
       }
@@ -112,6 +138,8 @@ export const CartProvider = ({children}) => {
         vendors,
         name,
         orderDetails,
+        filteredOrders,
+        setFilteredOrders,
         handleIncrease,
         setName,
         handleDecrease,
