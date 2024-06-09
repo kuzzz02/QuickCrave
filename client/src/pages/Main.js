@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import {useCart} from './CartContext';
 
 import {
   StyleSheet,
@@ -18,13 +19,13 @@ import {
   Icon,
   Button,
 } from 'react-native-paper';
-import VendorService from '../services/VendorService';
-import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
 
 const Main = () => {
   const navigation = useNavigation();
+
+  const { vendors, vendorsImages } = useCart(); 
 
   const categories = [
     {key: 'burger', text: '🍔 Burger'},
@@ -32,35 +33,13 @@ const Main = () => {
     {key: 'sandwich', text: '🥪 Sandwich'},
   ];
 
-  const [vendors, setVendors] = useState([]);
+  const [filteredVendors, setFilteredVendors] = useState(vendors);
 
-  const [filteredVendors, setFilteredVendors] = useState([]);
 
-  const [images, setImages] = useState({});
-
-  // const placeholderImage = require('../common/qu.png');
 
   useEffect(() => {
-    const fetchVendorDetails = async () => {
-      try {
-        const response = await VendorService.getAll();
-        const data = response.data;
-        const vendorsArray = Array.isArray(data) ? data : [data];
-        setVendors(vendorsArray);
-        setFilteredVendors(vendorsArray);
-        vendorsArray.forEach(async vendor => {
-          const imageSrc = await ImageService.getVendorImage(vendor.portrait);
-          setImages(prevImages => ({
-            ...prevImages,
-            [vendor.id]: imageSrc,
-          }));
-        });
-      } catch (error) {
-        console.error('Error fetching user details: ', error);
-      }
-    };
-    fetchVendorDetails();
-  }, []);
+    setFilteredVendors(vendors);
+  }, [vendors]);
 
   const renderRating = rating => {
     const filledStars = Math.floor(rating);
@@ -84,12 +63,10 @@ const Main = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('');
 
   const handlePress = categoryKey => {
-    // 如果已经选中的类别被再次点击，取消选中并显示所有商家
     if (selectedCategory === categoryKey) {
       setSelectedCategory('');
       setFilteredVendors(vendors);
     } else {
-      // 否则更新选中的类别并过滤商家
       setSelectedCategory(categoryKey);
       const filtered = vendors.filter(
         vendor => vendor.category === categoryKey,
@@ -101,7 +78,7 @@ const Main = () => {
   const handleSearch = query => {
     setSearchQuery(query);
     if (query.trim() === '') {
-      setFilteredVendors(vendors); // 如果搜索框为空，则显示所有商家
+      setFilteredVendors(vendors); 
     } else {
       const filtered = vendors.filter(vendor =>
         vendor.name.toLowerCase().includes(query.toLowerCase()),
@@ -126,7 +103,6 @@ const Main = () => {
           style={styles.imageD}
         />
       </View>
-      {/* //TODO:change this search bar into normal */}
       <Searchbar
         style={styles.searchBar}
         placeholder="Search For Food"
@@ -166,7 +142,8 @@ const Main = () => {
             style={styles.item}
             onPress={() => handleDetailPress(vendor)}>
             <View style={styles.imageBox}>
-            <Image style={styles.logo} source={{uri: images[vendor.id]}} />
+            <Image style={styles.logo} source={{uri: vendorsImages[vendor.id]}} />
+            
             </View>
             <View style={styles.details}>
               <Text style={styles.itemName}>{vendor.name}</Text>
@@ -199,8 +176,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   header: {
-    flexDirection: 'row', // 水平排列
-    alignItems: 'center', // 垂直居中
+    flexDirection: 'row', 
+    alignItems: 'center', 
     marginHorizontal: width * 0.05,
     marginTop: 0.02 * height,
   },
@@ -268,9 +245,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     width: width * 0.9,
     marginHorizontal: width * 0.05,
-    // justifyContent: 'center',
     justifyContent: 'space-between',
-    // padding: 10,
   },
   item: {
     width: 0.43*width,
@@ -280,10 +255,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     margin: 0.025 * width,
-    // padding: 10,
-    // justifyContent: 'center',
-    // textAlign: 'center',
-    // alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
@@ -330,13 +301,7 @@ const styles = StyleSheet.create({
     height: 0.1 * height,
     left: 0,
     right: 0,
-    // justifyContent: 'space-around',
-    // paddingVertical: 10,
-    // borderTopWidth: 1,
-    // borderTopColor: '#eee',
-    // marginBottom: 10,
     marginTop: 5,
-    // backgroundColor: 'red',
   },
   navButton: {
     alignItems: 'center',

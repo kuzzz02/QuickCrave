@@ -11,6 +11,7 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import UserService from '../services/UserService';
@@ -21,6 +22,8 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
   const navigation = useNavigation();
   const handleLoginPress = () => {
     navigation.navigate('LogIn');
@@ -34,7 +37,7 @@ const SignUp = () => {
       Alert.alert('Password does not match');
       return;
     }
-    UserService.signup({name: username, password: password2})
+    UserService.signup({name: username, password: password2, address: address, phone: phone})
       .then(res => {
         navigation.navigate('LogIn');
       })
@@ -45,11 +48,13 @@ const SignUp = () => {
   };
 
   return (
+    
     <KeyboardAvoidingView
       style={styles.container}
       behavior="height"
-      keyboardVerticalOffset={-25}
+      keyboardVerticalOffset={-20}
       enabled>
+        <ScrollView showsVerticalScrollIndicator={false}>
       <ImageBackground
         source={require('../common/SU.jpg')}
         style={styles.backgroundImage}
@@ -59,11 +64,12 @@ const SignUp = () => {
       <Text style={styles.subtitle}>
         Get best experience in QuickCrave by signing up!
       </Text>
+      
       <View style={styles.inputContainer}>
-        <Text style={styles.text}>Phone Number</Text>
+        <Text style={styles.text}>Set Username</Text>
         <TextInput
           style={styles.input}
-          placeholder="Please input your phone number"
+          placeholder="Please input your Username"
           onChangeText={text => setUsername(text)}
           // keyboardType="phone-pad"
         />
@@ -81,7 +87,20 @@ const SignUp = () => {
           onChangeText={text => setPassword2(text)}
           secureTextEntry={true}
         />
+        <Text style={styles.text}>Set your address</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Please set your address"
+          onChangeText={text => setAddress(text)}
+        />
+        <Text style={styles.text}>Set your phone number</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Please set your phone number"
+          onChangeText={text => setPhone(text)}
+        />
       </View>
+      </ScrollView>
       <Button
         style={styles.button}
         labelStyle={{fontSize: 16}}

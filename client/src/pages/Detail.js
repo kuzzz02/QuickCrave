@@ -16,12 +16,11 @@ import {
 } from 'react-native-paper';
 import {useCart} from './CartContext';
 import GoodsService from '../services/GoodsService';
-import ImageService from '../services/ImageService';
 
 const {width, height} = Dimensions.get('window');
 
 const Detail = () => {
-  const {counts, handleIncrease, handleDecrease, calculateTotal, images} = useCart();
+  const {counts, handleIncrease, handleDecrease, calculateTotal, goodsImages} = useCart();
 
   const newTheme = {
     ...DefaultTheme,
@@ -54,8 +53,6 @@ const Detail = () => {
 
   const [goods, setGoods] = useState([]);
 
-
-  // const placeholderImage = require('../common/qu.png');
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -106,7 +103,7 @@ const Detail = () => {
         <View style={styles.categoryContainer}>
           {goods.map((good, index) => (
             <View key={good.id} style={styles.foodCategory}>
-              <Image style={{width: 0.312 * width, height: 0.159 * height, marginBottom: 5}} source={{uri: images[good.id]}} />
+              <Image style={{width: 0.312 * width, height: 0.159 * height, marginBottom: 5}} source={{uri: goodsImages[good.id]}} />
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
@@ -219,20 +216,12 @@ const styles = StyleSheet.create({
   categoryContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 0.1 * height, // 确保足够空间在header之下开始
+    marginTop: 0.1 * height,
     justifyContent: 'flex-start',
     marginHorizontal: width * 0.05,
     // backgroundColor: 'red',
     alignItems: 'center',
   },
-  // textBox: {
-  //   height: 30,
-  //   width: 160,
-  //   // backgroundColor: 'red',
-  //   // alignItems: 'center',
-  //   justifyContent: 'center',
-  //   textAlign: 'center',
-  // },
   foodCategory: {
     width: 0.41 * width,
     height: 0.266 * height,
@@ -271,7 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // marginTop: 10,
     alignItems: 'center',
-    alignSelf: 'center', // 水平居中
+    alignSelf: 'center',
     justifyContent: 'space-between',
     marginTop: -8,
     height: 0.0465 * height,

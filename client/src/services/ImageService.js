@@ -20,7 +20,6 @@ class ImageService {
   }
 
   async getGoodsImage(imageName) {
-    // return http.get(`/image/goods/${imageName}`);
     try {
       const response = await http.get(`/image/goods?imageName=${imageName}`, { responseType: 'blob' });
       return new Promise((resolve, reject) => {
@@ -39,11 +38,11 @@ class ImageService {
   }
 
   getUserImage(imageName) {
-    return http.get(`/image/user/${imageName}`);
+    return http.get(`/image/user?imageName=${imageName}`);
   }
 
   getDeliveryImage(imageName) {
-    return http.get(`/image/delivery/${imageName}`);
+    return http.get(`/image/delivery?imageName=${imageName}`);
   }
 }
 

@@ -1,6 +1,25 @@
 import http from "../http";
 
 class GoodsService {
+  /**
+   * @param {*} name
+   * @param {*} description
+   * @param {*} image
+   * @param {*} number
+   * @param {*} price
+   * @param {*} discount
+   * @param {Long} vendor_id
+   */
+  create(name,description,image,number,price,discount,vendor_id) {
+    return http.post(`/goods/insert?name=${name}
+      &description=${description}
+      &image=${image}
+      &number=${number}
+      &price=${price}
+      &discount=${discount}
+      &vendor_id=${vendor_id}`);
+  }
+
   getAll() {
     return http.get("/goods/selectAll");
   }
@@ -13,10 +32,6 @@ class GoodsService {
     return http.get(`/goods/selectById?id=${id}`);
   }
 
-  create(data) {
-    return http.post("/goods/insert", data);
-  }
-
   delete(id) {
     return http.delete(`/goods/delete?id=${id}`);
   }
@@ -25,44 +40,40 @@ class GoodsService {
     return http.delete(`/goods/deleteAll`);
   }
 
-  update(id, data) {
-    return http.put(`/goods/update?id=${id}`, data);
+  updateName(id, name) {
+    return http.put(`/goods/updateName?id=${id}&name=${name}`);
   }
 
-  updateName(id, data) {
-    return http.put(`/goods/updateName?id=${id}`, data);
+  updateDescription(id, description) {
+    return http.put(`/goods/updateDescription?id=${id}&description=${description}`);
   }
 
-  updateDescription(id, data) {
-    return http.put(`/goods/updateDescription?id=${id}`, data);
+  updateImage(id, image) {
+    return http.put(`/goods/updateImage?id=${id}&image=${image}`);
   }
 
-  updateImage(id, data) {
-    return http.put(`/goods/updateImage?id=${id}`, data);
+  updateState(id, state) {
+    return http.put(`/goods/updateState?id=${id}&state=${state}`);
   }
 
-  updateState(id, data) {
-    return http.put(`/goods/updateState?id=${id}`, data);
+  updateDate(id, date) {
+    return http.put(`/goods/updateDate?id=${id}&date=${date}`);
   }
 
-  updateDate(id, data) {
-    return http.put(`/goods/updateDate?id=${id}`, data);
+  updatePrice(id, price) {
+    return http.put(`/goods/updatePrice?id=${id}&price=${price}`);
   }
 
-  updatePrice(id, data) {
-    return http.put(`/goods/updatePrice?id=${id}`, data);
+  updateDiscount(id, discount) {
+    return http.put(`/goods/updateDiscount?id=${id}&discount=${discount}`);
   }
 
-  updateDiscount(id, data) {
-    return http.put(`/goods/updateDiscount?id=${id}`, data);
+  updateQuantity(id, quantity) {
+    return http.put(`/goods/updateQuantity?id=${id}&quantity=${quantity}`);
   }
 
-  updateQuantity(id, data) {
-    return http.put(`/goods/updateQuantity?id=${id}`, data);
-  }
-
-  updateVendor(id, data) {
-    return http.put(`/goods/updateVendor?id=${id}`, data);
+  updateVendor(id, vendor_id) {
+    return http.put(`/goods/updateVendor?id=${id}&vendor_id=${vendor_id}`);
   }
 }
 

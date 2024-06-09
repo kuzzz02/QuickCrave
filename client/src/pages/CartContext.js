@@ -2,6 +2,7 @@ import React, {createContext, useContext, useState} from 'react';
 import {useEffect} from 'react';
 import GoodsService from '../services/GoodsService';
 import ImageService from '../services/ImageService';
+import VendorService from '../services/VendorService';
 
 const CartContext = createContext();
 
@@ -10,7 +11,10 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({children}) => {
   const [goods, setGoods] = useState([]);
   const [counts, setCounts] = useState([]);
-  const [images, setImages] = useState({});
+  const [goodsImages, setGoodsImages] = useState({});
+  const [vendorsImages, setVendorsImages] = useState({});
+  const [vendors, setVendors] = useState({});
+  const [name, setName] = useState("");
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -21,21 +25,35 @@ export const CartProvider = ({children}) => {
         setGoods(goodsArray);
         setCounts(new Array(goodsData.length).fill(0));
 
-        // 加载每个商品的图片
         goodsArray.forEach(async (good) => {
-          const imageSrc = await ImageService.getGoodsImage(good.image); // 假设 getGoodsImage 方法返回图片的 URL
-          setImages(prevImages => ({
+          const imageSrc = await ImageService.getGoodsImage(good.image); 
+          setGoodsImages(prevImages => ({
             ...prevImages,
             [good.id]: imageSrc
           }));
         });
+
+        const vendorsResponse = await VendorService.getAll();
+        const vendorsData = vendorsResponse.data;
+        const vendorsArray = Array.isArray(vendorsData) ? vendorsData : [vendorsData];
+        setVendors(vendorsArray);
+
+        vendorsArray.forEach(async (vendor) => {
+          const imageSrc = await ImageService.getVendorImage(vendor.portrait);
+          setVendorsImages(prevImages => ({
+            ...prevImages,
+            [vendor.id]: imageSrc
+          }));
+        });
+
       } catch (error) {
         console.error('Error fetching user details: ', error);
       }
     };
+
     fetchVendorDetails();
   }, []);
- 
+
 
   const handleIncrease = index => {
     const newCounts = [...counts];
@@ -67,8 +85,12 @@ export const CartProvider = ({children}) => {
       value={{
         goods,
         counts,
-        images,
+        goodsImages,
+        vendorsImages,
+        vendors,
+        name,
         handleIncrease,
+        setName,
         handleDecrease,
         setCounts,
         calculateTotal,
