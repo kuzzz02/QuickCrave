@@ -58,12 +58,6 @@ public class Alipay extends ReactContextBaseJavaModule {
       };
     };
 
-  // @Override
-	// protected void onCreate(Bundle savedInstanceState) {
-  //   EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
-	// 	super.onCreate(savedInstanceState);
-	// }
-
   @ReactMethod
   public void pay(String orderInfo, Promise promise) {
       Alipay.promise = promise;

@@ -33,41 +33,42 @@ const Pay = ({ route }) => {
 
   const createOrder = async (paymentType) => {
     const today = new Date().toISOString().split('T')[0];
-    const response = await OrdersService.create(
-      goods[0].id,
-      user.id,
-      vendor.id,
-      1111, 
-      'Ordered',
-      today,
-      user.address,
-      user.phone,
-      paymentType,
-      total
+    const random_OrderID = generateRandomString(16);
+
+    const order = await OrdersService.create({
+      orders_id: random_OrderID,
+      goods_id: goods[0].id.toString(),
+      user_id: user.id,
+      vendor_id: vendor.id,
+      delivery_id: 1111, 
+      state: 'Ordered',
+      date: today,
+      address: user.address,
+      phone: user.phone,
+      payment: paymentType,
+      total: total}
     )
     .then(response => {
-      return response;
+      orderIFO = response.config.data;
+      console.log(orderIFO)
+      alipay.pay(orderIFO)
+      .then(res => {
+        console.log(res.data)
+        NativeModules.Alipay.pay(res.data)
+        .then(response => {
+          setTimeout(() => {
+            navigation.navigate('Track', { vendor });
+          }, 1000);
+        })
+      })
+      .catch(error => {
+        console.log('Failed to place order:', error);
+      });
     })
-
-    if (response.data) {
-      // Alert.alert('Success', 'Order placed successfully');
-      // console.log('Order placed successfully');
-      // // navigation.navigate('Track', { vendor });
-      // alipay.pay()
-      // .then(response => {
-      //   console.log(response.data);
-      //   const result_code = NativeModules.Alipay.pay(response.data)
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      // });
-      // Optionally reset the cart or show a success message
-      navigation.navigate('Track', { vendor });
-    } 
-    // catch (error) {
-    //   console.error('Failed to place order:', error);
-    //   Alert.alert('Order error', 'Failed to place the order, please try again');
-    // }
+    .catch(error =>{
+      console.log('Failed to place order:', error);
+      Alert.alert('Order error', 'Failed to place the order, please try again');
+    });
   };
 
   const handleWechatPayPress = () => {
@@ -77,6 +78,17 @@ const Pay = ({ route }) => {
   const handleAliPayPress = () => {
     createOrder('AliPay');
   };
+
+  function generateRandomString(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const digits = '0123456789';
+    for (let i = 0; i < length; i++) {
+      const charactersPool = Math.random() < 0.9 ? digits : characters;
+      result += charactersPool.charAt(Math.floor(Math.random() * charactersPool.length));
+    }
+    return result;
+  }
 
   return (
     <View style={styles.container}>
