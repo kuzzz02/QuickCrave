@@ -66,7 +66,7 @@ const LogIn = () => {
       enabled>
         <ScrollView>
       <ImageBackground
-        source={require('../common/70.jpg')}
+        source={require('../common/73.jpg')}
         style={styles.backgroundImage}
         resizeMode="cover"
         imageStyle={{borderRadius: 20}}></ImageBackground>

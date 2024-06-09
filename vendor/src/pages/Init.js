@@ -15,7 +15,7 @@ const {width, height} = Dimensions.get('window');
 const Init = () => {
   const navigation = useNavigation();
   const handleSignUpPress = () => {
-    navigation.navigate('Register');
+    navigation.navigate('LogIn');
   };
   const handleLogInPress = () => {
     navigation.navigate('LogIn');

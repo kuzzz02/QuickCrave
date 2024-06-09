@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import {
   Avatar,
   Button,
+  TouchableOpacity,
   Card,
   Title,
   Paragraph,
@@ -22,10 +23,18 @@ const { width, height } = Dimensions.get('window');
 const OrderDetail = () => {
   const navigation = useNavigation();
 
+  
+
   const { name, filteredOrders } = useCart(); 
   const [vendor, setVendor] = useState([]);
-  const [goodsName, setGoodsName] = useState([]);
   const [goodsNames, setGoodsNames] = useState({});
+
+  const handleTrackPress = (order) => {
+    navigation.navigate('Track', {
+      vendor: vendor,       // 已经在状态中的供应商信息
+      userAddress: order.address  // 传递当前订单的用户地址
+    });
+  };
 
   useEffect(() => {
     if (name) {
@@ -60,11 +69,6 @@ const OrderDetail = () => {
     }
   }, [filteredOrders]);
   
-
-
-
-
-
   return (
     <View style={styles.container}>
       <View style={styles.tt}>
@@ -76,7 +80,7 @@ const OrderDetail = () => {
         {vendor.address}
       </Text>
       </View>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       {filteredOrders.map(order => (
         <Card key={order.id} style={{ margin: 8, elevation: 4 }}>
         <Card.Content>
