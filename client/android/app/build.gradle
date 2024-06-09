@@ -113,8 +113,6 @@ android {
 }
 
 // ./gradlew --refresh-dependencies
-// ./gradlew clean
-// ./gradlew assembleRelease
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
