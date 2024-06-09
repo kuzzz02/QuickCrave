@@ -77,7 +77,7 @@ const Track = () => {
   async function fetchRoute() {
     const _origin = await getPosition(users.address);
     const _destination =
-      await getPosition("佛山市南海区狮山镇信息大道南18号综合楼一层1号");
+      await getPosition(vendor.address);
     setOrigin(_origin);
     setDestination(_destination);
   }
