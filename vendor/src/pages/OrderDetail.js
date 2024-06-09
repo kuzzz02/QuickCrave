@@ -24,6 +24,8 @@ const OrderDetail = () => {
 
   const { name, filteredOrders } = useCart(); 
   const [vendor, setVendor] = useState([]);
+  const [goodsName, setGoodsName] = useState([]);
+  const [goodsNames, setGoodsNames] = useState({});
 
   useEffect(() => {
     if (name) {
@@ -39,6 +41,30 @@ const OrderDetail = () => {
     }
   }, [name]);
 
+  useEffect(() => {
+    if (filteredOrders && filteredOrders.length > 0) {
+      filteredOrders.forEach((order) => {
+        order.goods_id.split(',').forEach(item => {
+          const [id, quantity] = item.split(':');
+          // 获取每个商品的详细信息
+          GoodsService.getById(id)
+            .then(response => {
+              // 更新商品名称映射
+              setGoodsNames(prevNames => ({ ...prevNames, [id]: response.data.name }));
+            })
+            .catch(error => {
+              console.error(`Failed to fetch details for Goods ID: ${id}`, error);
+            });
+        });
+      });
+    }
+  }, [filteredOrders]);
+  
+
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={styles.tt}>
@@ -51,21 +77,58 @@ const OrderDetail = () => {
       </Text>
       </View>
       <ScrollView style={styles.scrollView}>
-        {filteredOrders.map(order => (
-          <Card key={order.id} style={{ margin: 8, elevation: 4 }}>
-            <Card.Content>
-              <Title style={styles.t1}>Order #{order.id}</Title>
-              <Paragraph>Date: {order.date}</Paragraph>
-              <Paragraph>Total: €{order.total}</Paragraph>
-              <Paragraph>Address: {order.address}</Paragraph>
-              <Paragraph>Payment: {order.payment}</Paragraph>
-              <Paragraph>State: {order.state}</Paragraph>
-              <Paragraph>Phone: {order.phone}</Paragraph>
-            </Card.Content>
-          </Card>
-        ))}
+      {filteredOrders.map(order => (
+        <Card key={order.id} style={{ margin: 8, elevation: 4 }}>
+        <Card.Content>
+          <Title style={styles.t1}>Order #{order.id}</Title>
+          {order.goods_id.split(',').map((item, index) => {
+            const [id, count] = item.split(':');
+            return (
+              <React.Fragment key={index}>
+                <Paragraph>
+                  <Text style={styles.label}>Goods_ID: </Text>
+                  <Text style={styles.content}>{id}</Text>
+                </Paragraph>
+                <Paragraph>
+                  <Text style={styles.label}>Goods_Name: </Text>
+                  <Text style={styles.content}>{goodsNames[id] || 'Loading...'}</Text>
+                </Paragraph>
+                <Paragraph>
+                  <Text style={styles.label}>Count: </Text>
+                  <Text style={styles.content}>{count}</Text>
+                </Paragraph>
+              </React.Fragment>
+            );
+          })}
+          <Paragraph>
+            <Text style={styles.label}>Date: </Text>
+            <Text style={styles.content}>{order.date}</Text>
+          </Paragraph>
+          <Paragraph>
+            <Text style={styles.label}>Total Pay: </Text>
+            <Text style={styles.content}>€{order.total}</Text>
+          </Paragraph>
+          <Paragraph>
+            <Text style={styles.label}>User Address: </Text>
+            <Text style={styles.content}>{order.address}</Text>
+          </Paragraph>
+          <Paragraph>
+            <Text style={styles.label}>Payment: </Text>
+            <Text style={styles.content}>{order.payment}</Text>
+          </Paragraph>
+          <Paragraph>
+            <Text style={styles.label}>Order State: </Text>
+            <Text style={styles.content}>{order.state}</Text>
+          </Paragraph>
+          <Paragraph>
+            <Text style={styles.label}>User Phone Number: </Text>
+            <Text style={styles.content}>{order.phone}</Text>
+          </Paragraph>
+        </Card.Content>
+      </Card>
+      ))}
       </ScrollView>
-      <BottomNav />
+      <BottomNav/>
     </View>
   );
 };
@@ -108,6 +171,15 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 25,
     fontFamily: 'AlimamaShuHeiTi-Bold',
+  },
+  label: {
+    fontFamily: 'AlimamaShuHeiTi-Bold',
+    fontSize: 16,
+  },
+  content: {
+    fontSize: 16,
+    color: 'black',
+    marginBottom: 4,
   },
   orderCard: {
     marginTop: -0.02 * height,

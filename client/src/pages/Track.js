@@ -58,10 +58,10 @@ const Track = () => {
   const [origin, setOrigin] = useState();
   const [destination, setDestination] = useState();
   const GOOGLE_MAPS_APIKEY = 'AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s';
-  console.log(users.address,vendor.address)
+  // console.log(users.address,vendor.address)
 
   async function fetchRoute() {
-    console.log("1333222",users.address,vendor.address);
+    // console.log("1333222",users.address,vendor.address);
     const _origin = await getPosition(users.address);
     const _destination =
       await getPosition(vendor.address);

@@ -35,9 +35,16 @@ const Pay = ({ route }) => {
     const today = new Date().toISOString().split('T')[0];
     const random_OrderID = generateRandomString(16);
 
+    const selectedGoods = goods.filter((item, index) => counts[index] > 0);
+
+    const goodsIdsCounts = selectedGoods.map((item, index) => `${item.id}:${counts[goods.indexOf(item)]}`).join(',');
+
+    const goodsIds = goods.map((item, index) =>{});
+    console.log(goodsIds);
+
     const order = await OrdersService.create({
       orders_id: random_OrderID,
-      goods_id: goods[0].id.toString(),
+      goods_id: goodsIdsCounts,
       user_id: user.id,
       vendor_id: vendor.id,
       delivery_id: 1111, 
@@ -50,7 +57,7 @@ const Pay = ({ route }) => {
     )
     .then(response => {
       orderIFO = response.config.data;
-      console.log(orderIFO)
+      // console.log("111",orderIFO)
       alipay.pay(orderIFO)
       .then(res => {
         console.log(res.data)

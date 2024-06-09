@@ -92,7 +92,7 @@ export const CartProvider = ({children}) => {
         const ordersData = ordersResponse.data;
         const ordersArray = Array.isArray(ordersData) ? ordersData : [ordersData];
         setOrderDetails(ordersArray);
-        console.log('ordersArray:', ordersArray);
+        // console.log('ordersArray:', ordersArray);
       } catch (error) {
         console.error('Error fetching order details:', error);
       }

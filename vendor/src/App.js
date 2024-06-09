@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import OrderDetail from './pages/OrderDetail';
 import Analysis from './pages/Analysis';
 import Information from './pages/Information';
+import Track from './pages/Track';
 
 const Stack = createStackNavigator();
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
           <Stack.Screen name="LogIn" component={LogIn} />
           
           <Stack.Screen name="OrderDetail" component={OrderDetail} />
+          <Stack.Screen name="Track" component={Track} />
         <Stack.Screen name="Information" component={Information} />
         <Stack.Screen name="Analysis" component={Analysis} />
         
