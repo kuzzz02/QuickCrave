@@ -64,10 +64,10 @@ const LogIn = () => {
         It's time for you to enjoy your delicious. Login in to start your trip!
       </Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.text}>Phone Number</Text>
+        <Text style={styles.text}>Username</Text>
         <TextInput
           style={styles.input}
-          placeholder="Please input your phone number"
+          placeholder="Please input your username"
           onChangeText={text => setUsername(text)}
           // keyboardType="phone-pad"
         />
