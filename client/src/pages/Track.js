@@ -3,9 +3,11 @@ import {StyleSheet, View, Image, Text, Dimensions, Touchable} from 'react-native
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {Avatar} from 'react-native-paper';
 import {DefaultTheme, Button, Icon} from 'react-native-paper';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import VendorService from '../services/VendorService';
-
+import MapView,{Marker} from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import http from '../http';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,7 +32,7 @@ const Track = () => {
         // if (response.data) {
         //   setVendor({
         //     name: response.data.name,
-        //     phone: response.data.phone, 
+        //     phone: response.data.phone,
         //   });
         // }
       } catch (error) {
@@ -39,76 +41,97 @@ const Track = () => {
     };
 
     fetchVendor();
+    fetchRoute();
   }, []);
 
-  // AMapSdk.init(
-  //   Platform.select({
-  //     android: "9ce3469d672f3e6922680464e4b159ce"
-  //   })
-  // );
 
+  
+  const [region, setRegion] = useState();
 
+  const [origin, setOrigin] = useState();
+  const [destination, setDestination] = useState();
+  const GOOGLE_MAPS_APIKEY = 'AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s';
+
+  async function fetchRoute () {
+   const _origin = await getPosition("上海市浦东新区川沙新镇川沙公园")
+   const _destination = await getPosition("上海市浦东新区川沙新镇川沙人民医院")
+    setRegion({
+      ..._origin,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
+    setOrigin(_origin)
+    setDestination(_destination)
+  }
+  async function getPosition(address){
+  const res = await http.get(`https://maps.google.com/maps/api/geocode/json?address=${encodeURI(address)}&key=${GOOGLE_MAPS_APIKEY}`)
+  const data = res.data;
+  if(!data.status === 'OK'){
+    return {
+      latitude:0,
+      longitude:0,
+    }
+  }
+  const location = data.results[0].geometry.location;
+  return {
+    latitude: location.lat,
+    longitude: location.lng,
+  }
+  }
 
   return (
     <View style={styles.container}>
-     {/* <MapView
-        style={{width: width, height: height*0.7}}
-        mapType={MapType.Standard}
-
-        minZoom={0}
-        showsScale={true}
-        compassEnabled={false}
-        myLocationEnabled={true}
-        rotateGesturesEnabled={false}
-        zoomControlsEnabled={false}
-        tiltGesturesEnabled={false}
-
-        initialCameraPosition={{
-          target: {
-            latitude: 23.149011880643513,
-            longitude: 113.03132632747293,
-            // latitude: coords.latitude,
-            // longitude: coords.longitude,
-          },
-          zoom: 12,
-        }}
-
-        onLoad={() => console.log("onLoad")}
-        locationEnabled={true}
-        onLocation={({ nativeEvent }) => {
-          setCoords(nativeEvent);
-          console.log(nativeEvent);
-        }}
-        // onPress={({ nativeEvent }) => console.log(nativeEvent)}
-        // onCameraIdle={({ nativeEvent }) => console.log(nativeEvent)}
-      >
-        <Marker coordinate={{latitude: 23.149011880643513, longitude: 113.03132632747293}} />
-        {coords.length > 1 && (
-          <Polyline
-            coordinates={coords}
-            strokeColor="rgba(0, 0, 255, 0.5)"
+      
+      {origin && destination && (
+        <MapView
+          style={{flex: 1}}
+          initialCamera={{center: origin, zoom: 14, pitch: 90, heading: 0}}>
+          <MapViewDirections
+            origin={origin}
+            mode="WALKING"
             strokeWidth={5}
+            strokeColor="hotpink"
+            destination={destination}
+            apikey={GOOGLE_MAPS_APIKEY}
           />
-        )}
-      </MapView> */}
+
+          <Marker key={'start'} coordinate={origin} title={'Start'} />
+          <Marker key={'end'} coordinate={destination} title={'End'} />
+        </MapView>
+      )}
 
       <View style={styles.informationContainer}>
         <View style={styles.header}>
-          <Text style={{ fontFamily: 'AlimamaShuHeiTi-Bold', fontSize: 20, color:'black' }}>
+          <Text
+            style={{
+              fontFamily: 'AlimamaShuHeiTi-Bold',
+              fontSize: 20,
+              color: 'black',
+            }}>
             Track Orders
           </Text>
         </View>
         <View style={styles.userInformation}>
           <Avatar.Text
             size={50}
-            label={vendor.name.charAt(0)} 
+            label={vendor.name.charAt(0)}
             style={styles.label}
           />
           <View style={styles.deliveryGuy}>
-            <Text style={{ fontFamily: 'AlimamaShuHeiTi-Bold', fontSize: 18, color:'black' }}>
+            <Text
+              style={{
+                fontFamily: 'AlimamaShuHeiTi-Bold',
+                fontSize: 18,
+                color: 'black',
+              }}>
               {vendor.name}
             </Text>
-            <Text style={{ fontFamily: 'AlimamaShuHeiTi-Bold', fontSize: 18, color:'black' }}>
+            <Text
+              style={{
+                fontFamily: 'AlimamaShuHeiTi-Bold',
+                fontSize: 18,
+                color: 'black',
+              }}>
               {vendor.phone}
             </Text>
           </View>
@@ -165,7 +188,7 @@ const styles = StyleSheet.create({
   deliveryGuy: {
     height: 0.053 * height,
     // backgroundColor: 'red',
-    color:'black',
+    color: 'black',
     flex: 1,
     marginHorizontal: 10,
     justifyContent: 'center',
