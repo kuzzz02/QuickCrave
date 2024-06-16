@@ -1,8 +1,9 @@
-import http from "../http";
+import http from '../http';
 
 class OrdersService {
   /**
-   * @param {Long} goods_id
+   * @param {String} orders_id
+   * @param {String} goods_id
    * @param {long} user_id
    * @param {Long} vendor_id
    * @param {Long} delivery_id
@@ -13,25 +14,16 @@ class OrdersService {
    * @param {*} payment
    * @param {*} total
    */
-  create(goods_id,user_id,vendor_id,delivery_id,state,date,address,phone,payment,total) {
-    return http.post(`/orders/insert?goods_id=${goods_id}
-      &user_id=${user_id}
-      &vendor_id=${vendor_id}
-      &delivery_id=${delivery_id}
-      &state=${state}
-      &date=${date}
-      &address=${address}
-      &phone=${phone}
-      &payment=${payment}
-      &total=${total}`);
+  create(data) {
+    return http.post(`/orders/create`, data);
   }
 
   getAll() {
-    return http.get("/orders/selectAll");
+    return http.get('/orders/selectAll');
   }
 
-  getById(id) {
-    return http.get(`/orders/selectById?id=${id}`);
+  getById(orders_id) {
+    return http.get(`/orders/selectById?orders_id=${orders_id}`);
   }
 
   delete(id) {
@@ -40,6 +32,10 @@ class OrdersService {
 
   deleteAll() {
     return http.delete(`/orders/deleteAll`);
+  }
+
+  updateState(orders_id, state) {
+    return http.put(`/orders/updateState?orders_id=${orders_id}&state=${state}`);
   }
 }
 

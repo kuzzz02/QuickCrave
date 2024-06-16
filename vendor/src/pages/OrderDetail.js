@@ -31,8 +31,8 @@ const OrderDetail = () => {
 
   const handleTrackPress = (order) => {
     navigation.navigate('Track', {
-      vendor: vendor,       // 已经在状态中的供应商信息
-      userAddress: order.address  // 传递当前订单的用户地址
+      vendor: vendor,       
+      userAddress: order.address  
     });
   };
 

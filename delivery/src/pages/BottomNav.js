@@ -54,16 +54,6 @@ const BottomNav = () => {
         <View style={styles.box}>
         <IconButton
         style={styles.icon}
-          icon={getIcon("Analysis")}
-          iconColor="#162D3A"
-          size={28}
-          onPress={handleAnalysisPress}
-        />
-        <Text style={styles.font}>Analysis</Text>
-        </View>
-        <View style={styles.box}>
-        <IconButton
-        style={styles.icon}
           icon={getIcon("Information")}
           iconColor="#162D3A"
           size={28}
@@ -92,7 +82,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignSelf: 'center',
     justifyContent: 'center',
-    width: 0.3333 * width,
+    width: 0.5 * width,
   },
   icon:{
     marginTop: -0.01 * height,

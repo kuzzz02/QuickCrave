@@ -15,6 +15,7 @@ import VendorService from '../services/VendorService';
 import MapView,{Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import http from '../http';
+import OrdersService from '../services/OrdersService';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,13 +31,29 @@ const theme = {
 const Track = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const {vendorAddress, userAddress} = route.params;
+  const {vendorAddress, userAddress, userPhone, vendorPhone, order} = route.params;
+
+  const handleFinishPress = async (order) => {
+    try {
+      const response = await OrdersService.updateState(order.orders_id, 'Finished');
+      console.log('Update response:', response);
+      if (response.status === 200) {
+        navigation.navigate('OrderDetail');
+      } else {
+        console.error('Failed to update order status:', response.status);
+      }
+    } catch (error) {
+      console.error(`Failed to update order state for order ID: ${order.id}`, error);
+    }
+  };
 
   useEffect(() => {
     fetchRoute(); 
-  }, []);
+  }, [userAddress,vendorAddress]);
 
-
+  // console.log("111")
+  // console.log(vendorAddress, userAddress);
+  console.log(vendorPhone, userPhone);
   
   const [region, setRegion] = useState();
   const [origin, setOrigin] = useState();
@@ -99,10 +116,10 @@ const Track = () => {
             Track Orders
           </Text>
         </View>
-        {/* <View style={styles.userInformation}>
-          <Avatar.Text
+        <View style={styles.userInformation}>
+          <Avatar.Icon
             size={50}
-            label={vendor.name.charAt(0)}
+            icon={"bike"}
             style={styles.label}
           />
           <View style={styles.deliveryGuy}>
@@ -112,7 +129,7 @@ const Track = () => {
                 fontSize: 18,
                 color: 'black',
               }}>
-              {vendor.name}
+              User Phone:{userPhone}
             </Text>
             <Text
               style={{
@@ -120,11 +137,11 @@ const Track = () => {
                 fontSize: 18,
                 color: 'black',
               }}>
-              {vendor.phone}
+              Vendor Phone:{vendorPhone}
             </Text>
           </View>
-        </View> */}
-        <TouchableOpacity style={styles.button}>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={() => handleFinishPress(order)}>
           <Text
             style={{
               color: 'white',

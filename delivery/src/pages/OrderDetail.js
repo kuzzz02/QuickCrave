@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Image, Dimensions, Text, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, ScrollView, StyleSheet, Image, Dimensions, Text, Alert, RefreshControl } from 'react-native';
+import { useNavigation,useIsFocused, useRoute } from '@react-navigation/native';
 import {
   Avatar,
   Button,
@@ -16,44 +16,76 @@ import BottomNav from './BottomNav';
 import { useCart } from './CartContext';
 import VendorService from '../services/VendorService';
 import GoodsService from '../services/GoodsService';
+import OrdersService from '../services/OrdersService';
 
 const { width, height } = Dimensions.get('window');
 
 const OrderDetail = () => {
+  const route = useRoute();
   const navigation = useNavigation();
-  const { filteredOrders } = useCart(); 
+  const { name } = useCart();
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [vendor, setVendor] = useState({});
   const [goodsNames, setGoodsNames] = useState({});
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const isFocused = useIsFocused();
+
+  const fetchOrders = () => {
+    OrdersService.getAll() 
+      .then(response => {
+        const orders = response.data;
+        const orderedOrders = orders.filter(order => order.state === "Ordered");
+        setFilteredOrders(orderedOrders);
+        console.log("Orders fetched successfully.");
+      })
+      .catch(error => {
+        console.error('Error fetching orders:', error);
+        setFilteredOrders([]); 
+      });
+  };
+
+  useEffect(() => {
+    fetchOrders();  
+  }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      console.log("Page is focused, refetching orders...");
+      fetchOrders();  
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     let isCancelled = false;
-  
     const loadVendorData = async () => {
-      try {
-        const promises = filteredOrders.map(order => VendorService.getById(order.vendor_id));
-        const vendors = await Promise.all(promises);
-        const vendorMap = vendors.reduce((acc, cur, index) => {
-          acc[filteredOrders[index].vendor_id] = cur.data;
-          return acc;
-        }, {});
-        if (!isCancelled) {
-          setVendor(vendorMap);
-          setIsDataLoaded(true);
+      if (filteredOrders.length > 0) {
+        try {
+          const vendorIds = filteredOrders.map(order => order.vendor_id);
+          const uniqueVendorIds = [...new Set(vendorIds)]; // Remove duplicates
+          const promises = uniqueVendorIds.map(id => VendorService.getById(id));
+          const vendors = await Promise.all(promises);
+          const vendorMap = vendors.reduce((acc, cur, index) => {
+            acc[uniqueVendorIds[index]] = cur.data;
+            return acc;
+          }, {});
+          
+          if (!isCancelled) {
+            setVendor(vendorMap);
+            setIsDataLoaded(true);
+          }
+        } catch (error) {
+          console.error('Error fetching vendor data:', error);
         }
-      } catch (error) {
-        console.error('Error fetching vendor data:', error);
       }
     };
-  
-    if (filteredOrders.length > 0) {
-      loadVendorData();
-    }
-  
+
+    loadVendorData();
+
     return () => {
-      isCancelled = true;  // Cleanup function to avoid setting state on unmounted component
+      isCancelled = true; 
     };
-  }, [filteredOrders]);
+  }, [filteredOrders]);  
+
 
   useEffect(() => {
     if (filteredOrders && filteredOrders.length > 0) {
@@ -74,28 +106,42 @@ const OrderDetail = () => {
     }
   }, [filteredOrders]);
 
-  const handleTrackPress = (order) => {
+
+  const handleTrackPress = async (order) => {
     const vendorInfo = vendor[order.vendor_id];
-    navigation.navigate('Track', {
-      vendorAddress: vendorInfo.address, // 传递当前订单的商家地址
-      userAddress: order.address // 传递当前订单的用户地址
-    });
+    try {
+      const response = await OrdersService.updateState(order.orders_id, 'Processing');
+      console.log('Update response:', response);
+      if (response.status === 200) {
+        navigation.navigate('Track', {
+          vendorAddress: vendorInfo.address, 
+          userAddress: order.address,
+          vendorPhone: vendorInfo.phone,
+          userPhone: order.phone,
+          order: order,
+        });
+      } else {
+        console.error('Failed to update order status:', response.status);
+      }
+    } catch (error) {
+      console.error(`Failed to update order state for order ID: ${order.id}`, error);
+    }
   };
   
   return (
     <View style={styles.container}>
       <View style={styles.tt}>
       <Text style={styles.title}>
-        {vendor.name}
+        Welcome {name}
       </Text>
       <Text style={styles.title1}>
-        <Icon source="map-marker" color="#06C168" size={0.057 * width} />
-        {vendor.address}
+        <Icon source="map-marker" color="#06C168" size={0.059 * width} />
+        Choose your order to delivery
       </Text>
       </View>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       {filteredOrders.map(order => (
-        <Card key={order.id} style={{ margin: 8, elevation: 4 }}>
+        <Card key={order.id} style={{ margin: 8, elevation: 4, marginTop:0.013*height }}>
         <Card.Content>
           <Title style={styles.t1}>Order #{order.id}</Title>
           {order.goods_id.split(',').map((item, index) => {
@@ -173,19 +219,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tt:{
-    height: 0.15 * height,
+    height: 0.11 * height,
    },
   title: {
     marginTop: 0.03 * height,
     marginLeft: 0.02 * width,
-    fontSize: 22,
+    fontSize: 24,
     color: 'black',
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   title1: {
     marginLeft: 0.02 * width,
     marginTop: 0.01 * height,
-    fontSize: 22,
+    fontSize: 20,
     color: 'black',
     fontFamily: 'AlimamaShuHeiTi-Bold',
   },

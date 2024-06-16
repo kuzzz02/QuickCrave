@@ -83,7 +83,7 @@ const Information = () => {
             mode="outlined"
           />
           
-          <Button mode="contained" onPress={handleSave} style={styles.button}>
+          <Button mode="contained" onPress={handleSave} style={styles.button} buttonColor="#162D3A">
             Save Information
           </Button>
         </Card.Content>
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+    borderRadius: 10,
   },
 });
 
