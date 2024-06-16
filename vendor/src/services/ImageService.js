@@ -20,7 +20,6 @@ class ImageService {
   }
 
   async getGoodsImage(imageName) {
-    // return http.get(`/image/goods/${imageName}`);
     try {
       const response = await http.get(`/image/goods?imageName=${imageName}`, { responseType: 'blob' });
       return new Promise((resolve, reject) => {
@@ -38,12 +37,40 @@ class ImageService {
     }
   }
 
-  getUserImage(imageName) {
-    return http.get(`/image/user?imageName=${imageName}`);
+  async getUserImage(imageName) {
+    try {
+      const response = await http.get(`/image/user?imageName=${imageName}`, { responseType: 'blob' });
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          resolve(base64data);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(response.data);
+      });
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      return null;
+    }
   }
 
-  getDeliveryImage(imageName) {
-    return http.get(`/image/delivery?imageName=${imageName}`);
+  async getDeliveryImage(imageName) {
+    try {
+      const response = await http.get(`/image/delivery?imageName=${imageName}`, { responseType: 'blob' });
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          resolve(base64data);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(response.data);
+      });
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      return null;
+    }
   }
 }
 

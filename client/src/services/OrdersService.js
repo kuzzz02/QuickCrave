@@ -1,4 +1,4 @@
-import http from "../http";
+import http from '../http';
 
 class OrdersService {
   /**
@@ -19,11 +19,11 @@ class OrdersService {
   }
 
   getAll() {
-    return http.get("/orders/selectAll");
+    return http.get('/orders/selectAll');
   }
 
-  getById(id) {
-    return http.get(`/orders/selectById?id=${id}`);
+  getById(orders_id) {
+    return http.get(`/orders/selectById?orders_id=${orders_id}`);
   }
 
   delete(id) {
@@ -32,6 +32,10 @@ class OrdersService {
 
   deleteAll() {
     return http.delete(`/orders/deleteAll`);
+  }
+
+  updateState(orders_id, state) {
+    return http.put(`/orders/updateState?orders_id=${orders_id}&state=${state}`);
   }
 }
 
