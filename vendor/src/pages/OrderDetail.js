@@ -8,6 +8,7 @@ import {
   Card,
   Title,
   Paragraph,
+  Menu,
   Icon,
   IconButton,
   BottomNavigation,
@@ -17,24 +18,19 @@ import { useCart } from './CartContext';
 import VendorService from '../services/VendorService';
 import GoodsService from '../services/GoodsService';
 
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 const { width, height } = Dimensions.get('window');
 
 const OrderDetail = () => {
   const navigation = useNavigation();
 
-  
-
   const { name, filteredOrders } = useCart(); 
   const [vendor, setVendor] = useState([]);
   const [goodsNames, setGoodsNames] = useState({});
-
-  const handleTrackPress = (order) => {
-    navigation.navigate('Track', {
-      vendor: vendor,       
-      userAddress: order.address  
-    });
-  };
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [selectedRange, setSelectedRange] = useState('Today');
+  const [displayedOrders, setDisplayedOrders] = useState(filteredOrders);
+  const openMenu = () => setMenuVisible(true);
+  const closeMenu = () => setMenuVisible(false);
 
   useEffect(() => {
     if (name) {
@@ -49,6 +45,30 @@ const OrderDetail = () => {
         });
     }
   }, [name]);
+
+  useEffect(() => {
+    const filterOrders = () => {
+      const now = new Date();
+      const filtered = filteredOrders.filter(order => {
+        const orderDate = new Date(order.date);
+        switch (selectedRange) {
+          case 'Today':
+            return orderDate.toDateString() === now.toDateString();
+          case 'Last Week':
+            const lastWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+            return orderDate >= lastWeek;
+          case 'Last Month':
+            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+            return orderDate >= lastMonth;
+          default:
+            return true;
+        }
+      });
+      setDisplayedOrders(filtered);
+    };
+
+    filterOrders();
+  }, [selectedRange, filteredOrders]);
 
   useEffect(() => {
     if (filteredOrders && filteredOrders.length > 0) {
@@ -70,18 +90,32 @@ const OrderDetail = () => {
   }, [filteredOrders]);
   
   return (
-    <View style={styles.container}>
+    <View style={styles.container}>      
       <View style={styles.tt}>
-      <Text style={styles.title}>
+        <View style={{ flexDirection: 'row' }}>
+        <Text style={styles.title}>
         {vendor.name}
       </Text>
+      <View style={styles.iconFilter}>
+        <Menu
+          visible={menuVisible}
+          onDismiss={closeMenu}
+          anchor={<Button icon="calendar" onPress={openMenu} textColor='black' style={styles.menuButton}>Calendar Filter</Button>}>
+          <Menu.Item onPress={() => { setSelectedRange('Today'); closeMenu(); }} title="Today" />
+          <Menu.Item onPress={() => { setSelectedRange('Last Week'); closeMenu(); }} title="Last Week" />
+          <Menu.Item onPress={() => { setSelectedRange('Last Month'); closeMenu(); }} title="Last Month" />
+        </Menu>
+        </View>
+      </View>
+        
       <Text style={styles.title1}>
         <Icon source="map-marker" color="#06C168" size={0.057 * width} />
         {vendor.address}
       </Text>
       </View>
+      
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-      {filteredOrders.map(order => (
+      {displayedOrders.map(order => (
         <Card key={order.id} style={{ margin: 8, elevation: 4 }}>
         <Card.Content>
           <Title style={styles.t1}>Order #{order.id}</Title>
@@ -145,6 +179,14 @@ const styles = StyleSheet.create({
   scrollView: {
     marginBottom: 70,
     flex: 1,
+  },
+  iconFilter:{
+    marginLeft: 0.38 * width,
+    marginTop: 0.02 * height,
+  },
+  menuButton: {
+    fontSize: 20,
+    fontFamily: 'AlimamaShuHeiTi-Bold',
   },
   tt:{
     height: 0.15 * height,
