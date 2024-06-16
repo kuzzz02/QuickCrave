@@ -3,7 +3,7 @@ import {useEffect} from 'react';
 import GoodsService from '../services/GoodsService';
 import ImageService from '../services/ImageService';
 import VendorService from '../services/VendorService';
-import DeliveryService from '../services/DeliveryService';
+import OrdersService from '../services/OrdersService';
 
 const CartContext = createContext();
 
@@ -16,6 +16,22 @@ export const CartProvider = ({children}) => {
   const [vendorsImages, setVendorsImages] = useState({});
   const [vendors, setVendors] = useState({});
   const [name, setName] = useState("");
+  const [orderDetails, setOrderDetails] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [vendor, setVendor] = useState(null); 
+
+  useEffect(() => {
+    OrdersService.getAll()  // 假设 OrdersService 有一个 getAll 方法来获取所有订单
+      .then(response => {
+        const orders = response.data;
+        const orderedOrders = orders.filter(order => order.state === "Ordered");
+        setFilteredOrders(orderedOrders);
+      })
+      .catch(error => {
+        console.error('Error fetching orders:', error);
+        setFilteredOrders([]); // 出错时清空订单列表
+      });
+  }, []);
 
   useEffect(() => {
     const fetchVendorDetails = async () => {
@@ -25,35 +41,63 @@ export const CartProvider = ({children}) => {
         const goodsArray = Array.isArray(goodsData) ? goodsData : [goodsData];
         setGoods(goodsArray);
         setCounts(new Array(goodsData.length).fill(0));
-
-        goodsArray.forEach(async (good) => {
-          const imageSrc = await ImageService.getGoodsImage(good.image); 
-          setGoodsImages(prevImages => ({
-            ...prevImages,
-            [good.id]: imageSrc
-          }));
+  
+        const goodsImagesPromises = goodsArray.map(async (good) => {
+          const imageSrc = await ImageService.getGoodsImage(good.image);
+          return { id: good.id, imageSrc };
         });
-
-        const vendorsResponse = await VendorService.getAll();
-        const vendorsData = vendorsResponse.data;
-        const vendorsArray = Array.isArray(vendorsData) ? vendorsData : [vendorsData];
+  
+        const vendorResponse = await VendorService.getAll();
+        const vendorData = vendorResponse.data;
+        const vendorsArray = Array.isArray(vendorData) ? vendorData : [vendorData];
         setVendors(vendorsArray);
-
-        vendorsArray.forEach(async (vendor) => {
+  
+        const vendorImagesPromises = vendorsArray.map(async (vendor) => {
           const imageSrc = await ImageService.getVendorImage(vendor.portrait);
-          setVendorsImages(prevImages => ({
-            ...prevImages,
-            [vendor.id]: imageSrc
-          }));
+          return { id: vendor.id, imageSrc };
         });
-
+  
+        // Resolve all promises and update state once
+        const goodsImages = await Promise.all(goodsImagesPromises);
+        const vendorImages = await Promise.all(vendorImagesPromises);
+  
+        setGoodsImages(prevImages => ({
+          ...prevImages,
+          ...goodsImages.reduce((acc, { id, imageSrc }) => ({ ...acc, [id]: imageSrc }), {})
+        }));
+  
+        setVendorsImages(prevImages => ({
+          ...prevImages,
+          ...vendorImages.reduce((acc, { id, imageSrc }) => ({ ...acc, [id]: imageSrc }), {})
+        }));
+  
       } catch (error) {
-        console.error('Error fetching user details: ', error);
+        console.error('Error fetching vendor details: ', error);
       }
     };
 
+    
+
+    
+  
+    const fetchOrderDetails = async () => {
+      try {
+        const ordersResponse = await OrdersService.getAll(); 
+        const ordersData = ordersResponse.data;
+        const ordersArray = Array.isArray(ordersData) ? ordersData : [ordersData];
+        setOrderDetails(ordersArray);
+        // console.log('ordersArray:', ordersArray);
+      } catch (error) {
+        console.error('Error fetching order details:', error);
+      }
+    };
+  
+    // Call both fetch functions
     fetchVendorDetails();
+    fetchOrderDetails();
   }, []);
+  
+
 
 
   const handleIncrease = index => {
@@ -78,9 +122,6 @@ export const CartProvider = ({children}) => {
     return total;
   };
 
-
-
-
   return (
     <CartContext.Provider
       value={{
@@ -90,6 +131,9 @@ export const CartProvider = ({children}) => {
         vendorsImages,
         vendors,
         name,
+        orderDetails,
+        filteredOrders,
+        setFilteredOrders,
         handleIncrease,
         setName,
         handleDecrease,

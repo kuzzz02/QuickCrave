@@ -23,13 +23,14 @@ export default function App() {
           screenOptions={{
             headerShown: false,
           }}>
-            <Stack.Screen name="Track" component={Track} />
+            
             <Stack.Screen name="LogIn" component={LogIn} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="OrderDetail" component={OrderDetail} />
           <Stack.Screen name="Start" component={Start} />
           <Stack.Screen name="Init" component={Init} />
           <Stack.Screen name="Information" component={Information} />
+          <Stack.Screen name="Track" component={Track} />
           {/* <Stack.Screen name="Detail" component={Detail} /> */}
           {/* <Stack.Screen name="ShoppingCart" component={ShoppingCart} /> */}
           

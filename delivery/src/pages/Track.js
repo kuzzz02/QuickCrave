@@ -30,38 +30,22 @@ const theme = {
 const Track = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  // const {vendor} = route.params;
+  const {vendorAddress, userAddress} = route.params;
 
   useEffect(() => {
-    const fetchVendor = async () => {
-      try {
-        const response = await VendorService.getByName(vendor.name); // 使用真实的商家ID
-        // if (response.data) {
-        //   setVendor({
-        //     name: response.data.name,
-        //     phone: response.data.phone,
-        //   });
-        // }
-      } catch (error) {
-        console.error('Failed to fetch vendor data:', error);
-      }
-    };
-
-    fetchVendor();
-    fetchRoute();
+    fetchRoute(); 
   }, []);
 
 
   
   const [region, setRegion] = useState();
-
   const [origin, setOrigin] = useState();
   const [destination, setDestination] = useState();
   const GOOGLE_MAPS_APIKEY = 'AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s';
 
   async function fetchRoute () {
-   const _origin = await getPosition("上海市浦东新区川沙新镇川沙公园")
-   const _destination = await getPosition("上海市浦东新区川沙新镇川沙人民医院")
+   const _origin = await getPosition(vendorAddress)
+   const _destination = await getPosition(userAddress)
     setRegion({
       ..._origin,
       latitudeDelta: 0.0922,
@@ -148,8 +132,8 @@ const Track = () => {
               fontFamily: 'AlimamaShuHeiTi-Bold',
               marginTop: 5,
             }}>
-            <Icon color="white" source="phone" size={20} />
-            Call
+            <Icon color="white" size={20} />
+            Delivery Finished
           </Text>
         </TouchableOpacity>
       </View>

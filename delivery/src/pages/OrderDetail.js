@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Image, Dimensions, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, Image, Dimensions, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {
   Avatar,
@@ -17,38 +17,43 @@ import { useCart } from './CartContext';
 import VendorService from '../services/VendorService';
 import GoodsService from '../services/GoodsService';
 
-const LeftContent = props => <Avatar.Icon {...props} icon="folder" />;
 const { width, height } = Dimensions.get('window');
 
 const OrderDetail = () => {
   const navigation = useNavigation();
-
-  
-
-  const { name, filteredOrders } = useCart(); 
-  const [vendor, setVendor] = useState([]);
+  const { filteredOrders } = useCart(); 
+  const [vendor, setVendor] = useState({});
   const [goodsNames, setGoodsNames] = useState({});
-
-  const handleTrackPress = (order) => {
-    navigation.navigate('Track', {
-      vendor: vendor,       // 已经在状态中的供应商信息
-      userAddress: order.address  // 传递当前订单的用户地址
-    });
-  };
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useEffect(() => {
-    if (name) {
-      VendorService.getByName(name)
-        .then(response => {
-          const vendorId = response.data.id;
-          setVendor(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching vendor details:', error);
-          setVendor(null);
-        });
+    let isCancelled = false;
+  
+    const loadVendorData = async () => {
+      try {
+        const promises = filteredOrders.map(order => VendorService.getById(order.vendor_id));
+        const vendors = await Promise.all(promises);
+        const vendorMap = vendors.reduce((acc, cur, index) => {
+          acc[filteredOrders[index].vendor_id] = cur.data;
+          return acc;
+        }, {});
+        if (!isCancelled) {
+          setVendor(vendorMap);
+          setIsDataLoaded(true);
+        }
+      } catch (error) {
+        console.error('Error fetching vendor data:', error);
+      }
+    };
+  
+    if (filteredOrders.length > 0) {
+      loadVendorData();
     }
-  }, [name]);
+  
+    return () => {
+      isCancelled = true;  // Cleanup function to avoid setting state on unmounted component
+    };
+  }, [filteredOrders]);
 
   useEffect(() => {
     if (filteredOrders && filteredOrders.length > 0) {
@@ -68,6 +73,14 @@ const OrderDetail = () => {
       });
     }
   }, [filteredOrders]);
+
+  const handleTrackPress = (order) => {
+    const vendorInfo = vendor[order.vendor_id];
+    navigation.navigate('Track', {
+      vendorAddress: vendorInfo.address, // 传递当前订单的商家地址
+      userAddress: order.address // 传递当前订单的用户地址
+    });
+  };
   
   return (
     <View style={styles.container}>
@@ -81,7 +94,7 @@ const OrderDetail = () => {
       </Text>
       </View>
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-      {/* {filteredOrders.map(order => (
+      {filteredOrders.map(order => (
         <Card key={order.id} style={{ margin: 8, elevation: 4 }}>
         <Card.Content>
           <Title style={styles.t1}>Order #{order.id}</Title>
@@ -117,6 +130,10 @@ const OrderDetail = () => {
             <Text style={styles.content}>{order.address}</Text>
           </Paragraph>
           <Paragraph>
+            <Text style={styles.label}>Vendor Address: </Text>
+            <Text style={styles.content}>{vendor[order.vendor_id]?.address || 'Loading...'}</Text>
+          </Paragraph>
+          <Paragraph>
             <Text style={styles.label}>Payment: </Text>
             <Text style={styles.content}>{order.payment}</Text>
           </Paragraph>
@@ -128,9 +145,18 @@ const OrderDetail = () => {
             <Text style={styles.label}>User Phone Number: </Text>
             <Text style={styles.content}>{order.phone}</Text>
           </Paragraph>
+          <Button
+        style={styles.bottom}
+        labelStyle={{fontSize: 16}}
+        buttonColor="#06C168"
+        mode="contained"
+        disabled={!isDataLoaded}
+  onPress={() => handleTrackPress(order)}>
+        Order Delivery
+      </Button>
         </Card.Content>
-      </Card> */}
-      {/* ))} */}
+      </Card>
+      ))}
       </ScrollView>
       <BottomNav/>
     </View>
@@ -248,16 +274,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   bottom: {
-    position: 'absolute',
-    right: 0,
-    left: -width * 0.05,
-    flexDirection: 'row',
-    bottom: 0,
-    height: 70,
-    width: width,
-    backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    borderRadius: 12,
+    height: 0.06 * height,
+    width: 0.45 * width,
+    marginLeft: 0.32 * width,
   },
   iconButton1: {
     marginLeft: 0.05 * width,
