@@ -58,16 +58,8 @@
       android:usesCleartextTraffic="true">
 
       <meta-data
-        android:name="com.amap.api.v2.apikey"
-        android:value="9ce3469d672f3e6922680464e4b159ce" />
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s" />
-      <service android:name="com.amap.api.location.APSService"></service>
-      <activity
-        android:name="com.amap.api.navi.AmapRouteActivity"
-        android:theme="@android:style/Theme.NoTitleBar"
-        android:configChanges="orientation|keyboardHidden|screenSize|navigation" />
+          android:name="com.google.android.maps.v2.API_KEY"
+          android:value="AIzaSyB0TgrPgGkxlk2awYA5Wqkk0f2n6rlM_6s" />
 
       <activity
         android:name=".MainActivity"
