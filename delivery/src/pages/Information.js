@@ -59,8 +59,8 @@ const Information = () => {
         </View>
       <Card style={styles.card}>
         <Card.Content>
-          <Title>Restaurant Information</Title>
-          <Paragraph>Edit your business information below:</Paragraph>
+          <Title>Personal Information</Title>
+          <Paragraph>Edit your detailed information below:</Paragraph>
           <TextInput
             label={deliver.name}
             value={name1}
