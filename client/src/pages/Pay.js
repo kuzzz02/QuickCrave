@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View, Text, Dimensions, Alert} from 'react-native';
 import {Button, IconButton, Icon} from 'react-native-paper';
-import OrdersService from '../services/OrdersSerivce';
+import OrdersService from '../services/OrdersService';
 import {useCart} from './CartContext';
 import alipay from '../middleware/alipay';
 import { NativeModules } from 'react-native';

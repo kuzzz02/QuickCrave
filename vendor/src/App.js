@@ -19,7 +19,6 @@ export default function App() {
         screenOptions={{
           headerShown: false,
         }}>
-          {/* <Stack.Screen name="Main" component={Main} /> */}
           <Stack.Screen name="Start" component={Start} />
           <Stack.Screen name="Init" component={Init} />
           <Stack.Screen name="LogIn" component={LogIn} />

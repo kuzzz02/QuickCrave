@@ -25,6 +25,10 @@ class DeliveryService {
     return http.get(`/delivery/selectById?id=${id}`);
   }
 
+  getByState(state) {
+    return http.get(`/delivery/selectByState?state=${state}`);
+  }
+
   delete(id) {
     return http.delete(`/delivery/delete?id=${id}`);
   }
@@ -35,6 +39,10 @@ class DeliveryService {
 
   update(id, name, password) {
     return http.put(`/delivery/update?id=${id}&${name}&${password}`);
+  }
+
+  updateState(id, state) {
+    return http.put(`/delivery/updateState?id=${id}&state=${state}`);
   }
 }
 
